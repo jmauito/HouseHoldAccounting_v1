@@ -18,6 +18,8 @@ use Domain\Bill;
 use Domain\Store;
 use ApplicationService\RegisterBillService;
 use Infraestructure\Connection\ConnectionMySqlTest;
+use Domain\Buyer;
+use Dao\BuyerDao;
 
 class RegisterBillServiceTest {
     private $connection;
@@ -65,6 +67,12 @@ class RegisterBillServiceTest {
         $bill->setStore($store);
                 
         $bill->setVoucherType($voucherType);
+
+        $buyer = new Buyer();
+        $buyer->setIdentificationType("1");
+        $buyer->setName("Test buyer");
+        $buyer->setIdentification("0000000000");
+        $bill->setBuyer($buyer);
         
         $registerBillService = new RegisterBillService($this->connection);
         $result = $registerBillService($bill);
@@ -100,6 +108,16 @@ class RegisterBillServiceTest {
         
         $bill->setVoucherType($voucherType);
         
+        $buyer = new Buyer();
+        $buyer->setIdentificationType("1");
+        $buyer->setName("Test buyer - exists");
+        $buyer->setIdentification("0000000001");
+        $bill->setBuyer($buyer);
+        $buyerDao = new BuyerDao($this->connection);
+        $buyerId = $buyerDao->insert($buyer);
+        $buyer->setId($buyerId);
+        $bill->setBuyer($buyer);
+                
         $registerBillService = new RegisterBillService($this->connection);
         $result = $registerBillService($bill);
         print "The bill was registred with id $result" . PHP_EOL;

@@ -17,6 +17,7 @@ final class Bill extends DomainModel{
     private $filePath;
     private $store;
     private $voucherType;
+    private $buyer;
     
     public function __construct(int $id = 0) {
         parent::__construct($id);
@@ -74,6 +75,11 @@ final class Bill extends DomainModel{
         return $this->voucherType;
     }
     
+    function getBuyer(): Buyer {
+        return $this->buyer;
+    }
+
+        
     function setAccessKey($accessKey): void {
         $this->accessKey = $accessKey;
     }
@@ -125,7 +131,10 @@ final class Bill extends DomainModel{
     function setVoucherType(VoucherType $voucherType): void {
         $this->voucherType = $voucherType;
     }
-
+    
+    function setBuyer(Buyer $buyer): void {
+        $this->buyer = $buyer;
+    }
     
     function toDto(){
         $dto = new \stdClass();
@@ -143,6 +152,7 @@ final class Bill extends DomainModel{
         $dto->filePath = $this->getFilePath();
         $dto->store = $this->store->toDto();
         $dto->voucherType = $this->voucherType->toDto;
+        $dto->buyer = $this->buyer->toDto;
         return $dto;
     }
     

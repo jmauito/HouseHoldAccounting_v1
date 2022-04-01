@@ -41,7 +41,7 @@ class BillDao {
         $arr['storeId'] = $bill->getStore()->getId();
         $arr['active'] = $bill->isActive();
         $arr['voucherTypeId'] = $bill->getVoucherType()->getId();
-        $arr['buyerId'] = 1;
+        $arr['buyerId'] = $bill->getBuyer()->getId();
         return $arr;
     }
     

@@ -63,6 +63,7 @@ CREATE TABLE `buyer` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `identification` char(13) DEFAULT NULL,
+  `identificationType` CHAR(2) NULL,
   `active` tinyint DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
@@ -74,11 +75,12 @@ CREATE TABLE `buyer` (
 -- Dumping data for table `buyer`
 --
 
-LOCK TABLES `buyer` WRITE;
+
+-- LOCK TABLES `buyer` WRITE;
 /*!40000 ALTER TABLE `buyer` DISABLE KEYS */;
-INSERT INTO `buyer` VALUES (1,'buyer test','0123456789',1);
+-- INSERT INTO `buyer` VALUES (1,'buyer test','0123456789',1);
 /*!40000 ALTER TABLE `buyer` ENABLE KEYS */;
-UNLOCK TABLES;
+-- UNLOCK TABLES;
 
 --
 -- Table structure for table `store`

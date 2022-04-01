@@ -15,6 +15,7 @@ namespace ApplicationService;
  */
 
 use \Domain\Bill;
+use Domain\Buyer;
 
 class ReadXmlBillService {
     private $xmlBill;
@@ -34,8 +35,9 @@ class ReadXmlBillService {
         $bill->setEmissionPoint($xml->infoTributaria->ptoEmi);
         $bill->setSecuential($xml->infoTributaria->secuencial);
         $arrDate = explode('/', $xml->infoFactura->fechaEmision);
-        $dateOfIssue = new \DateTime("{$arrDate[2]}-{$arrDate[1]}-{$arrDate[0]}");
-        $bill->setDateOfIssue($dateOfIssue);
+        //$dateOfIssue = new \DateTime("{$arrDate[2]}-{$arrDate[1]}-{$arrDate[0]}");
+        //$bill->setDateOfIssue($dateOfIssue);
+        $bill->setDateOfIssue("{$arrDate[2]}-{$arrDate[1]}-{$arrDate[0]}");
         $bill->setEstablishmentAddress($xml->infoFactura->dirEstablecimiento);
         $bill->setTotalWithoutTax($xml->infoFactura->totalSinImpuestos->__toString());
         $bill->setTotalDiscount($xml->infoFactura->totalDescuento->__toString());
@@ -43,7 +45,7 @@ class ReadXmlBillService {
         $bill->setTotal($xml->infoFactura->importeTotal->__toString());
 
         $bill->setStore($this->setStore($xml));
-        #$bill->setBuyer($this->setBuyer($xml->infoFactura));
+        $bill->setBuyer($this->setBuyer($xml));
         
         $voucherTypeDao = new \Dao\VoucherTypeDao($connection);
         $voucherType = $voucherTypeDao->findOne(['code' => $xml->infoTributaria->codDoc]);
@@ -79,5 +81,13 @@ class ReadXmlBillService {
         $store->setRuc((string) $xml->infoTributaria->ruc);
         $store->setParentAddress((string) $xml->infoTributaria->dirMatriz);
         return $store;
+    }
+    
+    private function setBuyer(\SimpleXMLElement $xml){
+        $buyer = new Buyer();
+        $buyer->setIdentificationType((string) $xml->infoFactura->tipoIdentificacionComprador);
+        $buyer->setName((string) $xml->infoFactura->razonSocialComprador);
+        $buyer->setIdentification((string) $xml->infoFactura->identificacionComprador);
+        return $buyer;
     }
 }

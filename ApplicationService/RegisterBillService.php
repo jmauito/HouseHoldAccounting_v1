@@ -15,8 +15,11 @@ namespace ApplicationService;
  */
 use Domain\Bill;
 use Dao\BillDao;
-use \Domain\Store;
+use Domain\Store;
 use Infraestructure\Connection\Connection;
+use Dao\StoreDao;
+use Domain\Buyer;
+use Dao\BuyerDao;
 
 class RegisterBillService {
 
@@ -32,6 +35,9 @@ class RegisterBillService {
         try {
             $storeId = $this->getOrCreateStore($bill->getStore());
             $bill->getStore()->setId($storeId);
+            $buyerId = $this->getOrCreateBuyer($bill->getBuyer());
+            $bill->getBuyer()->setId($buyerId);
+            
             $billDao = new BillDao($this->connection);
             $billId = $billDao->insert($bill);
             $this->connection->commit();
@@ -45,7 +51,7 @@ class RegisterBillService {
     }
 
     private function getOrCreateStore(Store $store) {
-        $storeDao = new \Dao\StoreDao($this->connection);
+        $storeDao = new StoreDao($this->connection);
         $storeExist = $storeDao->findOne(['ruc' => $store->getRuc()]);
         if ($storeExist === null) {
             $storeId = $storeDao->insert($store);
@@ -53,6 +59,17 @@ class RegisterBillService {
             $storeId = $storeExist->getId();
         }
         return $storeId;
+    }
+    
+    private function getOrCreateBuyer(Buyer $buyer) {
+        $buyerDao = new BuyerDao($this->connection);
+        $buyerExist = $buyerDao->findOne(['identification' => $buyer->getIdentification()]);
+        if ($buyerExist === null) {
+            $buyerId = $buyerDao->insert($buyer);
+        } else {
+            $buyerId = $buyerExist->getId();
+        }
+        return $buyerId;
     }
 
 }
