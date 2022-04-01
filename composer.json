@@ -1,0 +1,23 @@
+{
+    "name": "mauito/house-hold-accounting",
+    "description": "House Hold Accounting project from PHP",
+    "type": "project",
+    "authors": [
+        {
+            "name": "jmauito",
+            "email": "jmauito@gmail.com"
+        }
+    ],
+    "autoload":{
+        "psr-4": {
+            "DomainService\\" : "DomainService/",
+            "ApplicationService\\": "ApplicationService/",
+            "Domain\\":"Domain/",
+            "Infraestructure\\":"Infraestructure/",
+            "Lib\\":"Lib",
+            "Test\\":"Test",
+            "Dao\\":"Dao"
+        }
+    },
+    "require": {}
+}

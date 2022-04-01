@@ -1,0 +1,296 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<autorizacion>
+   <estado>AUTORIZADO</estado>
+   <numeroAutorizacion>2807201801019007200200120019020002250154986567417</numeroAutorizacion>
+   <fechaAutorizacion>2018-07-28T11:48:56-05:00</fechaAutorizacion>
+   <comprobante><![CDATA[<?xml version = '1.0' encoding = 'UTF-8'?>
+<factura id="comprobante" version="1.1.0">
+<infoTributaria>
+<ambiente>2</ambiente>
+<tipoEmision>1</tipoEmision>
+<razonSocial>GERARDO ORTIZ E HIJOS CIA LTDA</razonSocial>
+<nombreComercial>GERARDO ORTIZ E HIJOS CIA LTDA</nombreComercial>
+<ruc>0190072002001</ruc>
+<claveAcceso>2807201801019007200200120019020002250154986567417</claveAcceso>
+<codDoc>01</codDoc>
+<estab>001</estab>
+<ptoEmi>902</ptoEmi>
+<secuencial>000225015</secuencial>
+<dirMatriz>AV. CARLOS JULIO AROSEMENA S/N</dirMatriz>
+</infoTributaria>
+<infoFactura>
+<fechaEmision>28/07/2018</fechaEmision>
+<dirEstablecimiento>AV DE LA AMERICAS Y NICOLAS DE ROCHA</dirEstablecimiento>
+<contribuyenteEspecial>3517</contribuyenteEspecial>
+<obligadoContabilidad>SI</obligadoContabilidad>
+<tipoIdentificacionComprador>05</tipoIdentificacionComprador>
+<razonSocialComprador>MAURICIO ZARATE</razonSocialComprador>
+<identificacionComprador>0103294674</identificacionComprador>
+<direccionComprador>HORTENCIA MATA Y EL RETORNO</direccionComprador>
+<totalSinImpuestos>32.00</totalSinImpuestos>
+<totalDescuento>1.48</totalDescuento>
+<totalConImpuestos>
+<totalImpuesto>
+<codigo>2</codigo>
+<codigoPorcentaje>2</codigoPorcentaje>
+<baseImponible>32.00</baseImponible>
+<valor>3.84</valor>
+</totalImpuesto>
+</totalConImpuestos>
+<propina>0.00</propina>
+<importeTotal>35.84</importeTotal>
+<moneda>DOLAR AMERICANO</moneda>
+<pagos>
+<pago>
+<formaPago>19</formaPago>
+<total>35.84</total>
+</pago>
+</pagos>
+</infoFactura>
+<detalles>
+<detalle>
+<codigoPrincipal>4G4459X</codigoPrincipal>
+<descripcion>TUBO ESTRI D/CORTINA CAFE 1/2quot; X 3.2 MTS 2738</descripcion>
+<cantidad>1.0000</cantidad>
+<precioUnitario>2.8856</precioUnitario>
+<descuento>0.23</descuento>
+<precioTotalSinImpuesto>2.65</precioTotalSinImpuesto>
+<detallesAdicionales>
+<detAdicional nombre="Medida" valor="UNIDAD"/>
+<detAdicional nombre="Bodega" valor="1"/>
+</detallesAdicionales>
+<impuestos>
+<impuesto>
+<codigo>2</codigo>
+<codigoPorcentaje>2</codigoPorcentaje>
+<tarifa>12.00</tarifa>
+<baseImponible>2.65</baseImponible>
+<valor>0.32</valor>
+</impuesto>
+</impuestos>
+</detalle>
+<detalle>
+<codigoPrincipal>2T23168</codigoPrincipal>
+<descripcion>SOPORTE DOBLE 1/2quot; CAFE 2 SETS</descripcion>
+<cantidad>2.0000</cantidad>
+<precioUnitario>0.9756</precioUnitario>
+<descuento>0.20</descuento>
+<precioTotalSinImpuesto>1.76</precioTotalSinImpuesto>
+<detallesAdicionales>
+<detAdicional nombre="Medida" valor="SET"/>
+<detAdicional nombre="Bodega" valor="1"/>
+</detallesAdicionales>
+<impuestos>
+<impuesto>
+<codigo>2</codigo>
+<codigoPorcentaje>2</codigoPorcentaje>
+<tarifa>12.00</tarifa>
+<baseImponible>1.76</baseImponible>
+<valor>0.21</valor>
+</impuesto>
+</impuestos>
+</detalle>
+<detalle>
+<codigoPrincipal>2T23122</codigoPrincipal>
+<descripcion>TERMINAL NORMAL 1/2quot; CAFE 6 SETS</descripcion>
+<cantidad>1.0000</cantidad>
+<precioUnitario>0.4634</precioUnitario>
+<descuento>0.03</descuento>
+<precioTotalSinImpuesto>0.43</precioTotalSinImpuesto>
+<detallesAdicionales>
+<detAdicional nombre="Medida" valor="SET"/>
+<detAdicional nombre="Bodega" valor="1"/>
+</detallesAdicionales>
+<impuestos>
+<impuesto>
+<codigo>2</codigo>
+<codigoPorcentaje>2</codigoPorcentaje>
+<tarifa>12.00</tarifa>
+<baseImponible>0.43</baseImponible>
+<valor>0.05</valor>
+</impuesto>
+</impuestos>
+</detalle>
+<detalle>
+<codigoPrincipal>4M91L2F</codigoPrincipal>
+<descripcion>LINTERNA RECARGABLE ECOLED YJ-2891</descripcion>
+<cantidad>1.0000</cantidad>
+<precioUnitario>3.3292</precioUnitario>
+<descuento>0.27</descuento>
+<precioTotalSinImpuesto>3.06</precioTotalSinImpuesto>
+<detallesAdicionales>
+<detAdicional nombre="Medida" valor="UNIDAD"/>
+<detAdicional nombre="Bodega" valor="1"/>
+</detallesAdicionales>
+<impuestos>
+<impuesto>
+<codigo>2</codigo>
+<codigoPorcentaje>2</codigoPorcentaje>
+<tarifa>12.00</tarifa>
+<baseImponible>3.06</baseImponible>
+<valor>0.37</valor>
+</impuesto>
+</impuestos>
+</detalle>
+<detalle>
+<codigoPrincipal>X400282</codigoPrincipal>
+<descripcion>HALADOR BRONCE 3/4</descripcion>
+<cantidad>1.0000</cantidad>
+<precioUnitario>1.0530</precioUnitario>
+<descuento>0.03</descuento>
+<precioTotalSinImpuesto>1.02</precioTotalSinImpuesto>
+<detallesAdicionales>
+<detAdicional nombre="Medida" valor="UNIDAD"/>
+<detAdicional nombre="Bodega" valor="1"/>
+</detallesAdicionales>
+<impuestos>
+<impuesto>
+<codigo>2</codigo>
+<codigoPorcentaje>2</codigoPorcentaje>
+<tarifa>12.00</tarifa>
+<baseImponible>1.02</baseImponible>
+<valor>0.12</valor>
+</impuesto>
+</impuestos>
+</detalle>
+<detalle>
+<codigoPrincipal>X9125X1</codigoPrincipal>
+<descripcion>CHALECO WA014-1AK2776-1 NICOLAS</descripcion>
+<cantidad>1.0000</cantidad>
+<precioUnitario>22.9513</precioUnitario>
+<descuento>0.69</descuento>
+<precioTotalSinImpuesto>22.26</precioTotalSinImpuesto>
+<detallesAdicionales>
+<detAdicional nombre="Medida" valor="UNIDAD"/>
+<detAdicional nombre="Bodega" valor="1"/>
+</detallesAdicionales>
+<impuestos>
+<impuesto>
+<codigo>2</codigo>
+<codigoPorcentaje>2</codigoPorcentaje>
+<tarifa>12.00</tarifa>
+<baseImponible>22.26</baseImponible>
+<valor>2.67</valor>
+</impuesto>
+</impuestos>
+</detalle>
+<detalle>
+<codigoPrincipal>X4002A5</codigoPrincipal>
+<descripcion>ARGOLLA BRONCE 3/4quot;</descripcion>
+<cantidad>12.0000</cantidad>
+<precioUnitario>0.0703</precioUnitario>
+<descuento>0.03</descuento>
+<precioTotalSinImpuesto>0.82</precioTotalSinImpuesto>
+<detallesAdicionales>
+<detAdicional nombre="Medida" valor="UNIDAD"/>
+<detAdicional nombre="Bodega" valor="1"/>
+</detallesAdicionales>
+<impuestos>
+<impuesto>
+<codigo>2</codigo>
+<codigoPorcentaje>2</codigoPorcentaje>
+<tarifa>12.00</tarifa>
+<baseImponible>0.82</baseImponible>
+<valor>0.10</valor>
+</impuesto>
+</impuestos>
+</detalle>
+</detalles>
+<infoAdicional>
+<campoAdicional nombre="Lugar Venta">CORAL CENTRO</campoAdicional>
+<campoAdicional nombre="Codigo">6139230</campoAdicional>
+<campoAdicional nombre="Direccion">HORTENCIA MATA Y EL RETORNO</campoAdicional>
+<campoAdicional nombre="Telefonos">0989975024</campoAdicional>
+<campoAdicional nombre="Correo">mauricio.zarate@outlook.com</campoAdicional>
+<campoAdicional nombre="Deducible Vestimenta">22.26</campoAdicional>
+</infoAdicional>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature360307" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#">
+<ds:SignedInfo Id="Signature-SignedInfo831582">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+<ds:Reference URI="#Signature360307-SignedProperties86143" Id="SignedPropertiesID716317" Type="http://uri.etsi.org/01903#SignedProperties">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>F0FuSA4COuEwnuOwnF8kRUvlEvo=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#Certificate1251283">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>nguj18g/wkmRv0mu2fFOQ6UOCMI=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#comprobante" Id="Reference-ID-753739">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>EhyA4NWDssZhQBp5saxcdrx2GdA=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="SignatureValue141884">
+I1dsRnHMi0LZM+1eVs7mI7xmhajZbCDnJ+cDCBRl0B8bFmt+1L3wOmQAI/DLLqaXUWP1iySCNNvs
+AArTUF65Y9rEpclo/6mKDjCxRKoOWtr9SK1qFzuBj2W0/7LxvoJ93NklS+sVC1NBDwbJnvtbnjjx
+Mks1Z0mlby+1s2kYYkfkASI8qPMI1JnPESQCc3Uv8gB1z2tU567o2hM403ZHgQuBlrKsxifC+i3E
+9GpjQw2Z2tApb0AXhaamUMj1J0Z25KOAVG0JDqEVESiB7A2cOAQNGL+Uep6ZZvB+i3kNHp1fg73O
+N213TQskRSXlnhHYZ46YQ0q4jNtJVpGPzCUQ2g==
+</ds:SignatureValue>
+<ds:KeyInfo Id="Certificate1251283">
+<ds:X509Data>
+<ds:X509Certificate>
+MIIJYzCCB0ugAwIBAgIEWlrKLzANBgkqhkiG9w0BAQsFADCBoTELMAkGA1UEBhMCRUMxIjAgBgNV
+BAoTGUJBTkNPIENFTlRSQUwgREVMIEVDVUFET1IxNzA1BgNVBAsTLkVOVElEQUQgREUgQ0VSVElG
+SUNBQ0lPTiBERSBJTkZPUk1BQ0lPTi1FQ0lCQ0UxDjAMBgNVBAcTBVFVSVRPMSUwIwYDVQQDExxB
+QyBCQU5DTyBDRU5UUkFMIERFTCBFQ1VBRE9SMB4XDTE4MDExOTE5MzMxNFoXDTIwMDExOTIwMDMx
+NFowgbUxCzAJBgNVBAYTAkVDMSIwIAYDVQQKExlCQU5DTyBDRU5UUkFMIERFTCBFQ1VBRE9SMTcw
+NQYDVQQLEy5FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04tRUNJQkNFMQ4w
+DAYDVQQHEwVRVUlUTzE5MBEGA1UEBRMKMDAwMDEwNDE3MTAkBgNVBAMTHUhVR08gQU5EUkVTIFFV
+RVpBREEgSVpRVUlFUkRPMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxMNydShDHd6B
+hMVurGAuzfPsMiNmwAgLEvrnoAnanhnlcvb7I92H9M3xQVSPuMrv+nD215vkaLKe5OV/SsUkYh8G
+2KtAQAwCugPnjG1hROx9fHRX9ZgijGeKs8ysz+iml5nKd1NswpF40jpVn9KpmedOcs0ojuID6Kjv
+lz7CPMk7Sd8b/AuML2g+gOunzx4dJSZEKa3/7mfYKTMqRrIjncTipcWwJQeRCYldUWsD4HourDSx
+fjs3pdxIBTdhuqP8xp+OhG1FN3rqcr2QHWCgGk0vnKv1yCVonGXGr2Cc+Rg+93YMhRPNSoLOB+QR
+pUcJ5WDa1cs6jqTGFtCRWbwXNQIDAQABo4IEizCCBIcwgZEGCCsGAQUFBwEBBIGEMIGBMD4GCCsG
+AQUFBzABhjJodHRwOi8vb2NzcC5lY2kuYmNlLmVjL2VqYmNhL3B1YmxpY3dlYi9zdGF0dXMvb2Nz
+cDA/BggrBgEFBQcwAYYzaHR0cDovL29jc3AxLmVjaS5iY2UuZWMvZWpiY2EvcHVibGljd2ViL3N0
+YXR1cy9vY3NwMC4GCisGAQQBgqg7AwoEIBMeR0VSQVJETyBPUlRJWiBFIEhJSk9TIENJQSBMVERB
+MB0GCisGAQQBgqg7AwsEDxMNMDE5MDA3MjAwMjAwMTAaBgorBgEEAYKoOwMBBAwTCjAxMDQ3MTQw
+MTkwGwYKKwYBBAGCqDsDAgQNEwtIVUdPIEFORFJFUzAXBgorBgEEAYKoOwMDBAkTB1FVRVpBREEw
+GQYKKwYBBAGCqDsDBAQLEwlJWlFVSUVSRE8wFwYKKwYBBAGCqDsDBQQJEwdHRVJFTlRFMC8GCisG
+AQQBgqg7AwcEIRMfQVYgQ0FSTE9TIEpVTElPIEFST1NFTUVOQSBLTSAxNTAZBgorBgEEAYKoOwMI
+BAsTCTA0MjUwNjYzMjAZBgorBgEEAYKoOwMJBAsTCUd1YXlhcXVpbDAXBgorBgEEAYKoOwMMBAkT
+B0VDVUFET1IwIAYKKwYBBAGCqDsDMwQSExBTT0ZUV0FSRS1BUkNISVZPMCQGA1UdEQQdMBuBGWVj
+YXJyaW9uQGdlcmFyZG9vcnRpei5jb20wggHfBgNVHR8EggHWMIIB0jCCAc6gggHKoIIBxoaB1Wxk
+YXA6Ly9iY2VxbGRhcHN1YnAxLmJjZS5lYy9jbj1DUkw1MDUsY249QUMlMjBCQU5DTyUyMENFTlRS
+QUwlMjBERUwlMjBFQ1VBRE9SLGw9UVVJVE8sb3U9RU5USURBRCUyMERFJTIwQ0VSVElGSUNBQ0lP
+TiUyMERFJTIwSU5GT1JNQUNJT04tRUNJQkNFLG89QkFOQ08lMjBDRU5UUkFMJTIwREVMJTIwRUNV
+QURPUixjPUVDP2NlcnRpZmljYXRlUmV2b2NhdGlvbkxpc3Q/YmFzZYY0aHR0cDovL3d3dy5lY2ku
+YmNlLmVjL0NSTC9lY2lfYmNlX2VjX2NybGZpbGVjb21iLmNybKSBtTCBsjELMAkGA1UEBhMCRUMx
+IjAgBgNVBAoTGUJBTkNPIENFTlRSQUwgREVMIEVDVUFET1IxNzA1BgNVBAsTLkVOVElEQUQgREUg
+Q0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTi1FQ0lCQ0UxDjAMBgNVBAcTBVFVSVRPMSUwIwYD
+VQQDExxBQyBCQU5DTyBDRU5UUkFMIERFTCBFQ1VBRE9SMQ8wDQYDVQQDEwZDUkw1MDUwCwYDVR0P
+BAQDAgUgMB8GA1UdIwQYMBaAFBj58PvmMhyZZjkqyouyaX1JJ7/OMB0GA1UdDgQWBBQ+2SNBd9M0
+pwevhNT6QOu1KxOnlTAJBgNVHRMEAjAAMBkGCSqGSIb2fQdBAAQMMAobBFY4LjEDAgSQMA0GCSqG
+SIb3DQEBCwUAA4ICAQBu6b7ENgzy0l+LzO/owG+c4NnHmKurjyt0eHWqxrYHx99ekRjewDnyL31l
+k2vIFn1bxpKnPy43e4cd8+c/+MzXZVwifl2+R6fysQnse9sur//jBwO3jyQhbW2/E6sS19xdA2KK
++xgFv4L3WTbfITF2+CrkWnvIhYgl4vwfqGzuXGk9M59ZzfmtFm5SdvO8odfaukVlFMSfy6CMXcEO
+WMLI/VPpvMwi5vprTlqddVb0GNcDVd+zFimCylPM1gktknTBkRK7eleg9Ptv7bxrEwm6SVdVm/CM
+3AhHFcj5eIfoziwaonY26JlCS967iMsJ8vRTyyXyCuIKu7tau5VGqyYM9V1WP5oy+ift295l3zU9
+h7eZHS8Wj1ejGeuPEz7RwaY/gUW5tnci1pPB0YBkhz+KYCbYuEy5hJr/KLcXiZTaBUkrdMfh/ijZ
+laeFPwXg9wbqge1A2GtTz2MHa+8xZblPyFAnYv3NtzceWcLTyLZmI0goaYHtF7vnf/CsBq7TTpfb
+OsJlMjCs3UKoPKgOJTvoI+QB5dZDUq6xqpwn5lqxCsPXXNjzfesHXBDS5IJBGXUuyyuqjzhY6hv9
+fPzRm9VABTumPpMmbXIuQK9grpuVpaOTvAiVPfOb39zaOJXHD4RM3oOVsxXyW9vyBPaJqWY8JwwM
+WUwHpoiJuTfEklX2pQ==
+</ds:X509Certificate>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>
+xMNydShDHd6BhMVurGAuzfPsMiNmwAgLEvrnoAnanhnlcvb7I92H9M3xQVSPuMrv+nD215vkaLKe
+5OV/SsUkYh8G2KtAQAwCugPnjG1hROx9fHRX9ZgijGeKs8ysz+iml5nKd1NswpF40jpVn9KpmedO
+cs0ojuID6Kjvlz7CPMk7Sd8b/AuML2g+gOunzx4dJSZEKa3/7mfYKTMqRrIjncTipcWwJQeRCYld
+UWsD4HourDSxfjs3pdxIBTdhuqP8xp+OhG1FN3rqcr2QHWCgGk0vnKv1yCVonGXGr2Cc+Rg+93YM
+hRPNSoLOB+QRpUcJ5WDa1cs6jqTGFtCRWbwXNQ==
+</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object Id="Signature360307-Object894066"><etsi:QualifyingProperties Target="#Signature360307"><etsi:SignedProperties Id="Signature360307-SignedProperties86143"><etsi:SignedSignatureProperties><etsi:SigningTime>2018-07-28T12:48:52-04:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>YGOhrX//4Qh3WoNNk+yafq0MllM=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AC BANCO CENTRAL DEL ECUADOR,L=QUITO,OU=ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE,O=BANCO CENTRAL DEL ECUADOR,C=EC</ds:X509IssuerName><ds:X509SerialNumber>1515899439</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-753739"><etsi:Description>Contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>]]></comprobante>
+</autorizacion>
