@@ -138,7 +138,7 @@ class ConnectionMySqlTest implements Connection{
     }
 
     public function dropDataBase(){
-        $this->connection->query("DROP TABLE bill, buyer, store,`voucher-type`;");
+        $this->connection->query("DROP TABLE bill_detail, bill, buyer, store,`voucher-type`;");
     }
     
     public function createDataBase(){

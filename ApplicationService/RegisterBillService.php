@@ -40,6 +40,8 @@ class RegisterBillService {
             
             $billDao = new BillDao($this->connection);
             $billId = $billDao->insert($bill);
+            $bill->setId($billId);
+            $this->registerBillDetail($bill);
             $this->connection->commit();
         } catch (\Exception $exc) {
             $this->connection->rollBack();
@@ -70,6 +72,15 @@ class RegisterBillService {
             $buyerId = $buyerExist->getId();
         }
         return $buyerId;
+    }
+    
+    private function registerBillDetail(Bill $bill){
+        foreach ($bill->getBillDetails() as $billDetail){
+            $billDetailDao = new \Dao\BillDetailDao($this->connection);
+            $billDetailDao->setBillId($bill->getId());
+            $billDetailDao->insert($billDetail);
+        }
+                
     }
 
 }

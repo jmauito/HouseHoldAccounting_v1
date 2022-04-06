@@ -142,3 +142,23 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2022-03-28 20:43:51
+DROP TABLE IF EXISTS `bill_detail`;
+CREATE TABLE `bill_detail` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `billId` INT UNSIGNED NOT NULL,
+  `mainCode` VARCHAR(25) NULL,
+  `description` VARCHAR(300) NOT NULL,
+  `quantity` DECIMAL(14,2) NOT NULL,
+  `unitPrice` DECIMAL(14,4) NOT NULL,
+  `discount` DECIMAL(14,4) NULL,
+  `totalPriceWithoutTaxes` DECIMAL(14,4) NOT NULL,
+  `active` tinyint DEFAULT '1',
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
+  INDEX `fk_Bill_Detail_Bill_idx` (`billId` ASC) VISIBLE,
+  CONSTRAINT `fk_Bill_Detail_Bill`
+    FOREIGN KEY (`billId`)
+    REFERENCES `bill` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
