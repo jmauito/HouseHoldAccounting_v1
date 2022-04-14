@@ -28,7 +28,6 @@ class ConnectionMySqlTest implements Connection{
         } catch (\PDOException $ex) {
             echo "Falló la conexión: " . $ex->getMessage() . PHP_EOL;
             print_r($ex);
-            phpinfo();
             die();
             
         }
@@ -138,7 +137,7 @@ class ConnectionMySqlTest implements Connection{
     }
 
     public function dropDataBase(){
-        $this->connection->query("DROP TABLE bill_detail, bill, buyer, store,`voucher-type`;");
+        $this->connection->query("DROP TABLE bill_deductible, bill_detail, bill, buyer, store,`voucher-type`,`deductible`;");
     }
     
     public function createDataBase(){

@@ -19,6 +19,7 @@ final class Bill extends DomainModel{
     private $voucherType;
     private $buyer;
     private $billDetails = [];
+    private $billDeductibles = [];
     
     public function __construct(int $id = 0) {
         parent::__construct($id);
@@ -83,7 +84,11 @@ final class Bill extends DomainModel{
     function getBillDetails(): array{
         return $this->billDetails;
     }
-        
+    
+    function getBillDeductibles(): array{
+        return $this->billDeductibles;
+    }
+    
     function setAccessKey($accessKey): void {
         $this->accessKey = $accessKey;
     }
@@ -159,6 +164,28 @@ final class Bill extends DomainModel{
             }
         }
         $this->billDetails = $billDetails;
+        return true;
+    }
+    
+    function addBillDeductible(BillDeductible $billDeductible): ?bool{
+        if (TRUE === $index = array_search($billDeductible, $this->getBillDeductibles()) ){
+            return null;
+        }
+        $this->billDeductibles[] = $billDeductible;
+        return true;
+    }
+    
+    function deleteBillDeductibles(BillDeductible $billDeductible): ?bool{
+        if (FALSE === $index = array_search($billDeductible, $this->billDeductibles) ){
+            return null;
+        }
+        $billDeductibles = [];
+        foreach ($this->billDeductibles as $key=>$value){
+            if ($key !== $index){
+                $billDeductibles[] = $value;
+            }
+        }
+        $this->billDeductibles = $billDeductibles;
         return true;
     }
     

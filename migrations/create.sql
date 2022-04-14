@@ -162,3 +162,34 @@ CREATE TABLE `bill_detail` (
     ON DELETE CASCADE
     ON UPDATE CASCADE);
 
+DROP TABLE IF EXISTS `deductible`;
+CREATE TABLE `deductible` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL,
+  `active` TINYINT NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) );
+
+
+DROP TABLE IF EXISTS `bill_deductible`;
+CREATE TABLE `bill_deductible` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `value` DECIMAL(14,2) NOT NULL,
+  `billId` INT UNSIGNED NULL,
+  `deductibleId` INT UNSIGNED NULL,
+  `active` TINYINT NULL DEFAULT 1,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+  INDEX `bill_deductible_bill_fk_idx` (`billId` ASC) ,
+  INDEX `bill_deductible_deductible_fk_idx` (`deductibleId` ASC) ,
+  CONSTRAINT `bill_deductible_bill_fk`
+    FOREIGN KEY (`billId`)
+    REFERENCES `householdaccounting_test`.`bill` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `bill_deductible_deductible_fk`
+    FOREIGN KEY (`deductibleId`)
+    REFERENCES `householdaccounting_test`.`deductible` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE);

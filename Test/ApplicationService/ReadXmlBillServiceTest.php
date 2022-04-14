@@ -23,6 +23,10 @@ class ReadXmlBillServiceTest {
         $this->connection = $connection;
     }
     
+    public function __destruct() {
+        #$this->connection->dropDatabase();
+    }
+    
     public function __invoke() {
         $bill = $this->convertXmlToBill();
         echo '<pre>';

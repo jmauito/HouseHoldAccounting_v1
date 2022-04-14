@@ -42,6 +42,7 @@ class RegisterBillService {
             $billId = $billDao->insert($bill);
             $bill->setId($billId);
             $this->registerBillDetail($bill);
+            $this->registerBillDeductibles($bill);
             $this->connection->commit();
         } catch (\Exception $exc) {
             $this->connection->rollBack();
@@ -79,6 +80,14 @@ class RegisterBillService {
             $billDetailDao = new \Dao\BillDetailDao($this->connection);
             $billDetailDao->setBillId($bill->getId());
             $billDetailDao->insert($billDetail);
+        }
+                
+    }
+    
+    private function registerBillDeductibles(Bill $bill){
+        foreach ($bill->getBillDeductibles() as $billDeductible){
+            $billDeductibleDao = new \Dao\BillDeductibleDao($this->connection, $bill->getId(), $billDeductible->getDeductible()->getId());
+            $billDeductibleDao->insert($billDeductible);
         }
                 
     }

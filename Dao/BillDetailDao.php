@@ -28,7 +28,6 @@ class BillDetailDao {
     function setBillId(int $billId): void {
         $this->billId = $billId;
     }
-
         
     public function __construct(Connection $connection) {
         $this->connection = $connection;
