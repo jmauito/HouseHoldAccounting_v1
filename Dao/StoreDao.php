@@ -64,4 +64,20 @@ class StoreDao {
         
         return $store;
     }
+    
+    public function findById(int $id):?Store
+    {
+        $result = $this->connection->findById(self::$TABLE, $id);
+        if ($result === null){
+            return null;
+        }
+        
+        $store = new Store($result->id);
+        $store->setBusinessName($result->businessName);
+        $store->setTradeName($result->tradeName);
+        $store->setParentAddress($result->parentAddress);
+        $store->setActive($result->active);
+        
+        return $store;
+    }
 }

@@ -19,5 +19,7 @@
             "Dao\\":"Dao"
         }
     },
-    "require": {}
+    "require": {
+        "league/plates": "^3.4"
+    }
 }

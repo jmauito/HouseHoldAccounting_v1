@@ -34,7 +34,11 @@ final class Store extends DomainModel{
     }
 
     function setTradeName($tradeName): void {
-        $this->tradeName = $tradeName;
+        if (null == $tradeName){
+            $this->tradeName = $this->getBusinessName();
+        }else {
+            $this->tradeName = $tradeName;
+        }  
     }
 
     function setRuc($ruc): void {

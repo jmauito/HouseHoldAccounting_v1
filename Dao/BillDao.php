@@ -19,7 +19,17 @@ use Infraestructure\Connection\Connection;
 class BillDao {
     private static $TABLE = "bill";
     private $connection;
-    
+    private $storeId;
+    private $buyerId;
+
+    function getStoreId():int {
+        return $this->storeId;
+    }
+
+    function getBuyerId():int {
+        return $this->buyerId;
+    }
+
     public function __construct(Connection $connection) {
         $this->connection = $connection;
     }
@@ -56,5 +66,30 @@ class BillDao {
     
     public function delete(int $id):int{
         return $this->connection->delete(self::$TABLE, $id);
+    }
+    
+    public function findOne($property, $value):?Bill
+    {
+        if (null === $result = $this->connection->findOne(self::$TABLE, [$property=>$value]) ){
+            return null;
+        }
+        
+        $this->buyerId = $result->buyerId;
+        $this->storeId = $result->storeId;
+        
+        $bill = new Bill();
+        $bill->setId($result->id);
+        $bill->setAccessKey($result->accessKey);
+        $bill->setEmissionPoint($result->emissionPoint);
+        $bill->setEstablishment($result->establishment);
+        $bill->setSecuential($result->secuential);
+        $bill->setDateOfIssue($result->dateOfIssue);
+        $bill->setEstablishmentAddress($result->establishmentAddress);
+        $bill->setTotalWithoutTax($result->totalWithoutTax);
+        $bill->setTotalDiscount($result->totalDiscount);
+        $bill->setTip($result->tip);
+        $bill->setTotal($result->total);
+        $bill->setFilePath($result->filePath);
+        return $bill;
     }
 }

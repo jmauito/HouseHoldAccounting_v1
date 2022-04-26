@@ -91,8 +91,8 @@ DROP TABLE IF EXISTS `store`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `store` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `businessName` varchar(45) NOT NULL,
-  `tradeName` varchar(45) NOT NULL,
+  `businessName` varchar(255) NOT NULL,
+  `tradeName` varchar(255) NOT NULL,
   `ruc` char(13) NOT NULL,
   `parentAddress` varchar(45) DEFAULT NULL,
   `active` tinyint DEFAULT '1',
