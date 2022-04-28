@@ -16,10 +16,12 @@
             "Infraestructure\\":"Infraestructure/",
             "Lib\\":"Lib",
             "Test\\":"Test",
-            "Dao\\":"Dao"
+            "Dao\\":"Dao",
+            "Controllers\\":"Controllers"
         }
     },
     "require": {
-        "league/plates": "^3.4"
+        "league/plates": "^3.4",
+        "altorouter/altorouter": "^2.0"
     }
 }

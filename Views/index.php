@@ -3,5 +3,5 @@
 ]) ?>
 
 <ul>
-    <li><a href="BillXmlLoad.php">Load from xml file</a></li>
+    <li><a href="load-from-xml">Load from xml file</a></li>
 </ul>
