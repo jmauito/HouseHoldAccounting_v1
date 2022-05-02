@@ -25,19 +25,19 @@ final class Bill extends DomainModel{
         parent::__construct($id);
     }
     
-    function getAccessKey() {
+    function getAccessKey(): string {
         return $this->accessKey;
     }
 
-    function getEstablishment() {
+    function getEstablishment():string {
         return $this->establishment;
     }
 
-    function getEmissionPoint() {
+    function getEmissionPoint():string {
         return $this->emissionPoint;
     }
 
-    function getSecuential() {
+    function getSecuential():string {
         return $this->secuential;
     }
 
@@ -204,9 +204,17 @@ final class Bill extends DomainModel{
         $dto->total = $this->getTotal();
         $dto->filePath = $this->getFilePath();
         $dto->store = $this->store->toDto();
-        $dto->voucherType = $this->voucherType->toDto;
-        $dto->buyer = $this->buyer->toDto;
+        $dto->voucherType = $this->voucherType->toDto();
+        $dto->buyer = $this->buyer->toDto();
+        $dto->billDetails = [];
+        foreach ($this->billDetails as $billDetail){
+            $dto->billDetails[] = $billDetail->toDto();
+        }
         return $dto;
+    }
+    
+    function toJson(){
+        return json_encode($this->toDto());
     }
     
 }

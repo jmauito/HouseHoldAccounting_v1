@@ -62,5 +62,28 @@ class DeductibleDao {
         return $deductible;
         
     }
+    
+    public function find():?array{
+        if( null === $result = $this->connection->find(self::$TABLE, ['active' => true])){
+            return null;
+        }
+        $deductibles = [];
+        foreach ($result as $obj){
+            $deductible = new Deductible();
+            $deductible->setId($obj->id);
+            $deductible->setName($obj->name);
+            $deductibles[] = $deductible;
+        }
+        return $deductibles;
+    }
 
+    public function findById(int $id):?Deductible{
+        if (null === $result = $this->connection->findById(self::$TABLE, $id)){
+            return null;
+        }
+        $deductible = new Deductible($result->id);
+        $deductible->setName($result->name);
+        $deductible->setActive($result->active);
+        return $deductible;
+    }
 }

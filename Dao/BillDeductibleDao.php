@@ -72,4 +72,14 @@ class BillDeductibleDao {
         
         return $billDeductible;
     }
+    
+    public function findById(int $id):?BillDeductible{
+        if (null === $result = $this->connection->findById(self::$TABLE, $id)){
+            return null;
+        }
+        $billDeductible = new BillDeductible($result->id);
+        $billDeductible->setValue($result->value);
+        $billDeductible->setActive($result->active);
+        return $billDeductible;
+    }
 }

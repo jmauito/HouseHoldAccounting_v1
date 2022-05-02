@@ -42,8 +42,24 @@ class ConnectionMySql implements Connection {
         return $stmt->rowCount();
     }
 
-    public function find(string $table, array $params): array {
-        
+    public function find(string $table, array $params):? array {
+        $statement = "SELECT * FROM `$table` WHERE ";
+        $separator = '';
+        foreach ($params as $field => $param){
+            $statement .= "$separator $field = :$field ";
+            $separator = ' AND ';
+        }
+        $stmt = $this->connection->prepare($statement);
+        foreach ($params as $field => $param){
+            $$field = $param;
+            $stmt->bindParam($field, $$field);
+        }
+        $stmt->execute();
+        $result = $stmt->fetchAll(\PDO::FETCH_OBJ);
+        if (count($result) === 0){
+            return null;
+        }
+        return $result;
     }
 
     public function findById(string $table, int $id): ?\stdClass {

@@ -16,7 +16,7 @@ interface Connection {
     
     public function findById(string $table, int $id):? \stdClass;
     public function findOne(string $table, array $params):? \stdClass;
-    public function find(string $table, array $params): array;
+    public function find(string $table, array $params):? array;
     public function insert(string $table, array $params):int;
     public function update(string $table, array $params):int;
     public function delete(string $table, int $id):int;

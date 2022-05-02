@@ -24,13 +24,13 @@ use Dao\BuyerDao;
 class RegisterBillService {
 
     private $connection;
+    private $errors = [];
 
     public function __construct(Connection $connection) {
         $this->connection = $connection;
     }
 
     public function __invoke(Bill $bill) {
-
         $this->connection->beginTransaction();
         try {
             $storeId = $this->getOrCreateStore($bill->getStore());
@@ -46,8 +46,8 @@ class RegisterBillService {
             $this->connection->commit();
         } catch (\Exception $exc) {
             $this->connection->rollBack();
-            echo $exc->getMessage();
-            echo $exc->getTraceAsString();
+            $this->errors[] = $exc->getMessage();
+            return null;
         }
 
         return $billId;
@@ -92,4 +92,7 @@ class RegisterBillService {
                 
     }
 
+    public function getErrors(){
+        return $this->errors;
+    }
 }

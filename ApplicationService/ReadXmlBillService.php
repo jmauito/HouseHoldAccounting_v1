@@ -44,7 +44,6 @@ class ReadXmlBillService {
 
         $bill->setStore($this->setStore($xml));
         $bill->setBuyer($this->setBuyer($xml));
-
         $voucherTypeDao = new \Dao\VoucherTypeDao($connection);
         $voucherType = $voucherTypeDao->findOne(['code' => $xml->infoTributaria->codDoc]);
         $bill->setVoucherType($voucherType);
