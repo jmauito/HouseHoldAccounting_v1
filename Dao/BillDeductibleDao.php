@@ -82,4 +82,28 @@ class BillDeductibleDao {
         $billDeductible->setActive($result->active);
         return $billDeductible;
     }
+    
+    public function findByBill():? array
+    {
+        if (null === $result = $this->connection->find(self::$TABLE, [
+            'billId' => $this->billId,
+            'active' => true
+        ])){
+            return null;
+        }
+        $billDeductibles = [];
+        foreach($result as $value){
+            $billDeductibles[] = $this->parse($value);
+        }
+        return $billDeductibles;
+    }
+    
+    private function parse(\stdClass $result):BillDeductible
+    {
+        $billDeductible = new BillDeductible($result->id);
+        $billDeductible->setValue($result->value);
+        $billDeductible->setDeductibleId($result->deductibleId);
+        return $billDeductible;
+    }
+    
 }

@@ -30,14 +30,14 @@ class BillController extends Controller {
 
         if ($billExists) {
             $bill = $billExists;
-            $title = "Bill exists";
+            $title = "Bill already register";
         }
 
         $deductibleFinderService = new DeductibleFinderService($connection);
         $deductibles = $deductibleFinderService->findAll();
 
         echo $this->templates->render('bill-edit', [
-            'title' => "Factura cargada",
+            'title' => $title,
             'bill' => $bill,
             'deductibles' => $deductibles
         ]);

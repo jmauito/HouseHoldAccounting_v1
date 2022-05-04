@@ -64,5 +64,16 @@ class VoucherTypeDao {
         return $voucherType;
         
     }
+    
+    public function findById(int $id){
+        if (null === $result = $this->connection->findById(self::$TABLE, $id) ){
+            return null;
+        }
+        $voucherType = new VoucherType($result->id);
+        $voucherType->setCode($result->code);
+        $voucherType->setName($result->name);
+        $voucherType->setActive($result->active);
+        return $voucherType;
+    }
 
 }

@@ -79,4 +79,23 @@ class BillDetailDao {
         
         return $billDetail;
     }
+    
+    public function findByBill(int $billId):? array
+    {
+        if (null === $result = $this->connection->find(self::$TABLE, ['billId' => $billId]) ){
+            return null;
+        }
+        $billDetails = [];
+        foreach($result as $value){
+            $billDetail = new BillDetail($value->id);
+            $billDetail->setMainCode($value->mainCode);
+            $billDetail->setDescription($value->description);
+            $billDetail->setQuantity($value->quantity);
+            $billDetail->setUnitPrice($value->unitPrice);
+            $billDetail->setDiscount($value->discount);
+            $billDetail->setTotalPriceWithoutTaxes($value->totalPriceWithoutTaxes);
+            $billDetails[] = $billDetail;
+        }
+        return $billDetails;
+    }
 }

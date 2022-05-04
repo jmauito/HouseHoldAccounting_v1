@@ -63,4 +63,16 @@ class BuyerDao {
         
         return $buyer;
     }
+    
+    public function findById(int $id){
+        if (null === $result = $this->connection->findById(self::$TABLE, $id) ){
+            return null;
+        }
+        $buyer = new Buyer($result->id);
+        $buyer->setName($result->name);
+        $buyer->setIdentification($result->identification);
+        $buyer->setIdentificationType($result->identificationType);
+        $buyer->setActive($result->active);
+        return $buyer;
+    }
 }

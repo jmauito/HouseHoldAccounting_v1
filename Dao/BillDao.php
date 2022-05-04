@@ -21,6 +21,7 @@ class BillDao {
     private $connection;
     private $storeId;
     private $buyerId;
+    private $voucherTypeId;
 
     function getStoreId():int {
         return $this->storeId;
@@ -28,6 +29,10 @@ class BillDao {
 
     function getBuyerId():int {
         return $this->buyerId;
+    }
+    
+    function getVoucherTypeId():int{
+        return $this->voucherTypeId;
     }
 
     public function __construct(Connection $connection) {
@@ -71,11 +76,15 @@ class BillDao {
     public function findOne($property, $value):?Bill
     {
         if (null === $result = $this->connection->findOne(self::$TABLE, [$property=>$value]) ){
+            $this->buyerId = null;
+            $this->storeId = null;
+            $this->voucherTypeId = null;
             return null;
         }
         
         $this->buyerId = $result->buyerId;
         $this->storeId = $result->storeId;
+        $this->voucherTypeId = $result->voucherTypeId;
         
         $bill = new Bill();
         $bill->setId($result->id);

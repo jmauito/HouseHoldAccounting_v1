@@ -6,6 +6,7 @@ use Lib\DomainModel;
 final class BillDeductible extends DomainModel{
     private $deductible;
     private $value;
+    private $deductibleId;
     
     public function __construct(int $id = 0) {
         parent::__construct($id);
@@ -18,6 +19,10 @@ final class BillDeductible extends DomainModel{
     function getValue():float {
         return $this->value;
     }
+    
+    function getDeductibleId():int{
+        return $this->deductibleId;
+    }
 
     function setDeductible(Deductible $deductible): void {
         $this->deductible = $deductible;
@@ -25,6 +30,10 @@ final class BillDeductible extends DomainModel{
 
     function setValue(float $value): void {
         $this->value = $value;
+    }
+    
+    function setDeductibleId(int $deductibleId): void {
+        $this->deductibleId = $deductibleId;
     }
 
     function toDto(){

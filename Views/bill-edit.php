@@ -74,15 +74,25 @@ $encodedBill = base64_encode($bill->toJson());
 
     <div>
         <h2>Deductibles</h2>
-
+        
         <?php foreach ($deductibles as $deductible): ?>
             <?php $inputDeductibleName = "deductible-{$deductible->getId()}" ?>
+            <?php
+                $billDeductibleValue = null;
+                $deductibleId = $deductible->getId();
+                $billDeductibleExists = current( array_filter($bill->getBillDeductibles(), function($arr) use ($deductibleId){
+                    return $arr->getDeductible()->getId() === $deductibleId;
+                }) );
+                if ($billDeductibleExists !== false){
+                    $billDeductibleValue = $billDeductibleExists->getValue();
+                }
+            ?>
             <div>
                 <label for="<?= $inputDeductibleName ?>">
                     <?= $deductible->getName() ?>
                 </label>
                 <input type="text" name="bill-deductibles[<?= $deductible->getId() ?>]" 
-                       id ="<?= $inputDeductibleName ?>" />
+                       id ="<?= $inputDeductibleName ?>" value="<?= $billDeductibleValue ?>"/>
             </div>
         <?php endforeach; ?>
     </div>
