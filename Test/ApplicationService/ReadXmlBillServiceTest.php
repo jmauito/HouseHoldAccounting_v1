@@ -14,20 +14,42 @@ namespace Test\ApplicationService;
  * @author mauit
  */
 
+use Infraestructure\Connection\ConnectionMySqlTest;
 use ApplicationService\ReadXmlBillService;
+use PHPUnit\Framework\TestCase;
+use Domain\Bill;
 
-class ReadXmlBillServiceTest {
-    private $connection;
+class ReadXmlBillServiceTest extends TestCase{
+    // private $connection;
     
-    public function __construct(\Infraestructure\Connection\Connection $connection) {
+    /*public function __construct(\Infraestructure\Connection\Connection $connection) {
+        parent::__construct();
         $this->connection = $connection;
+    }*/
+    
+    public function testCanParseXmlToBill():void
+    {
+        $connection = new ConnectionMySqlTest();
+        $xmlBill = file_get_contents('Test/testBill.xml');
+        $readXmlBillService = new ReadXmlBillService($xmlBill);
+        $bill = $readXmlBillService($connection);
+        $this->assertInstanceOf(Bill::class, $bill );
     }
     
-    public function __destruct() {
-        #$this->connection->dropDatabase();
+    public function testCanRegisterBill():void{
+        $connection = new ConnectionMySqlTest();
+        $bill = BillMother::random();
+        print_r($bill);
+        $registerBillService = new \ApplicationService\RegisterBillService($connection);
+        $id = $registerBillService($bill);
+        $this->assertEquals($bill->getId(), $id);
     }
     
-    public function __invoke() {
+    /*public function __destruct() {
+        $this->connection->dropDatabase();
+    }*/
+    
+    /*public function __invoke() {
         $bill = $this->convertXmlToBill();
         echo '<pre>';
         print_r($bill);
@@ -36,16 +58,7 @@ class ReadXmlBillServiceTest {
         print("Register bill whit id: '$id'");
     }
     
-    private function convertXmlToBill(){
-        $xmlBill = file_get_contents('testBill.xml');
-        $readXmlBillService = new ReadXmlBillService($xmlBill);
-        $bill = $readXmlBillService($this->connection);
-        return $bill;
-    }
     
-    private function registerBill(\Domain\Bill $bill){
-        $registerBillService = new \ApplicationService\RegisterBillService($this->connection);
-        $id = $registerBillService($bill);
-        return $id;
-    }
+    
+    */
 }
