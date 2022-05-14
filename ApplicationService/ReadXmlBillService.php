@@ -14,6 +14,7 @@ namespace ApplicationService;
  * @author mauit
  */
 use Domain\Bill;
+use Domain\BillAdditionalInformation;
 use Domain\Buyer;
 use Domain\Store;
 use Domain\BillDetail;
@@ -49,7 +50,11 @@ class ReadXmlBillService {
         $bill->setVoucherType($voucherType);
         
         $this->setBillDetails($bill,$xml->detalles);
-        
+
+        if (property_exists($xml, 'infoAdicional')){
+            $this->setBillAdditionalInformation($bill,$xml->infoAdicional);
+        }
+
         return $bill;
     }
 
@@ -100,6 +105,17 @@ class ReadXmlBillService {
             $billDetail->setTotalPriceWithoutTaxes((float)$detail->precioTotalSinImpuesto);
             
             $bill->addBillDetail($billDetail);
+        }
+    }
+
+    private function setBillAdditionalInformation(Bill $bill, \SimpleXMLElement $xml){
+
+        foreach ($xml->campoAdicional as $additionalField) {
+            $billAdditionalInformation = new BillAdditionalInformation();
+            $billAdditionalInformation->setName($additionalField['nombre']);
+            $billAdditionalInformation->setValue($additionalField[0]);
+
+            $bill->addBillAdditionalInformation($billAdditionalInformation);
         }
     }
 }

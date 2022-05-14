@@ -60,12 +60,12 @@ class BillDao {
         return $arr;
     }
     
-    public function insert(Bill $bill){
+    public function insert(Bill $bill):int{
         $bill->setActive(true);
         return $this->connection->insert(self::$TABLE, $this->toArray($bill));
     }
     
-    public function update(Bill $bill){
+    public function update(Bill $bill):int{
         return $this->connection->update(self::$TABLE, $this->toArray($bill));
     }
     

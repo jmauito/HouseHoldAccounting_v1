@@ -3,6 +3,7 @@ $this->layout('Layouts/layout', [
     'title' => $title
 ]);
 $encodedBill = base64_encode($bill->toJson());
+
 ?>
 
 <form action="save-bill" method="post" >
@@ -73,6 +74,16 @@ $encodedBill = base64_encode($bill->toJson());
     </div>
 
     <div>
+        <h2> Additional Information</h2>
+        <?php foreach ($bill->getBillAdditionalInformation() as $additionalInformation ): ?>
+        <div>
+            <label><?= $additionalInformation->getName() ?> : </label>
+            <label><?= $additionalInformation->getValue() ?> </label>
+        </div>
+        <?php endforeach; ?>
+    </div>
+
+    <div>
         <h2>Deductibles</h2>
         
         <?php foreach ($deductibles as $deductible): ?>
@@ -121,16 +132,38 @@ $encodedBill = base64_encode($bill->toJson());
                     <td><?= $billDetail->getDiscount() ?></td>
                     <td><?= $billDetail->getTotalPriceWithoutTaxes() ?></td>
                     <td>
-                        <select name="billDetailDeductible[<?= $billDetail->getMainCode() ?>]">
+                        <select 
+                            name="billDetailDeductible[<?= $billDetail->getMainCode() ?>]" 
+                            id="<?= $billDetail->getMainCode() ?>" 
+                            onchange="changeBillDetailDeductible('<?= $billDetail->getMainCode() ?>', '<?= $billDetail->getTotalPriceWithoutTaxes() ?>')"
+                        >
                             <option value="0" selected>Select deductible...</option>
+                            <?php foreach ($deductibles as $deductible): ?>
+                            <option value="<?= $deductible->getId()  ?>"><?= $deductible->getName() ?></option>
+                            <?php endforeach;?>
                         </select>
+                        <input type="hidden" id="deductibleId_<?= $billDetail->getMainCode() ?>" name="deductibleId_<?= $billDetail->getMainCode() ?>" value="" />
                     </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
 
-
-
     <input type="submit" value="Save">
 </form>
+
+<script>
+
+let billDetailsDedctible = [];
+
+function changeBillDetailDeductible(mainCode, value){
+    const element = document.getElementById(mainCode)
+    
+    const deductibleId = document.getElementById('deductibleId_' + mainCode)
+    deductibleId.value = element.value
+    
+    const deductible = document.getElementById('deductible-' + element.value)
+    deductible.value = deductible.value * 1 + value * 1
+    
+}
+</script>

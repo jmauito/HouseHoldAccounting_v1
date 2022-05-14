@@ -20,6 +20,7 @@ final class Bill extends DomainModel{
     private $buyer;
     private $billDetails = [];
     private $billDeductibles = [];
+    private $billAdditionalInformation = [];
     
     public function __construct(int $id = 0) {
         parent::__construct($id);
@@ -87,6 +88,10 @@ final class Bill extends DomainModel{
     
     function getBillDeductibles(): array{
         return $this->billDeductibles;
+    }
+
+    function getBillAdditionalInformation(): array{
+        return $this->billAdditionalInformation;
     }
     
     function setAccessKey($accessKey): void {
@@ -188,8 +193,31 @@ final class Bill extends DomainModel{
         $this->billDeductibles = $billDeductibles;
         return true;
     }
+
+    function addBillAdditionalInformation(BillAdditionalInformation $billAdditionalInformation): ?bool{
+        if (TRUE === $index = array_search($billAdditionalInformation, $this->getBillAdditionalInformation()) ){
+            return null;
+        }
+        $this->billAdditionalInformation[] = $billAdditionalInformation;
+        return true;
+    }
+
+    function deleteBillAdditionalInformation(BillAdditionalInformation $billAdditionalInformation): ?bool{
+        if (FALSE === $index = array_search( $billAdditionalInformation, $this->getBillAdditionalInformation() ) ){
+            return null;
+        }
+        $listBillAdditionalInformation = [];
+        foreach ($this->billAdditionalInformation as $key=>$value){
+            if ($key !== $index){
+                $listBillAdditionalInformation[] = $value;
+            }
+        }
+        $this->billAdditionalInformation = $listBillAdditionalInformation;
+        return true;
+    }
     
-    function toDto(){
+    function toDto():\stdClass
+    {
         $dto = new \stdClass();
         $dto->id = $this->getId();
         $dto->accessKey = $this->getAccessKey();
@@ -209,6 +237,10 @@ final class Bill extends DomainModel{
         $dto->billDetails = [];
         foreach ($this->billDetails as $billDetail){
             $dto->billDetails[] = $billDetail->toDto();
+        }
+        $dto->billAdditionalInformation = [];
+        foreach ($this->billAdditionalInformation as $billAdditionalInformation){
+            $dto->billAdditionalInformation[] = $billAdditionalInformation->toDto();
         }
         return $dto;
     }

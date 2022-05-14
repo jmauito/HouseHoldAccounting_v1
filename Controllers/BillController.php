@@ -4,6 +4,12 @@ namespace Controllers;
 
 use ApplicationService\ReadXmlBillService;
 use ApplicationService\SearchBillService;
+use Domain\Bill;
+use Domain\BillAdditionalInformation;
+use Domain\BillDetail;
+use Domain\Buyer;
+use Domain\Store;
+use Domain\VoucherType;
 use Infraestructure\Connection\ConnectionMySql;
 use \DomainService\DeductibleFinderService;
 use \Dao\DeductibleDao;
@@ -68,8 +74,8 @@ class BillController extends Controller {
         }
     }
 
-    private function jsonToBill($billJson): \Domain\Bill {
-        $bill = new \Domain\Bill();
+    private function jsonToBill($billJson):? Bill {
+        $bill = new Bill();
         if (null === $json = json_decode($billJson)) {
             return null;
         }
@@ -85,27 +91,27 @@ class BillController extends Controller {
         $bill->setTotal($json->total);
         $bill->setFilePath($json->filePath);
         
-        $store = new \Domain\Store();
+        $store = new Store();
         $store->setBusinessName($json->store->businessName);
         $store->setTradeName($json->store->tradeName);
         $store->setRuc($json->store->ruc);
         $store->setParentAddress($json->store->parentAddress);
         $bill->setStore($store);
 
-        $voucherType = new \Domain\VoucherType();
+        $voucherType = new VoucherType();
         $voucherType->setId($json->voucherType->id);
         $voucherType->setCode($json->voucherType->code);
         $voucherType->setName($json->voucherType->name);
         $bill->setVoucherType($voucherType);
 
-        $buyer = new \Domain\Buyer();
+        $buyer = new Buyer();
         $buyer->setIdentificationType($json->buyer->identificationType);
         $buyer->setName($json->buyer->name);
         $buyer->setIdentification($json->buyer->ruc);
         $bill->setBuyer($buyer);
 
         foreach ($json->billDetails as $jsonBillDetail){
-            $billDetail = new \Domain\BillDetail();
+            $billDetail = new BillDetail();
             $billDetail->setMainCode($jsonBillDetail->mainCode);
             $billDetail->setDescription($jsonBillDetail->description);
             $billDetail->setQuantity($jsonBillDetail->quantity);
@@ -114,7 +120,12 @@ class BillController extends Controller {
             $billDetail->setTotalPriceWithoutTaxes($jsonBillDetail->totalPriceWithoutTaxes);
             $bill->addBillDetail($billDetail);
         }
-        
+        foreach ($json->billAdditionalInformation as $jsonBillAdditionalInformation){
+            $billAdditionalInformation = new BillAdditionalInformation();
+            $billAdditionalInformation->setName($jsonBillAdditionalInformation->name);
+            $billAdditionalInformation->setValue($jsonBillAdditionalInformation->value);
+            $bill->addBillAdditionalInformation($billAdditionalInformation);
+        }
         return $bill;
     }
 

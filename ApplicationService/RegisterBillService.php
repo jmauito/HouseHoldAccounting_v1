@@ -13,8 +13,11 @@ namespace ApplicationService;
  *
  * @author mauit
  */
+
+use Dao\BillAdditionalInformationDao;
 use Domain\Bill;
 use Dao\BillDao;
+use Domain\BillAdditionalInformation;
 use Domain\Store;
 use Infraestructure\Connection\Connection;
 use Dao\StoreDao;
@@ -43,6 +46,7 @@ class RegisterBillService {
             $bill->setId($billId);
             $this->registerBillDetail($bill);
             $this->registerBillDeductibles($bill);
+            $this->registerBillAdditionalInformation($bill);
             $this->connection->commit();
         } catch (\Exception $exc) {
             $this->connection->rollBack();
@@ -90,6 +94,15 @@ class RegisterBillService {
             $billDeductibleDao->insert($billDeductible);
         }
                 
+    }
+
+    private function registerBillAdditionalInformation(Bill $bill){
+        foreach ($bill->getBillAdditionalInformation() as $billAdditionalInformation){
+            $billAdditionalInformationDao = new BillAdditionalInformationDao($this->connection);
+            $billAdditionalInformationDao->setBillId($bill->getId());
+            $billAdditionalInformationDao->insert($billAdditionalInformation);
+        }
+
     }
 
     public function getErrors(){
