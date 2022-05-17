@@ -1,0 +1,23 @@
+
+.main-container{
+    white-space: nowrap;
+}
+
+.main-container *{
+    white-space: normal;
+}
+
+.main-container .content .lateral-menu{
+    display: inline-block;
+    margin-right: -4px;
+    vertical-align: top;
+    height: 100vh;
+}
+
+.main-container .lateral-menu{
+    width: 300px;
+}
+
+.menu{
+    display: inline-block;
+}

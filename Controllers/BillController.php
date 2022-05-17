@@ -30,6 +30,7 @@ class BillController extends Controller {
         $bill = $readXmlService($connection);
 
         $title = "New bill";
+        $update = false;
 
         $searchBilService = new SearchBillService($connection);
         $billExists = $searchBilService->searchByAccessKey($bill->getAccessKey());
@@ -37,6 +38,7 @@ class BillController extends Controller {
         if ($billExists) {
             $bill = $billExists;
             $title = "Bill already register";
+            $update = true;
         }
 
         $deductibleFinderService = new DeductibleFinderService($connection);
@@ -45,13 +47,16 @@ class BillController extends Controller {
         echo $this->templates->render('bill-edit', [
             'title' => $title,
             'bill' => $bill,
-            'deductibles' => $deductibles
+            'deductibles' => $deductibles,
+            'update' => $update
         ]);
     }
 
     public function saveBill() {
         $connection = new ConnectionMySql();
         $bill = $this->jsonToBill(base64_decode($_POST['bill']));
+        $update = $_POST['update'];
+
         $deductibleDao = new DeductibleDao($connection);
         foreach ($_POST['bill-deductibles'] as $htmlBillDeductibleCode => $htmlBillDeductibleValue) {
             $deductible = $deductibleDao->findById($htmlBillDeductibleCode);
@@ -61,7 +66,7 @@ class BillController extends Controller {
             $bill->addBillDeductible($billDeductible);
         }
         $registerBillService = new RegisterBillService($connection);
-        if (null === $billId = $registerBillService($bill)) {
+        if (null === $billId = $registerBillService($bill, $update)) {
             echo $this->templates->render('error-view', [
                 'title' => 'Error al registrar la factura.',
                 'errorMessages' => $registerBillService->getErrors()

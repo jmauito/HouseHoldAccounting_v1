@@ -2,6 +2,5 @@
     'title' => $title
 ]) ?>
 
-<ul>
-    <li><a href="load-from-xml">Load from xml file</a></li>
-</ul>
+
+<h1>Dashboard</h1>

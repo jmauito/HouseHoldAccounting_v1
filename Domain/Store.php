@@ -41,9 +41,9 @@ final class Store extends DomainModel{
         }  
     }
 
-    function setRuc($ruc): void {
+    function setRuc(string $ruc): void {
         if (strlen($ruc) !== 13){
-            throw new \Exception("La longitud del ruc debe ser de 13 caracteres");
+            throw new \Exception("La longitud del ruc debe ser de 13 caracteres ('$ruc')");
         }
         $this->ruc = $ruc;
     }

@@ -1,12 +1,12 @@
 <?php
 $this->layout('Layouts/layout', [
-    'title' => $title
+    'title' => $title,
 ]);
 $encodedBill = base64_encode($bill->toJson());
-
 ?>
 
 <form action="save-bill" method="post" >
+    <input type="hidden" name="update" value="<?= $update ?>">
     <input type="hidden" name="bill" id="bill" value="<?= $encodedBill ?>">
     <div>
         <label >Access key: </label>
@@ -135,14 +135,14 @@ $encodedBill = base64_encode($bill->toJson());
                         <select 
                             name="billDetailDeductible[<?= $billDetail->getMainCode() ?>]" 
                             id="<?= $billDetail->getMainCode() ?>" 
-                            onchange="changeBillDetailDeductible('<?= $billDetail->getMainCode() ?>', '<?= $billDetail->getTotalPriceWithoutTaxes() ?>')"
+                            onchange="changeBillDetailDeductible('<?= $billDetail->getMainCode() ?>', '<?= $billDetail->getTotalPriceWithoutTaxes() ?>', document.getElementById('<?= $billDetail->getMainCode() ?>').value)"
                         >
                             <option value="0" selected>Select deductible...</option>
                             <?php foreach ($deductibles as $deductible): ?>
                             <option value="<?= $deductible->getId()  ?>"><?= $deductible->getName() ?></option>
                             <?php endforeach;?>
                         </select>
-                        <input type="hidden" id="deductibleId_<?= $billDetail->getMainCode() ?>" name="deductibleId_<?= $billDetail->getMainCode() ?>" value="" />
+                        <input type="hidden" id="deductibleId_<?= $billDetail->getMainCode() ?>" name="deductibleId_<?= $billDetail->getMainCode() ?>" value="0" />
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -156,14 +156,26 @@ $encodedBill = base64_encode($bill->toJson());
 
 let billDetailsDedctible = [];
 
-function changeBillDetailDeductible(mainCode, value){
-    const element = document.getElementById(mainCode)
-    
-    const deductibleId = document.getElementById('deductibleId_' + mainCode)
-    deductibleId.value = element.value
-    
-    const deductible = document.getElementById('deductible-' + element.value)
-    deductible.value = deductible.value * 1 + value * 1
-    
+function changeBillDetailDeductible(mainCode, totalPriceWithoutTaxes){
+    const selectedDeductible = document.getElementById(mainCode)
+    const oldDeductible = document.getElementById('deductibleId_' + mainCode)
+
+    if (selectedDeductible.value == 0 ) {
+        const deductible = document.getElementById('deductible-' + oldDeductible.value)
+        deductible.value = deductible.value * 1 - totalPriceWithoutTaxes * 1
+    } else {
+        const deductible = document.getElementById('deductible-' + selectedDeductible.value)
+        deductible.value = deductible.value * 1 + totalPriceWithoutTaxes * 1
+
+        if(oldDeductible.value != 0 && oldDeductible.value != selectedDeductible.value){
+            const deductible = document.getElementById('deductible-' + oldDeductible.value)
+            deductible.value = deductible.value * 1 - totalPriceWithoutTaxes * 1
+        }
+
+    }
+
+
+
+    oldDeductible.value = selectedDeductible.value
 }
 </script>

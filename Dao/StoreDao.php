@@ -76,6 +76,7 @@ class StoreDao {
         $store->setBusinessName($result->businessName);
         $store->setTradeName($result->tradeName);
         $store->setParentAddress($result->parentAddress);
+        $store->setRuc($result->ruc);
         $store->setActive($result->active);
         
         return $store;
