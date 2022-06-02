@@ -87,7 +87,7 @@ class BillAdditionalInformationDao
      * @param stdClass $result
      * @return BillAdditionalInformation
      */
-    public function parse(stdClass $result): BillAdditionalInformation
+    public function parse(\stdClass $result): BillAdditionalInformation
     {
         $this->setBillId($result->billId);
         $billAdditionalInformation = new BillAdditionalInformation($result->id);

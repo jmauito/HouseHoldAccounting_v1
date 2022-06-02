@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
 </head>
-<header>
+<header class="nav-bar">
     <nav>
         <div class="logo-space">
             <a href="/" class="logo">Main menu</a>
@@ -34,18 +34,8 @@
 </header>
 <body>
 <div class="main-container">
-    <div class="lateral-menu">
-        <nav class="nav">
-
-
-        </nav>
-    </div>
-
-
-
     <div class="content">
-
-        <header>
+        <header class="main-title">
             <h1> <?= $title ?>: </h1>
         </header>
 

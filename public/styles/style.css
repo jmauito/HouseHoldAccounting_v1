@@ -3,7 +3,7 @@
     padding: 0;
 }
 /*For navbar*/
-header{
+.nav-bar{
     width: 100%;
     height: auto;
     padding-bottom: 75px;
@@ -72,4 +72,18 @@ li a{
 .show{
     display:block;
     float: none;
+}
+
+header.main-title{
+    border-style: double;
+    width: 100%;
+}
+header.main-title > h1{
+    width: 80%;
+    margin: auto;
+}
+
+.content{
+    width: 90%;
+    margin: auto;
 }

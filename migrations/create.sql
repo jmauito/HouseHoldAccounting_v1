@@ -210,3 +210,35 @@ CREATE TABLE `bill_additional_information` (
             REFERENCES `bill` (`id`)
             ON DELETE CASCADE
             ON UPDATE CASCADE);
+
+DROP TABLE IF EXISTS `expense`;
+CREATE TABLE `expense` (
+        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                              `name` VARCHAR(45) NULL,
+                              `active` TINYINT NOT NULL DEFAULT 1,
+                              PRIMARY KEY (`id`),
+                              UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+                              UNIQUE INDEX `name_UNIQUE` (`name` ASC) );
+
+
+DROP TABLE IF EXISTS `bill_expense`;
+CREATE TABLE `bill_expense` (
+                                   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                                   `value` DECIMAL(14,2) NOT NULL,
+                                   `billId` INT UNSIGNED NULL,
+                                   `expenseId` INT UNSIGNED NULL,
+                                   `active` TINYINT NULL DEFAULT 1,
+                                   PRIMARY KEY (`id`),
+                                   UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
+                                   INDEX `bill_expense_bill_fk_idx` (`billId` ASC) ,
+                                   INDEX `bill_expense_expense_fk_idx` (`expenseId` ASC) ,
+                                   CONSTRAINT `bill_expense_bill_fk`
+                                       FOREIGN KEY (`billId`)
+                                           REFERENCES `bill` (`id`)
+                                           ON DELETE CASCADE
+                                           ON UPDATE CASCADE,
+                                   CONSTRAINT `bill_expense_deductible_fk`
+                                       FOREIGN KEY (`expenseId`)
+                                           REFERENCES `expense` (`id`)
+                                           ON DELETE RESTRICT
+                                           ON UPDATE CASCADE);

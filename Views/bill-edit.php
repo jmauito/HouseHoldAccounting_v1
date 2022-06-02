@@ -108,6 +108,31 @@ $encodedBill = base64_encode($bill->toJson());
         <?php endforeach; ?>
     </div>
 
+    <div>
+        <h2>Expenses</h2>
+
+        <?php foreach ($expenses as $expense): ?>
+            <?php $inputExpenseName = "deductible-{$expense->getId()}" ?>
+            <?php
+            $billExpenseValue = null;
+            $expenseId = $expense->getId();
+            $billExpenseExists = current( array_filter($bill->getBillExpenses(), function($arr) use ($expenseId){
+                return $arr->getExpense()->getId() === $expenseId;
+            }) );
+            if ($billExpenseExists !== false){
+                $billExpenseValue = $billExpenseExists->getValue();
+            }
+            ?>
+            <div>
+                <label for="<?= $inputExpenseName ?>">
+                    <?= $expense->getName() ?>
+                </label>
+                <input type="text" name="bill-expenses[<?= $expense->getId() ?>]"
+                       id ="<?= $inputExpenseName ?>" value="<?= $billExpenseValue ?>"/>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
     <h2>Details:</h2>
     <table>
         <thead>

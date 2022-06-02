@@ -14,6 +14,9 @@ namespace ApplicationService;
  * @author mauit
  */
 
+use Dao\BillAdditionalInformationDao;
+use Dao\BillExpenseDao;
+use Dao\ExpenseDao;
 use Infraestructure\Connection\Connection;
 use Dao\BillDao;
 use Domain\Bill;
@@ -58,7 +61,21 @@ class SearchBillService {
             $billDeductible->setDeductible($deductibleDao->findById($billDeductible->getDeductibleId()));
             $bill->addBillDeductible($billDeductible);
         }
-        
+
+        $billAdditionalInformationDao = new BillAdditionalInformationDao($this->connection);
+        $additionalInformation = $billAdditionalInformationDao->findByBillId($bill->getId());
+        foreach ($additionalInformation as $add){
+            $bill->addBillAdditionalInformation($add);
+        }
+
+        $billExpenseDao = new BillExpenseDao($this->connection, $bill->getId());
+        $billExpenses = $billExpenseDao->findByBill($bill->getId());
+        foreach ($billExpenses as $billExpense){
+            $expenseDao = new ExpenseDao($this->connection);
+            $billExpense->setExpense($expenseDao->findById($billExpense->getExpenseId()));
+            $bill->addBillExpense($billExpense);
+        }
+
         return $bill;
     }
     

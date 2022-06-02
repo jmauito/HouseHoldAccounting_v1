@@ -21,6 +21,7 @@ final class Bill extends DomainModel{
     private $billDetails = [];
     private $billDeductibles = [];
     private $billAdditionalInformation = [];
+    private $billExpenses = [];
     
     public function __construct(int $id = 0) {
         parent::__construct($id);
@@ -92,6 +93,10 @@ final class Bill extends DomainModel{
 
     function getBillAdditionalInformation(): array{
         return $this->billAdditionalInformation;
+    }
+
+    function getBillExpenses(): array{
+        return $this->billExpenses;
     }
     
     function setAccessKey($accessKey): void {
@@ -215,6 +220,28 @@ final class Bill extends DomainModel{
         $this->billAdditionalInformation = $listBillAdditionalInformation;
         return true;
     }
+
+    function addBillExpense(BillExpense $billExpense): ?bool{
+        if (TRUE === $index = array_search($billExpense, $this->getBillExpenses()) ){
+            return null;
+        }
+        $this->billExpenses[] = $billExpense;
+        return true;
+    }
+
+    function deleteBillExpenses(BillExpense $billExpense): ?bool{
+        if (FALSE === $index = array_search( $billExpense, $this->getBillExpenses() ) ){
+            return null;
+        }
+        $billExpenses = [];
+        foreach ($this->billExpenses as $key=>$value){
+            if ($key !== $index){
+                $billExpenses[] = $value;
+            }
+        }
+        $this->billExpenses = $billExpenses;
+        return true;
+    }
     
     function toDto():\stdClass
     {
@@ -241,6 +268,10 @@ final class Bill extends DomainModel{
         $dto->billAdditionalInformation = [];
         foreach ($this->billAdditionalInformation as $billAdditionalInformation){
             $dto->billAdditionalInformation[] = $billAdditionalInformation->toDto();
+        }
+        $dto->billExpenses = [];
+        foreach ($this->billExpenses as $billExpense){
+            $dto->billExpenses[] = $billExpense->toDto();
         }
         return $dto;
     }

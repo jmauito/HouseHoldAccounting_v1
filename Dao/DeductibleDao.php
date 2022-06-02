@@ -46,7 +46,7 @@ class DeductibleDao {
         return $this->connection->delete(self::$TABLE, $id);
     }
 
-    public function findOne(array $params): Deductible {
+    public function findOne(array $params):? Deductible {
         $deductible = new Deductible();
         foreach ($params as $property => $value) {
             if (!property_exists($deductible, $property)) {

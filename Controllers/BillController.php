@@ -4,6 +4,7 @@ namespace Controllers;
 
 use ApplicationService\ReadXmlBillService;
 use ApplicationService\SearchBillService;
+use Dao\ExpenseDao;
 use Domain\Bill;
 use Domain\BillAdditionalInformation;
 use Domain\BillDetail;
@@ -44,10 +45,17 @@ class BillController extends Controller {
         $deductibleFinderService = new DeductibleFinderService($connection);
         $deductibles = $deductibleFinderService->findAll();
 
+        $deductibleFinderService = new DeductibleFinderService($connection);
+        $deductibles = $deductibleFinderService->findAll();
+
+        $expenseDao = new ExpenseDao($connection);
+        $expenses = $expenseDao->find();
+
         echo $this->templates->render('bill-edit', [
             'title' => $title,
             'bill' => $bill,
             'deductibles' => $deductibles,
+            'expenses' => $expenses,
             'update' => $update
         ]);
     }
