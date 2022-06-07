@@ -8,6 +8,7 @@ use Dao\ExpenseDao;
 use Domain\Bill;
 use Domain\BillAdditionalInformation;
 use Domain\BillDetail;
+use Domain\BillDetailDeductible;
 use Domain\Buyer;
 use Domain\Store;
 use Domain\VoucherType;
@@ -73,6 +74,8 @@ class BillController extends Controller {
             $billDeductible->setValue(floatval($htmlBillDeductibleValue));
             $bill->addBillDeductible($billDeductible);
         }
+        $this->registerBillDetailDeductibles($bill);
+
         $registerBillService = new RegisterBillService($connection);
         if (null === $billId = $registerBillService($bill, $update)) {
             echo $this->templates->render('error-view', [
@@ -84,6 +87,18 @@ class BillController extends Controller {
                 'title' => 'Factura registrada correctamente',
                 'message' => 'La factura fue registrada con éxito.'
             ]);
+        }
+    }
+
+    private function registerBillDetailDeductibles(Bill $bill){
+        for ($i=0; $i < count($bill->getBillDetails()); $i++){
+            $billDetail = $bill->getBillDetails()[$i];
+            if ($_POST['deductibleId'.$billDetail->getMainCode()]){
+                $billDetailDeductible = new BillDetailDeductible();
+                $billDetailDeductible->setDeductibleId($_POST['deductibleId'.$billDetail->getMainCode()]);
+                $billDetailDeductible->setValue($billDetail->getTotalPriceWithoutTaxes());
+                $bill->getBillDetails()[$i]->setBillDetailDeductible($billDetailDeductible);
+            }
         }
     }
 

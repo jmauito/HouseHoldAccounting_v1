@@ -10,6 +10,7 @@ final class BillDetail extends DomainModel{
     private $unitPrice;
     private $discount;
     private $totalPriceWithoutTaxes;
+    private $billDetailDeductible;
     
     public function __construct(int $id = 0) {
         parent::__construct($id);
@@ -39,6 +40,10 @@ final class BillDetail extends DomainModel{
         return $this->totalPriceWithoutTaxes;
     }
 
+    function getBillDetailDeductible():?BillDetailDeductible {
+        return $this->billDetailDeductible;
+    }
+
     function setMainCode(string $mainCode): void {
         $this->mainCode = $mainCode;
     }
@@ -63,6 +68,10 @@ final class BillDetail extends DomainModel{
         $this->totalPriceWithoutTaxes = $totalPriceWithoutTaxes;
     }
 
+    function setBillDetailDeductible(BillDetailDeductible $billDetailDeductible){
+        $this->billDetailDeductible = $billDetailDeductible;
+    }
+
     function toDto(){
         $dto = new \stdClass();
         $dto->id = $this->getId();
@@ -72,7 +81,11 @@ final class BillDetail extends DomainModel{
         $dto->unitPrice = $this->getUnitPrice();
         $dto->discount = $this->getDiscount();
         $dto->totalPriceWithoutTaxes = $this->getTotalPriceWithoutTaxes();
-        
+        if ($this->billDetailDeductible !== null){
+            $dto->billDetailDeductible = $this->getBillDetailDeductible()->toDto();
+        }
+
+
         return $dto;
     }
     

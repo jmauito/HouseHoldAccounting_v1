@@ -167,7 +167,7 @@ $encodedBill = base64_encode($bill->toJson());
                             <option value="<?= $deductible->getId()  ?>"><?= $deductible->getName() ?></option>
                             <?php endforeach;?>
                         </select>
-                        <input type="hidden" id="deductibleId_<?= $billDetail->getMainCode() ?>" name="deductibleId_<?= $billDetail->getMainCode() ?>" value="0" />
+                        <input type="hidden" id="deductibleId<?= $billDetail->getMainCode() ?>" name="deductibleId<?= $billDetail->getMainCode() ?>" value="0" />
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -179,11 +179,9 @@ $encodedBill = base64_encode($bill->toJson());
 
 <script>
 
-let billDetailsDedctible = [];
-
 function changeBillDetailDeductible(mainCode, totalPriceWithoutTaxes){
     const selectedDeductible = document.getElementById(mainCode)
-    const oldDeductible = document.getElementById('deductibleId_' + mainCode)
+    const oldDeductible = document.getElementById('deductibleId' + mainCode)
 
     if (selectedDeductible.value == 0 ) {
         const deductible = document.getElementById('deductible-' + oldDeductible.value)

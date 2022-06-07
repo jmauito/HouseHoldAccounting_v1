@@ -18,11 +18,13 @@ use Dao\BillAdditionalInformationDao;
 use Domain\Bill;
 use Dao\BillDao;
 use Domain\BillAdditionalInformation;
+use Domain\BillDetailDeductible;
 use Domain\Store;
 use Infraestructure\Connection\Connection;
 use Dao\StoreDao;
 use Domain\Buyer;
 use Dao\BuyerDao;
+use Dao\BillDetailDeductibleDao;
 
 class RegisterBillService {
 
@@ -46,7 +48,9 @@ class RegisterBillService {
             $bill->setId($billId);
             $this->registerBillDetail($bill);
             $this->registerBillDeductibles($bill);
+            //$this->registerBillDetailDeductibles($bill);
             $this->registerBillAdditionalInformation($bill);
+
             $this->connection->commit();
         } catch (\Exception $exc) {
             $this->connection->rollBack();
@@ -83,7 +87,8 @@ class RegisterBillService {
         foreach ($bill->getBillDetails() as $billDetail){
             $billDetailDao = new \Dao\BillDetailDao($this->connection);
             $billDetailDao->setBillId($bill->getId());
-            $billDetailDao->insert($billDetail);
+            $billDetailId = $billDetailDao->insert($billDetail);
+            $this->registerBillDetailDeductible($billDetailId, $billDetail->getBillDetailDeductible());
         }
                 
     }
@@ -94,6 +99,17 @@ class RegisterBillService {
             $billDeductibleDao->insert($billDeductible);
         }
                 
+    }
+
+    private function registerBillDetailDeductible(int $billDetailId, ?BillDetailDeductible $billDetailDeductible){
+
+            if ($billDetailDeductible!==null){
+                $billDetailDeductibleDao = new BillDetailDeductibleDao($this->connection, $billDetailId);
+                $billDetailDeductibleDao->insert($billDetailDeductible);
+            }
+
+
+
     }
 
     private function registerBillAdditionalInformation(Bill $bill){
