@@ -34,19 +34,6 @@ CREATE TABLE `voucher-type` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `voucher-type`
---
-
-LOCK TABLES `voucher-type` WRITE;
-/*!40000 ALTER TABLE `voucher-type` DISABLE KEYS */;
-INSERT INTO `voucher-type` VALUES (2,'bill','01',1);
-/*!40000 ALTER TABLE `voucher-type` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-
-
---
 -- Table structure for table `bill`
 --
 
@@ -102,16 +89,6 @@ CREATE TABLE `buyer` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `buyer`
---
-
-
--- LOCK TABLES `buyer` WRITE;
-/*!40000 ALTER TABLE `buyer` DISABLE KEYS */;
--- INSERT INTO `buyer` VALUES (1,'buyer test','0123456789',1);
-/*!40000 ALTER TABLE `buyer` ENABLE KEYS */;
--- UNLOCK TABLES;
 
 --
 -- Table structure for table `store`
@@ -133,18 +110,9 @@ CREATE TABLE `store` (
   UNIQUE KEY `tradeName_UNIQUE` (`tradeName`),
   UNIQUE KEY `ruc_UNIQUE` (`ruc`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-03-28 20:43:51
 DROP TABLE IF EXISTS `bill_detail`;
 CREATE TABLE `bill_detail` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -197,6 +165,7 @@ CREATE TABLE `bill_deductible` (
     ON DELETE RESTRICT
     ON UPDATE CASCADE);
 
+DROP TABLE  IF EXISTS bill_additional_information;
 CREATE TABLE `bill_additional_information` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `billId` INT UNSIGNED NOT NULL,

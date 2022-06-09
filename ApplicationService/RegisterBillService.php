@@ -25,6 +25,7 @@ use Dao\StoreDao;
 use Domain\Buyer;
 use Dao\BuyerDao;
 use Dao\BillDetailDeductibleDao;
+use Dao\BillExpenseDao;
 
 class RegisterBillService {
 
@@ -48,6 +49,7 @@ class RegisterBillService {
             $bill->setId($billId);
             $this->registerBillDetail($bill);
             $this->registerBillDeductibles($bill);
+            $this->registerBillExpenses($bill);
             //$this->registerBillDetailDeductibles($bill);
             $this->registerBillAdditionalInformation($bill);
 
@@ -99,6 +101,14 @@ class RegisterBillService {
             $billDeductibleDao->insert($billDeductible);
         }
                 
+    }
+
+    private function registerBillExpenses(Bill $bill){
+        foreach ($bill->getBillExpenses() as $billExpense){
+            $billExpenseDao = new BillExpenseDao($this->connection, $bill->getId());
+            $billExpenseDao->insert($billExpense);
+        }
+
     }
 
     private function registerBillDetailDeductible(int $billDetailId, ?BillDetailDeductible $billDetailDeductible){

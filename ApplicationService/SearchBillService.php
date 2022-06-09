@@ -68,13 +68,7 @@ class SearchBillService {
             $bill->addBillAdditionalInformation($add);
         }
 
-        $billExpenseDao = new BillExpenseDao($this->connection, $bill->getId());
-        $billExpenses = $billExpenseDao->findByBill($bill->getId());
-        foreach ($billExpenses as $billExpense){
-            $expenseDao = new ExpenseDao($this->connection);
-            $billExpense->setExpense($expenseDao->findById($billExpense->getExpenseId()));
-            $bill->addBillExpense($billExpense);
-        }
+        $this->getBillExpenses($bill);
 
         return $bill;
     }
@@ -99,7 +93,25 @@ class SearchBillService {
         $voucherType = $voucherTypeDao->findById($voucherTypeId);
         return $voucherType;
     }
-    
-    
+
+    /**
+     * @param Bill $bill
+     * @return void
+     */
+    public function getBillExpenses(Bill $bill): void
+    {
+        $billExpenseDao = new BillExpenseDao($this->connection, $bill->getId());
+        if (null === $billExpenses = $billExpenseDao->findByBill() ){
+            return;
+        }
+
+        foreach ($billExpenses as $billExpense) {
+            $expenseDao = new ExpenseDao($this->connection);
+            $billExpense->setExpense($expenseDao->findById($billExpense->getExpenseId()));
+            $bill->addBillExpense($billExpense);
+        }
+    }
+
+
 }   
 

@@ -14,12 +14,18 @@ namespace Test\ApplicationService;
  * @author mauit
  */
 
+use Dao\BillDetailDeductibleDao;
+use Dao\ExpenseDao;
 use Domain\Bill;
+use Domain\BillDetailDeductible;
 use Domain\Store;
 use ApplicationService\RegisterBillService;
 use Infraestructure\Connection\ConnectionMySqlTest;
 use Domain\Buyer;
 use Dao\BuyerDao;
+use Domain\Deductible;
+use Dao\DeductibleDao;
+use Dao\VoucherTypeDao;
 
 class RegisterBillServiceTest {
     private $connection;
@@ -34,16 +40,25 @@ class RegisterBillServiceTest {
     }
     
     public function __invoke() {
-        echo "Register bill and store... \n";
-        $this->createBillAndStoreTest();
-        echo "Register only bill. The store exists... \n";
-        $this->createBill();
-        echo "Register bill with deductible... \n";
-        $this->createBillWithDeductibles();
-        
+        $billMother = new \Test\Domain\BillMother();
+        $bill = $billMother->build();
+        $voucherTypeDao = new VoucherTypeDao($this->connection);
+        $voucherTypeDao->insert($bill->getVoucherType());
+        $deductibleDao = new DeductibleDao($this->connection);
+        $deductibleDao->insert($bill->getBillDeductibles()[0]->getDeductible());
+        $expenseDao = new ExpenseDao($this->connection);
+        $expenseDao->insert($bill->getBillExpenses()[0]->getExpense());
+        $registerBillService = new RegisterBillService($this->connection);
+        if (null === $billId = $registerBillService($bill) ){
+            print("Errores: ");
+            foreach ($registerBillService->getErrors() as $errors){
+                print($errors);
+            }
+        }
+        print("Factura registrada correctamente, id: $billId");
     }
     
-    private function createBillAndStoreTest(){
+    /*private function createBillAndStoreTest(){
         
         $voucherTypeDao = new \Dao\VoucherTypeDao($this->connection);
         $voucherType = $voucherTypeDao->findOne(['code' => '01']);
@@ -187,5 +202,60 @@ class RegisterBillServiceTest {
         $billDeductibleDao->insert($billDeductible);
         print "Registred bill with id '{$bill->getId()}' and deductible {$deductible->getName()} whith value: {$billDeductible->getValue()} <br>";
     }
+
+    public function registerBillWithBillDetailDeductibles(){
+        $voucherTypeDao = new VoucherTypeDao($this->connection);
+        $voucherType = $voucherTypeDao->findOne(['code' => '01']);
+
+        $bill = new Bill();
+        $bill->setAccessKey("01234567804");
+        $bill->setEstablishment("001");
+        $bill->setEmissionPoint("001");
+        $bill->setSecuential("003");
+        $bill->setDateOfIssue("2022-03-23");
+        $bill->setEstablishmentAddress("001");
+        $bill->setTotalWithoutTax("001");
+        $bill->setTotalDiscount("001");
+        $bill->setTip(0);
+        $bill->setTotal(100);
+        $bill->setFilePath("001");
+
+        $store = new Store();
+        $store->setBusinessName("test business name - for deductible test");
+        $store->setTradeName("Test trade deductible-test");
+        $store->setRuc("0103456784001");
+        $store->setParentAddress("Address of business test");
+        $registerStoreService = new RegisterStoreService($this->connection);
+        $store->setId( $registerStoreService($store) );
+        $bill->setStore($store);
+
+        $bill->setVoucherType($voucherType);
+
+        $buyer = new Buyer();
+        $buyer->setIdentificationType("1");
+        $buyer->setName("Test buyer - for deductible test");
+        $buyer->setIdentification("0000000011");
+        $bill->setBuyer($buyer);
+        $buyerDao = new BuyerDao($this->connection);
+        $buyerId = $buyerDao->insert($buyer);
+        $buyer->setId($buyerId);
+        $bill->setBuyer($buyer);
+
+        $registerBillService = new RegisterBillService($this->connection);
+        $bill->setId($registerBillService($bill));
+        echo "Bill was registered with code {$bill->setId()} <br>";
+        $deductible = new Deductible(2);
+        $deductible->setName("Hogar");
+        $deductibleDao = new DeductibleDao($this->connection);
+        $deductible->setId($deductibleDao->insert($deductible));
+        echo "Deductible was registered with code {$deductible->getId()} <br>";
+
+        $billDetailDeductible = new BillDetailDeductible();
+        $billDetailDeductible->setValue(50);
+        $billDetailDeductible->setDeductible($deductible);
+        $billDetailDeductibleDao = new BillDetailDeductibleDao($this->connection,$bill->getId());
+        $billDetailDeductibleDao->insert($billDetailDeductible);
+        print "Registred bill detail deductible {$deductible->getName()} whith value: {$billDetailDeductible->getValue()} <br>";
+    }*/
     
 }
