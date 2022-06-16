@@ -9,8 +9,8 @@ use Domain\BillExpense;
 
 class BillMother
 {
-    public function build():Bill{
-        $billId = 1;
+    public function build($billId):Bill{
+
         $bill = new Bill($billId);
         $bill->setAccessKey('111');
         $bill->setEstablishment('001');

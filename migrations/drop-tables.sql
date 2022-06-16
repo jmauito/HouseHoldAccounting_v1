@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS `bill_detail_deductible`;
+DROP TABLE IF EXISTS `bill_deductible`;
+DROP TABLE IF EXISTS `bill_expense`;
+DROP TABLE  IF EXISTS `bill_additional_information`;
+DROP TABLE IF EXISTS `bill_detail`;
+DROP TABLE IF EXISTS `bill`;
+DROP TABLE IF EXISTS `store`;
+DROP TABLE IF EXISTS `buyer`;
+DROP TABLE IF EXISTS `voucher-type`;
+DROP TABLE IF EXISTS `deductible`;
+DROP TABLE IF EXISTS `expense`;

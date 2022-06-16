@@ -36,7 +36,7 @@ class RegisterBillService {
         $this->connection = $connection;
     }
 
-    public function __invoke(Bill $bill) {
+    public function __invoke(Bill $bill):?int {
         $this->connection->beginTransaction();
         try {
             $storeId = $this->getOrCreateStore($bill->getStore());
@@ -131,7 +131,7 @@ class RegisterBillService {
 
     }
 
-    public function getErrors(){
+    public function getErrors():?array{
         return $this->errors;
     }
 }

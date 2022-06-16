@@ -47,7 +47,7 @@ class VoucherTypeDao {
         return $this->connection->delete(self::$TABLE, $id);
     }
 
-    public function findOne(array $params): VoucherType {
+    public function findOne(array $params): ?VoucherType {
         $voucherType = new VoucherType();
         foreach ($params as $property => $value) {
             if (!property_exists($voucherType, $property)) {

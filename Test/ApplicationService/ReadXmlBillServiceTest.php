@@ -19,7 +19,7 @@ use ApplicationService\ReadXmlBillService;
 use PHPUnit\Framework\TestCase;
 use Domain\Bill;
 
-class ReadXmlBillServiceTest extends TestCase{
+class ReadXmlBillServiceTest{
     // private $connection;
     
     /*public function __construct(\Infraestructure\Connection\Connection $connection) {

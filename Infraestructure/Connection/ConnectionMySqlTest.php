@@ -31,8 +31,14 @@ class ConnectionMySqlTest implements Connection{
             die();
             
         }
+        $this->createDataBase();
     }
-    
+
+    public  function __destruct()
+    {
+        $this->dropDataBase();
+    }
+
     public function delete(string $table, int $id):int {
         $statement = "DELETE FROM `$table` WHERE id = :id";
         $stmt = $this->connection->prepare($statement);
@@ -42,12 +48,12 @@ class ConnectionMySqlTest implements Connection{
         return $stmt->rowCount();
     }
 
-    public function find(string $table, array $params):array {
-        
+    public function find(string $table, array $params):?array {
+        return null;
     }
 
-    public function findById(string $table, int $id): \stdClass {
-        
+    public function findById(string $table, int $id):? \stdClass {
+        return null;
     }
 
     public function findOne(string $table, array $params): ? \stdClass {
@@ -137,12 +143,13 @@ class ConnectionMySqlTest implements Connection{
     }
 
     public function dropDataBase(){
-        $this->connection->query("DROP TABLE bill_deductible, bill_expense, bill_detail, bill, buyer, store,`voucher-type`,`deductible`, expense;");
+        $dropTables = file_get_contents('migrations/drop-tables.sql');
+        $this->connection->query($dropTables);
     }
     
     public function createDataBase(){
-        $createTable = file_get_contents('../migrations/create.sql');
-        $this->connection->query($createTable);
+        $createTables = file_get_contents('migrations/create-tables.sql');
+        $this->connection->query($createTables);
     }
 }
 
