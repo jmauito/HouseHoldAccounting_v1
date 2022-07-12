@@ -18,26 +18,28 @@ use Domain\BillAdditionalInformation;
 use Domain\Buyer;
 use Domain\Store;
 use Domain\BillDetail;
+use \Infraestructure\Connection\Connection;
 
 class ReadXmlBillService {
 
     private $xmlBill;
+    private $errors = [];
 
     public function __construct(string $xmlBill) {
         $this->xmlBill = $this->cleanBillXml($xmlBill);
     }
 
-    public function __invoke(\Infraestructure\Connection\Connection $connection) {
+    public function __invoke(Connection $connection) {
         $xml = new \SimpleXMLElement($this->xmlBill);
         $bill = new Bill();
-        $bill->setAccessKey($xml->infoTributaria->claveAcceso);
+        $bill->setAccessKey($xml->infoTributaria->claveAcceso->__toString());
 
-        $bill->setEstablishment($xml->infoTributaria->estab);
-        $bill->setEmissionPoint($xml->infoTributaria->ptoEmi);
-        $bill->setSecuential($xml->infoTributaria->secuencial);
+        $bill->setEstablishment($xml->infoTributaria->estab->__toString());
+        $bill->setEmissionPoint($xml->infoTributaria->ptoEmi->__toString());
+        $bill->setSecuential($xml->infoTributaria->secuencial->__toString());
         $arrDate = explode('/', $xml->infoFactura->fechaEmision);
         $bill->setDateOfIssue("{$arrDate[2]}-{$arrDate[1]}-{$arrDate[0]}");
-        $bill->setEstablishmentAddress($xml->infoFactura->dirEstablecimiento);
+        $bill->setEstablishmentAddress($xml->infoFactura->dirEstablecimiento->__toString());
         $bill->setTotalWithoutTax($xml->infoFactura->totalSinImpuestos->__toString());
         $bill->setTotalDiscount($xml->infoFactura->totalDescuento->__toString());
         $bill->setTip($xml->infoFactura->propina->__toString());
@@ -46,7 +48,10 @@ class ReadXmlBillService {
         $bill->setStore($this->setStore($xml));
         $bill->setBuyer($this->setBuyer($xml));
         $voucherTypeDao = new \Dao\VoucherTypeDao($connection);
-        $voucherType = $voucherTypeDao->findOne(['code' => $xml->infoTributaria->codDoc]);
+        if (null === $voucherType = $voucherTypeDao->findOne(['code' => $xml->infoTributaria->codDoc]) ){
+            $this->errors[] = "Not found voucherType.code = {$xml->infoTributaria->codDoc}";
+            return null;
+        }
         $bill->setVoucherType($voucherType);
         
         $this->setBillDetails($bill,$xml->detalles);
@@ -56,6 +61,10 @@ class ReadXmlBillService {
         }
 
         return $bill;
+    }
+
+    public function getErrors():?array{
+        return $this->errors;
     }
 
     private function cleanBillXml($fileContent) {

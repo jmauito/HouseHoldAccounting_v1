@@ -99,47 +99,47 @@ final class Bill extends DomainModel{
         return $this->billExpenses;
     }
     
-    function setAccessKey($accessKey): void {
+    function setAccessKey(string $accessKey): void {
         $this->accessKey = $accessKey;
     }
 
-    function setEstablishment($establishment): void {
+    function setEstablishment(string $establishment): void {
         $this->establishment = $establishment;
     }
 
-    function setEmissionPoint($emissionPoint): void {
+    function setEmissionPoint(string $emissionPoint): void {
         $this->emissionPoint = $emissionPoint;
     }
 
-    function setSecuential($secuential): void {
+    function setSecuential(string $secuential): void {
         $this->secuential = $secuential;
     }
 
-    function setDateOfIssue($dateOfIssue): void {
+    function setDateOfIssue(string $dateOfIssue): void {
         $this->dateOfIssue = $dateOfIssue;
     }
 
-    function setEstablishmentAddress($establishmentAddress): void {
+    function setEstablishmentAddress(string $establishmentAddress): void {
         $this->establishmentAddress = $establishmentAddress;
     }
 
-    function setTotalWithoutTax($totalWithoutTax): void {
+    function setTotalWithoutTax(float $totalWithoutTax): void {
         $this->totalWithoutTax = $totalWithoutTax;
     }
 
-    function setTotalDiscount($totalDiscount): void {
+    function setTotalDiscount(float $totalDiscount): void {
         $this->totalDiscount = $totalDiscount;
     }
 
-    function setTip($tip): void {
+    function setTip(float $tip): void {
         $this->tip = $tip;
     }
 
-    function setTotal($total): void {
+    function setTotal(float $total): void {
         $this->total = $total;
     }
 
-    function setFilePath($filePath): void {
+    function setFilePath(string $filePath): void {
         $this->filePath = $filePath;
     }
     

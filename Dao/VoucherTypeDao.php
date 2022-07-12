@@ -55,7 +55,9 @@ class VoucherTypeDao {
             }
             
         }
-        $result = $this->connection->findOne(self::$TABLE, $params);
+        if (null ===$result = $this->connection->findOne(self::$TABLE, $params) ){
+            return null;
+        }
         
         $voucherType->setId($result->id);
         $voucherType->setName($result->name);
