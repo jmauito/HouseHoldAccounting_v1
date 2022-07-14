@@ -34,17 +34,14 @@ class BillController extends Controller {
         $title = "New bill";
         $update = false;
 
-        $searchBilService = new SearchBillService($connection);
-        $billExists = $searchBilService->searchByAccessKey($bill->getAccessKey());
+        $searchBillService = new SearchBillService($connection);
+        $billExists = $searchBillService->searchByAccessKey($bill->getAccessKey());
 
         if ($billExists) {
             $bill = $billExists;
             $title = "Bill already register";
             $update = true;
         }
-
-        $deductibleFinderService = new DeductibleFinderService($connection);
-        $deductibles = $deductibleFinderService->findAll();
 
         $deductibleFinderService = new DeductibleFinderService($connection);
         $deductibles = $deductibleFinderService->findAll();

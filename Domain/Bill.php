@@ -139,7 +139,7 @@ final class Bill extends DomainModel{
         $this->total = $total;
     }
 
-    function setFilePath(string $filePath): void {
+    function setFilePath(?string $filePath): void {
         $this->filePath = $filePath;
     }
     

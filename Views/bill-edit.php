@@ -110,9 +110,8 @@ $encodedBill = base64_encode($bill->toJson());
 
     <div>
         <h2>Expenses</h2>
-
         <?php foreach ($expenses as $expense): ?>
-            <?php $inputExpenseName = "deductible-{$expense->getId()}" ?>
+            <?php $inputExpenseName = "expense-{$expense->getId()}" ?>
             <?php
             $billExpenseValue = null;
             $expenseId = $expense->getId();
@@ -143,7 +142,8 @@ $encodedBill = base64_encode($bill->toJson());
                 <th>Unit Price</th>
                 <th>Discount</th>
                 <th>Total</th>
-                <th></th>
+                <th>Deductibles</th>
+                <th>Expenses</th>
             </tr>
         </thead>
         <tbody>
@@ -159,8 +159,8 @@ $encodedBill = base64_encode($bill->toJson());
                     <td>
                         <select 
                             name="billDetailDeductible[<?= $billDetail->getMainCode() ?>]" 
-                            id="<?= $billDetail->getMainCode() ?>" 
-                            onchange="changeBillDetailDeductible('<?= $billDetail->getMainCode() ?>', '<?= $billDetail->getTotalPriceWithoutTaxes() ?>', document.getElementById('<?= $billDetail->getMainCode() ?>').value)"
+                            id="billDetailDeductible-<?= $billDetail->getMainCode() ?>"
+                            onchange="changeBillDetailDeductible('<?= $billDetail->getMainCode() ?>', '<?= $billDetail->getTotalPriceWithoutTaxes() ?>')"
                         >
                             <option value="0" selected>Select deductible...</option>
                             <?php foreach ($deductibles as $deductible): ?>
@@ -168,6 +168,19 @@ $encodedBill = base64_encode($bill->toJson());
                             <?php endforeach;?>
                         </select>
                         <input type="hidden" id="deductibleId<?= $billDetail->getMainCode() ?>" name="deductibleId<?= $billDetail->getMainCode() ?>" value="0" />
+                    </td>
+                    <td>
+                        <select
+                                name="billDetailExpense[<?= $billDetail->getMainCode() ?>]"
+                                id="billDetailExpense-<?= $billDetail->getMainCode() ?>"
+                                onchange="changeBillDetailExpense('<?= $billDetail->getMainCode() ?>', '<?= $billDetail->getTotalPriceWithoutTaxes() ?>')"
+                        >
+                            <option value="0" selected>Select expense...</option>
+                            <?php foreach ($expenses as $expense): ?>
+                                <option value="<?= $expense->getId()  ?>"><?= $expense->getName() ?></option>
+                            <?php endforeach;?>
+                        </select>
+                        <input type="hidden" id="expenseId<?= $billDetail->getMainCode() ?>" name="expenseId<?= $billDetail->getMainCode() ?>" value="0" />
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -180,7 +193,7 @@ $encodedBill = base64_encode($bill->toJson());
 <script>
 
 function changeBillDetailDeductible(mainCode, totalPriceWithoutTaxes){
-    const selectedDeductible = document.getElementById(mainCode)
+    const selectedDeductible = document.getElementById('billDetailDeductible-' + mainCode)
     const oldDeductible = document.getElementById('deductibleId' + mainCode)
 
     if (selectedDeductible.value == 0 ) {
@@ -200,5 +213,28 @@ function changeBillDetailDeductible(mainCode, totalPriceWithoutTaxes){
 
 
     oldDeductible.value = selectedDeductible.value
+}
+
+function changeBillDetailExpense(mainCode, totalPriceWithoutTaxes){
+    const selectedExpense = document.getElementById('billDetailExpense-' + mainCode)
+    const oldExpense = document.getElementById('expenseId' + mainCode)
+console.log(selectedExpense)
+    if (selectedExpense.value == 0 ) {
+        const expense = document.getElementById('expense-' + oldExpense.value)
+        expense.value = expense.value * 1 - totalPriceWithoutTaxes * 1
+    } else {
+        const expense = document.getElementById('expense-' + selectedExpense.value)
+        expense.value = expense.value * 1 + totalPriceWithoutTaxes * 1
+
+        if(oldExpense.value != 0 && oldExpense.value != selectedExpense.value){
+            const expense = document.getElementById('expense-' + oldExpense.value)
+            expense.value = expense.value * 1 - totalPriceWithoutTaxes * 1
+        }
+
+    }
+
+
+
+    oldExpense.value = selectedExpense.value
 }
 </script>
