@@ -67,7 +67,7 @@ class VoucherTypeDao {
         
     }
     
-    public function findById(int $id){
+    public function findById(int $id):?VoucherType{
         if (null === $result = $this->connection->findById(self::$TABLE, $id) ){
             return null;
         }

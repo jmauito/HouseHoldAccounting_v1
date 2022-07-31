@@ -157,8 +157,7 @@ $encodedBill = base64_encode($bill->toJson());
                     <td><?= $billDetail->getDiscount() ?></td>
                     <td><?= $billDetail->getTotalPriceWithoutTaxes() ?></td>
                     <td>
-                        <select 
-                            name="billDetailDeductible[<?= $billDetail->getMainCode() ?>]" 
+                        <select name="billDetailDeductible[<?= $billDetail->getMainCode() ?>]"
                             id="billDetailDeductible-<?= $billDetail->getMainCode() ?>"
                             onchange="changeBillDetailDeductible('<?= $billDetail->getMainCode() ?>', '<?= $billDetail->getTotalPriceWithoutTaxes() ?>')"
                         >
@@ -170,8 +169,7 @@ $encodedBill = base64_encode($bill->toJson());
                         <input type="hidden" id="deductibleId<?= $billDetail->getMainCode() ?>" name="deductibleId<?= $billDetail->getMainCode() ?>" value="0" />
                     </td>
                     <td>
-                        <select
-                                name="billDetailExpense[<?= $billDetail->getMainCode() ?>]"
+                        <select name="billDetailExpense[<?= $billDetail->getMainCode() ?>]"
                                 id="billDetailExpense-<?= $billDetail->getMainCode() ?>"
                                 onchange="changeBillDetailExpense('<?= $billDetail->getMainCode() ?>', '<?= $billDetail->getTotalPriceWithoutTaxes() ?>')"
                         >

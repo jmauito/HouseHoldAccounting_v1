@@ -8,7 +8,8 @@ $router->map('GET', '/', 'FrontController#home', 'home');
 $router->map('GET', '/load-from-xml', 'BillController#loadFromXml', 'load-from-xml');
 $router->map('POST', '/create-bill-from-xml', 'BillController#createBillFromXml', 'create-bill-from-xml');
 $router->map('POST', '/save-bill', 'BillController#saveBill', 'save-bill');
-
+$router->map('GET', '/create-bill', 'BillController#createBill', 'create-bill');
+$router->map('POST', '/insert-bill', 'BillController#insertBill', 'insert-bill');
 $match = $router->match();
 
 if (!$match){

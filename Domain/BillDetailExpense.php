@@ -38,7 +38,7 @@ class BillDetailExpense extends DomainModel
         $this->expenseId = $expenseId;
     }
 
-    function toDto(){
+    function toDto():\StdClass{
         $dto = new \stdClass();
         $dto->id = $this->getId();
         $dto->deductible = $this->getName();

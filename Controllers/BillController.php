@@ -5,10 +5,13 @@ namespace Controllers;
 use ApplicationService\ReadXmlBillService;
 use ApplicationService\SearchBillService;
 use Dao\ExpenseDao;
+use Dao\VoucherTypeDao;
 use Domain\Bill;
 use Domain\BillAdditionalInformation;
 use Domain\BillDetail;
 use Domain\BillDetailDeductible;
+use Domain\BillDetailExpense;
+use Domain\BillExpense;
 use Domain\Buyer;
 use Domain\Store;
 use Domain\VoucherType;
@@ -58,20 +61,33 @@ class BillController extends Controller {
         ]);
     }
 
+    public function createBill(){
+        $connection = new ConnectionMySql();
+        $bill = new Bill();
+        $title = "New bill";
+
+        $deductibleFinderService = new DeductibleFinderService($connection);
+        $deductibles = $deductibleFinderService->findAll();
+
+        $expenseDao = new ExpenseDao($connection);
+        $expenses = $expenseDao->find();
+
+        echo $this->templates->render('bill-create', [
+            'title' => $title,
+            'bill' => $bill,
+            'deductibles' => $deductibles,
+            'expenses' => $expenses,
+        ]);
+
+    }
     public function saveBill() {
         $connection = new ConnectionMySql();
         $bill = $this->jsonToBill(base64_decode($_POST['bill']));
         $update = $_POST['update'];
 
-        $deductibleDao = new DeductibleDao($connection);
-        foreach ($_POST['bill-deductibles'] as $htmlBillDeductibleCode => $htmlBillDeductibleValue) {
-            $deductible = $deductibleDao->findById($htmlBillDeductibleCode);
-            $billDeductible = new BillDeductible();
-            $billDeductible->setDeductible($deductible);
-            $billDeductible->setValue(floatval($htmlBillDeductibleValue));
-            $bill->addBillDeductible($billDeductible);
-        }
+        $this->getBillDeductibleByHtmlPost($connection, $bill);
         $this->registerBillDetailDeductibles($bill);
+        $this->registerBillDetailExpenses($bill);
 
         $registerBillService = new RegisterBillService($connection);
         if (null === $billId = $registerBillService($bill, $update)) {
@@ -87,6 +103,55 @@ class BillController extends Controller {
         }
     }
 
+    public function insertBill()
+    {
+        $connection = new ConnectionMySql();
+        $bill = new Bill();
+        $bill->setAccessKey('todo');
+        $bill->setEstablishment($_POST['establishment']);
+        $bill->setSecuential($_POST['secuential']);
+        $bill->setEmissionPoint($_POST['emissionPoint']);
+        $bill->setDateOfIssue($_POST['dateOfIssue']);
+        $bill->setTotalWithoutTax($_POST['totalWithoutTax']);
+        $bill->setTotalDiscount($_POST['totalDiscount']);
+        $bill->setTip($_POST['tip']);
+        $bill->setTotal($_POST['total']);
+
+        $store = new Store();
+        $store->setBusinessName($_POST['businessName']);
+        $store->setTradeName($_POST['tradeName']);
+        $store->setRuc($_POST['ruc']);
+        $store->setParentAddress($_POST['parentAddress']);
+        $bill->setStore($store);
+
+        $buyer = new Buyer();
+        $buyer->setIdentificationType('05');
+        $buyer->setName($_POST['name']);
+        $buyer->setIdentification($_POST['identification']);
+        $bill->setBuyer($buyer);
+
+        $voucherTypeDao = new VoucherTypeDao($connection);
+        $voucherType = $voucherTypeDao->findById($_POST['voucherTypeId']);
+        $bill->setVoucherType($voucherType);
+
+        $this->getBillDeductibleByHtmlPost($connection, $bill);
+        $this->getBillExpensesByHtmlPost($connection, $bill);
+
+        $registerBillService = new RegisterBillService($connection);
+        if (null === $billId = $registerBillService($bill, false)) {
+            echo $this->templates->render('error-view', [
+                'title' => 'Error al registrar la factura.',
+                'errorMessages' => $registerBillService->getErrors()
+            ]);
+        } else {
+            echo $this->templates->render('success-view', [
+                'title' => 'Factura registrada correctamente',
+                'message' => 'La factura fue registrada con éxito.'
+            ]);
+        }
+
+    }
+
     private function registerBillDetailDeductibles(Bill $bill){
         for ($i=0; $i < count($bill->getBillDetails()); $i++){
             $billDetail = $bill->getBillDetails()[$i];
@@ -95,6 +160,18 @@ class BillController extends Controller {
                 $billDetailDeductible->setDeductibleId($_POST['deductibleId'.$billDetail->getMainCode()]);
                 $billDetailDeductible->setValue($billDetail->getTotalPriceWithoutTaxes());
                 $bill->getBillDetails()[$i]->setBillDetailDeductible($billDetailDeductible);
+            }
+        }
+    }
+
+    private function registerBillDetailExpenses(Bill $bill){
+        for ($i=0; $i < count($bill->getBillDetails()); $i++){
+            $billDetail = $bill->getBillDetails()[$i];
+            if ($_POST['expenseId'.$billDetail->getMainCode()]){
+                $billDetailExpense = new BillDetailExpense();
+                $billDetailExpense->setExpenseId($_POST['expenseId'.$billDetail->getMainCode()]);
+                $billDetailExpense->setValue($billDetail->getTotalPriceWithoutTaxes());
+                $bill->getBillDetails()[$i]->setBillDetailExpense($billDetailExpense);
             }
         }
     }
@@ -165,6 +242,40 @@ class BillController extends Controller {
             }
         }
         return $result;
+    }
+
+    /**
+     * @param ConnectionMySql $connection
+     * @param Bill|null $bill
+     * @return void
+     */
+    public function getBillDeductibleByHtmlPost(ConnectionMySql $connection, ?Bill $bill): void
+    {
+        $deductibleDao = new DeductibleDao($connection);
+        foreach ($_POST['bill-deductibles'] as $htmlBillDeductibleCode => $htmlBillDeductibleValue) {
+            $deductible = $deductibleDao->findById($htmlBillDeductibleCode);
+            $billDeductible = new BillDeductible();
+            $billDeductible->setDeductible($deductible);
+            $billDeductible->setValue(floatval($htmlBillDeductibleValue));
+            $bill->addBillDeductible($billDeductible);
+        }
+    }
+
+    /**
+     * @param ConnectionMySql $connection
+     * @param Bill|null $bill
+     * @return void
+     */
+    public function getBillExpensesByHtmlPost(ConnectionMySql $connection, ?Bill $bill): void
+    {
+        $expenseDao = new ExpenseDao($connection);
+        foreach ($_POST['bill-expenses'] as $htmlBillExpenseCode => $htmlBillExpenseValue) {
+            $expense = $expenseDao->findById($htmlBillExpenseCode);
+            $billExpense = new BillExpense();
+            $billExpense->setExpense($expense);
+            $billExpense->setValue(floatval($htmlBillExpenseValue));
+            $bill->addBillExpense($billExpense);
+        }
     }
 
 }
