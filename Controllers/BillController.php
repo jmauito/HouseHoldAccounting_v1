@@ -137,6 +137,11 @@ class BillController extends Controller {
         $this->getBillDeductibleByHtmlPost($connection, $bill);
         $this->getBillExpensesByHtmlPost($connection, $bill);
 
+        if(key_exists('mainCode', $_POST)){
+            $this->getBillDetailsByHtmlPost($connection, $bill);
+        }
+
+
         $registerBillService = new RegisterBillService($connection);
         if (null === $billId = $registerBillService($bill, false)) {
             echo $this->templates->render('error-view', [
@@ -275,6 +280,20 @@ class BillController extends Controller {
             $billExpense->setExpense($expense);
             $billExpense->setValue(floatval($htmlBillExpenseValue));
             $bill->addBillExpense($billExpense);
+        }
+    }
+
+    private function getBillDetailsByHtmlPost(ConnectionMySql $connection, ?Bill $bill): void
+    {
+        foreach ($_POST['mainCode'] as $mainCode){
+            $billDetail = new BillDetail();
+            $billDetail->setMainCode($mainCode);
+            $billDetail->setDescription($_POST['description'][$mainCode]);
+            $billDetail->setQuantity($_POST['quantity'][$mainCode]);
+            $billDetail->setUnitPrice($_POST['unitPrice'][$mainCode]);
+            $billDetail->setDiscount($_POST['discount'][$mainCode]);
+            $billDetail->setTotalPriceWithoutTaxes($_POST['totalPriceWithoutTaxes'][$mainCode]);
+            $bill->addBillDetail($billDetail);
         }
     }
 

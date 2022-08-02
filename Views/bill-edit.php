@@ -216,7 +216,7 @@ function changeBillDetailDeductible(mainCode, totalPriceWithoutTaxes){
 function changeBillDetailExpense(mainCode, totalPriceWithoutTaxes){
     const selectedExpense = document.getElementById('billDetailExpense-' + mainCode)
     const oldExpense = document.getElementById('expenseId' + mainCode)
-console.log(selectedExpense)
+
     if (selectedExpense.value == 0 ) {
         const expense = document.getElementById('expense-' + oldExpense.value)
         expense.value = expense.value * 1 - totalPriceWithoutTaxes * 1

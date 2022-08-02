@@ -86,5 +86,52 @@ $this->layout('Layouts/layout', [
             </div>
         <?php endforeach; ?>
     </div>
+
+    <div>
+        <h2>Details</h2>
+        <input type="button" onclick="insertItem()"  value="New item"/>
+        <input type="hidden" id="itemsCount" name="itemsCount" value="0">
+        <div id="items" name = "items"></div>
+    </div>
     <input type="submit" value="Save">
 </form>
+<script>
+    function createInput(name, i, value){
+        const input = document.createElement('input')
+        input.id= name + i
+        input.name = `${name}[${i}]`
+        input.value = value
+        return input
+    }
+    function insertItem(){
+        let itemsCount = document.getElementById('itemsCount')
+        const i = (itemsCount.value * 1) + 1
+        itemsCount.value = i
+        const divItem = document.createElement('div')
+        divItem.id = 'item' + i
+        const mainCode = createInput('mainCode', i, i.toString())
+        const description = createInput('description', i, null)
+        const quantity = createInput('quantity', i, 0)
+        const unitPrice = createInput('unitPrice', i, 0)
+        const discount = createInput('discount', i, 0)
+        const totalPriceWithoutTaxes = createInput('totalPriceWithoutTaxes', i, 0)
+        const removeItem = document.createElement('button')
+        removeItem.innerHTML = '-'
+        removeItem.setAttribute('onclick', `removeItem(${i})`)
+
+        divItem.appendChild(mainCode)
+        divItem.appendChild(description)
+        divItem.appendChild(quantity)
+        divItem.appendChild(unitPrice)
+        divItem.appendChild(discount)
+        divItem.appendChild(totalPriceWithoutTaxes)
+        divItem.appendChild(removeItem)
+        let items = document.getElementById("items")
+        items.appendChild(divItem)
+    }
+    function removeItem(i){
+        const item = document.getElementById('item' + i)
+        const items = document.getElementById('items')
+        items.removeChild(item)
+    }
+</script>

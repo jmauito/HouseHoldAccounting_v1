@@ -27,7 +27,7 @@
             <li>
                 <a href="load-from-xml">Load bill from xml file</a>
             </li>
-            <li><a href="#">Register bill</a> </li>
+            <li><a href="create-bill">Register bill</a> </li>
 
         </ul>
     </nav>
