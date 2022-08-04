@@ -5,7 +5,7 @@ $this->layout('Layouts/layout', [
 ?>
 
 <form action="insert-bill" method="post">
-    <input type="hidden" name="voucherTypeId" id="voucherTypeId" value="2">
+    <input type="hidden" name="voucherTypeId" id="voucherTypeId" value="1">
     <label for="establishment">Establishment:</label>
     <input type="text" name="establishment" id="establishment">
     <label for="emissionPoint">Emission Point:</label>

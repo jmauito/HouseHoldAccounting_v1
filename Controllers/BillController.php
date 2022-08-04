@@ -105,43 +105,50 @@ class BillController extends Controller {
 
     public function insertBill()
     {
-        $connection = new ConnectionMySql();
-        $bill = new Bill();
-        $bill->setAccessKey('todo');
-        $bill->setEstablishment($_POST['establishment']);
-        $bill->setSecuential($_POST['secuential']);
-        $bill->setEmissionPoint($_POST['emissionPoint']);
-        $bill->setDateOfIssue($_POST['dateOfIssue']);
-        $bill->setTotalWithoutTax($_POST['totalWithoutTax']);
-        $bill->setTotalDiscount($_POST['totalDiscount']);
-        $bill->setTip($_POST['tip']);
-        $bill->setTotal($_POST['total']);
+        try {
+            $connection = new ConnectionMySql();
+            $bill = new Bill();
+            $bill->setEstablishment($_POST['establishment']);
+            $bill->setSecuential($_POST['secuential']);
+            $bill->setEmissionPoint($_POST['emissionPoint']);
+            $bill->setDateOfIssue(new \DateTime($_POST['dateOfIssue']));
+            $bill->setTotalWithoutTax($_POST['totalWithoutTax']);
+            $bill->setTotalDiscount($_POST['totalDiscount']);
+            $bill->setTip($_POST['tip']);
+            $bill->setTotal($_POST['total']);
 
-        $store = new Store();
-        $store->setBusinessName($_POST['businessName']);
-        $store->setTradeName($_POST['tradeName']);
-        $store->setRuc($_POST['ruc']);
-        $store->setParentAddress($_POST['parentAddress']);
-        $bill->setStore($store);
+            $store = new Store();
+            $store->setBusinessName($_POST['businessName']);
+            $store->setTradeName($_POST['tradeName']);
+            $store->setRuc($_POST['ruc']);
+            $store->setParentAddress($_POST['parentAddress']);
+            $bill->setStore($store);
 
-        $buyer = new Buyer();
-        $buyer->setIdentificationType('05');
-        $buyer->setName($_POST['name']);
-        $buyer->setIdentification($_POST['identification']);
-        $bill->setBuyer($buyer);
+            $buyer = new Buyer();
+            $buyer->setIdentificationType('05');
+            $buyer->setName($_POST['name']);
+            $buyer->setIdentification($_POST['identification']);
+            $bill->setBuyer($buyer);
 
-        $voucherTypeDao = new VoucherTypeDao($connection);
-        $voucherType = $voucherTypeDao->findById($_POST['voucherTypeId']);
-        $bill->setVoucherType($voucherType);
+            $voucherTypeDao = new VoucherTypeDao($connection);
+            $voucherType = $voucherTypeDao->findById($_POST['voucherTypeId']);
+            $bill->setVoucherType($voucherType);
 
-        $this->getBillDeductibleByHtmlPost($connection, $bill);
-        $this->getBillExpensesByHtmlPost($connection, $bill);
+            $this->getBillDeductibleByHtmlPost($connection, $bill);
+            $this->getBillExpensesByHtmlPost($connection, $bill);
 
-        if(key_exists('mainCode', $_POST)){
-            $this->getBillDetailsByHtmlPost($connection, $bill);
+            if (key_exists('mainCode', $_POST)) {
+                $this->getBillDetailsByHtmlPost($connection, $bill);
+            }
+
+            $bill->setAccessKey($bill->generateAccessKey());
+        } catch (\Exception $e){
+            echo $this->templates->render('error-view', [
+                'title' => 'Error al registrar la factura.',
+                'errorMessages' => [$e->getMessage()]
+            ]);
+            die();
         }
-
-
         $registerBillService = new RegisterBillService($connection);
         if (null === $billId = $registerBillService($bill, false)) {
             echo $this->templates->render('error-view', [

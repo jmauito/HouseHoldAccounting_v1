@@ -46,7 +46,7 @@ class BillDao {
         $arr['establishment'] = $bill->getEstablishment();
         $arr['emissionPoint'] = $bill->getEmissionPoint();
         $arr['secuential'] = $bill->getSecuential();
-        $arr['dateOfIssue'] = $bill->getDateOfIssue();
+        $arr['dateOfIssue'] = $bill->getDateOfIssue()->format("Y-m-d");
         $arr['establishmentAddress'] = $bill->getEstablishmentAddress();
         $arr['totalWithoutTax'] = $bill->getTotalWithoutTax();
         $arr['totalDiscount'] = $bill->getTotalDiscount();
