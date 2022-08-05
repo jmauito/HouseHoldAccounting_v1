@@ -20,8 +20,8 @@ class BillMother
         $bill->setAccessKey('111');
         $bill->setEstablishment('001');
         $bill->setEmissionPoint('001');
-        $bill->setSecuential('0000001');
-        $bill->setDateOfIssue('2022-06-07');
+        $bill->setSequential('1');
+        $bill->setDateOfIssue(new \DateTime('2022-06-07'));
         $bill->setEstablishmentAddress("Establishment Address");
         $bill->setTotalWithoutTax(100);
         $bill->setTotal(112);
@@ -63,8 +63,8 @@ class BillMother
         $bill->setAccessKey('2807201801019007200200120019020002250154986567417');
         $bill->setEstablishment('001');
         $bill->setEmissionPoint('902');
-        $bill->setSecuential('000225015');
-        $bill->setDateOfIssue('2018-07-28');
+        $bill->setSequential('000225015');
+        $bill->setDateOfIssue(new \DateTime('2018-07-28'));
         $bill->setEstablishmentAddress('AV DE LA AMERICAS Y NICOLAS DE ROCHA');
         $bill->setTotalWithoutTax(32.00);
         $bill->setTotalDiscount(1.48);

@@ -19,14 +19,15 @@ use Infraestructure\Connection\ConnectionMySqlTest;
 use ApplicationService\ReadXmlBillService;
 use PHPUnit\Framework\TestCase;
 use Domain\Bill;
-
+use Test\Domain\VoucherTypeMother;
+use Test\Domain\BillMother;
 class ReadXmlBillServiceTest extends TestCase{
 
     public function testCanParseXmlToBill():void
     {
         $connection = new ConnectionMySqlTest();
         $voucherTypeDao = new VoucherTypeDao($connection);
-        $voucherTypeMother = new \Test\Domain\VoucherTypeMother();
+        $voucherTypeMother = new VoucherTypeMother();
         $voucherTypeDao->insert($voucherTypeMother->build());
         $xmlBill = file_get_contents('Test/testBill.xml');
         $readXmlBillService = new ReadXmlBillService($xmlBill);
@@ -35,7 +36,7 @@ class ReadXmlBillServiceTest extends TestCase{
             echo(implode($readXmlBillService->getErrors() ));
         }
 
-        $billMother = new \Test\Domain\BillMother();
+        $billMother = new BillMother();
         $billTest = $billMother->buildTestBill();
 
         $this->assertInstanceOf(Bill::class, $bill );

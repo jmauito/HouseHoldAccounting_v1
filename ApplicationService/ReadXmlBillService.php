@@ -36,9 +36,9 @@ class ReadXmlBillService {
 
         $bill->setEstablishment($xml->infoTributaria->estab->__toString());
         $bill->setEmissionPoint($xml->infoTributaria->ptoEmi->__toString());
-        $bill->setSecuential($xml->infoTributaria->secuencial->__toString());
+        $bill->setSequential($xml->infoTributaria->secuencial->__toString());
         $arrDate = explode('/', $xml->infoFactura->fechaEmision);
-        $bill->setDateOfIssue("{$arrDate[2]}-{$arrDate[1]}-{$arrDate[0]}");
+        $bill->setDateOfIssue( new \DateTime("{$arrDate[2]}-{$arrDate[1]}-{$arrDate[0]}"));
         $bill->setEstablishmentAddress($xml->infoFactura->dirEstablecimiento->__toString());
         $bill->setTotalWithoutTax($xml->infoFactura->totalSinImpuestos->__toString());
         $bill->setTotalDiscount($xml->infoFactura->totalDescuento->__toString());

@@ -109,7 +109,7 @@ class BillController extends Controller {
             $connection = new ConnectionMySql();
             $bill = new Bill();
             $bill->setEstablishment($_POST['establishment']);
-            $bill->setSecuential($_POST['secuential']);
+            $bill->setSequential($_POST['sequential']);
             $bill->setEmissionPoint($_POST['emissionPoint']);
             $bill->setDateOfIssue(new \DateTime($_POST['dateOfIssue']));
             $bill->setTotalWithoutTax($_POST['totalWithoutTax']);
@@ -196,7 +196,7 @@ class BillController extends Controller {
         $bill->setAccessKey($json->accessKey);
         $bill->setEstablishment($json->establishment);
         $bill->setEmissionPoint($json->emissionPoint);
-        $bill->setSecuential($json->secuential);
+        $bill->setSequential($json->sequential);
         $bill->setDateOfIssue($json->dateOfIssue);
         $bill->setEstablishmentAddress($this->parseEstablishmentAddress($json->establishmentAddress));
         $bill->setTotalWithoutTax($json->totalWithoutTax);

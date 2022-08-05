@@ -10,8 +10,8 @@ $this->layout('Layouts/layout', [
     <input type="text" name="establishment" id="establishment">
     <label for="emissionPoint">Emission Point:</label>
     <input type="text" name="emissionPoint" id="emissionPoint">
-    <label for="secuential">Secuential:</label>
-    <input type="text" name="secuential" id="secuential">
+    <label for="sequential">Secuential:</label>
+    <input type="text" name="sequential" id="sequential">
     <label for="dateOfIssue">Date:</label>
     <input type="text" name="dateOfIssue" id="dateOfIssue">
     <label for="tip">Tip:</label>

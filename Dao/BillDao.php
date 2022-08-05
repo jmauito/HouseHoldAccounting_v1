@@ -45,7 +45,7 @@ class BillDao {
         $arr['accessKey'] = $bill->getAccessKey();
         $arr['establishment'] = $bill->getEstablishment();
         $arr['emissionPoint'] = $bill->getEmissionPoint();
-        $arr['secuential'] = $bill->getSecuential();
+        $arr['sequential'] = $bill->getSequential();
         $arr['dateOfIssue'] = $bill->getDateOfIssue()->format("Y-m-d");
         $arr['establishmentAddress'] = $bill->getEstablishmentAddress();
         $arr['totalWithoutTax'] = $bill->getTotalWithoutTax();
@@ -91,7 +91,7 @@ class BillDao {
         $bill->setAccessKey($result->accessKey);
         $bill->setEmissionPoint($result->emissionPoint);
         $bill->setEstablishment($result->establishment);
-        $bill->setSecuential($result->secuential);
+        $bill->setSequential($result->secuential);
         $bill->setDateOfIssue($result->dateOfIssue);
         $bill->setEstablishmentAddress($result->establishmentAddress);
         $bill->setTotalWithoutTax($result->totalWithoutTax);

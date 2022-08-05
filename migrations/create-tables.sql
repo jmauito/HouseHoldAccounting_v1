@@ -7,15 +7,17 @@ DROP TABLE IF EXISTS `bill_detail`;
 DROP TABLE IF EXISTS `bill`;
 DROP TABLE IF EXISTS `store`;
 DROP TABLE IF EXISTS `buyer`;
-DROP TABLE IF EXISTS `voucher-type`;
+DROP TABLE IF EXISTS `voucher_type`;
 DROP TABLE IF EXISTS `deductible`;
 DROP TABLE IF EXISTS `expense`;
+DROP TABLE IF EXISTS `tax`;
+DROP TABLE IF EXISTS  `percentage_tax`;
 --
--- Table structure for table `voucher-type`
+-- Table structure for table `voucher_type`
 --
 
 
-CREATE TABLE `voucher-type` (
+CREATE TABLE `voucher_type` (
                                 `id` int unsigned NOT NULL AUTO_INCREMENT,
                                 `name` varchar(45) NOT NULL,
                                 `code` char(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
@@ -67,9 +69,9 @@ CREATE TABLE `store` (
 CREATE TABLE `bill` (
                         `id` int unsigned NOT NULL AUTO_INCREMENT,
                         `accessKey` char(49) DEFAULT NULL,
-                        `establishment` char(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+                        `establishment` char(3) NOT NULL,
                         `emissionPoint` char(3) NOT NULL,
-                        `secuential` char(9) NOT NULL,
+                        `sequential` char(9) NOT NULL,
                         `dateOfIssue` date NOT NULL,
                         `establishmentAddress` varchar(300) DEFAULT NULL,
                         `totalWithoutTax` decimal(14,2) NOT NULL,
@@ -77,20 +79,20 @@ CREATE TABLE `bill` (
                         `tip` decimal(5,2) DEFAULT NULL,
                         `total` decimal(14,2) DEFAULT NULL,
                         `filePath` varchar(45) DEFAULT NULL,
-                        `active` tinyint(1) DEFAULT '1',
+                        `active` tinyint DEFAULT 1,
                         `voucherTypeId` int unsigned NOT NULL,
                         `buyerId` int unsigned NOT NULL,
                         `storeId` int unsigned NOT NULL,
                         PRIMARY KEY (`id`),
                         UNIQUE KEY `id_UNIQUE` (`id`),
-                        UNIQUE KEY `billNumber_UNIQUE` (`establishment`,`emissionPoint`,`secuential`) USING BTREE,
+                        UNIQUE KEY `billNumber_UNIQUE` (`establishment`,`emissionPoint`,`sequential`) USING BTREE,
                         UNIQUE KEY `accessKey_UNIQUE` (`accessKey`),
                         KEY `bill_buyer_fk` (`buyerId`),
                         KEY `bill_store_fk` (`storeId`),
                         KEY `bill_voucherType_fk` (`voucherTypeId`),
                         CONSTRAINT `bill_buyer_fk` FOREIGN KEY (`buyerId`) REFERENCES `buyer` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
                         CONSTRAINT `bill_store_fk` FOREIGN KEY (`storeId`) REFERENCES `store` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-                        CONSTRAINT `bill_voucherType_fk` FOREIGN KEY (`voucherTypeId`) REFERENCES `voucher-type` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+                        CONSTRAINT `bill_voucherType_fk` FOREIGN KEY (`voucherTypeId`) REFERENCES `voucher_type` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -214,3 +216,43 @@ CREATE TABLE `bill_detail_expense` (
                                                REFERENCES `expense` (`id`)
                                                ON DELETE RESTRICT
                                                ON UPDATE CASCADE);
+
+CREATE TABLE tax(
+    id int unsigned NOT NULL AUTO_INCREMENT,
+    name VARCHAR(45),
+    code VARCHAR(1),
+    active tinyint DEFAULT 1,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `id_UNIQUE` (`id`),
+    UNIQUE KEY `name_UNIQUE` (`name`)
+);
+DROP TABLE IF EXISTS  percentage_tax;
+CREATE TABLE tax_rate(
+   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+   name VARCHAR(45),
+   taxId INT UNSIGNED NOT NULL,
+   code varchar(1) NOT NULL,
+   percentage tinyint NOT NULL,
+   active tinyint DEFAULT 1,
+   PRIMARY KEY (`id`),
+   UNIQUE KEY `id_UNIQUE` (`id`),
+   UNIQUE KEY `taxId_name_UNIQUE` (taxId,name),
+   UNIQUE KEY `taxId_code_UNIQUE` (taxId,code),
+   KEY `tax_fk` (`taxId`),
+   CONSTRAINT `tax_fk` FOREIGN KEY (`taxId`) REFERENCES `tax` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE bill_tax_rate(
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  billId INT UNSIGNED NOT NULL,
+  taxRateId INT UNSIGNED NOT NULL,
+  taxBase decimal(14,2),
+  value decimal(14,2),
+  active tinyint DEFAULT 1,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `billId_taxRateId_UNIQUE` (billId,taxRateId),
+  KEY `tax_fk` (`billId`),
+  CONSTRAINT `bill_tax_rate_bill_fk` FOREIGN KEY (`billId`) REFERENCES `bill` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `bill_tax_rate_tax_rate_fk` FOREIGN KEY (`taxRateId`) REFERENCES `tax_rate` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
+);
