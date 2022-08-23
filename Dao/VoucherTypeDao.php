@@ -18,7 +18,7 @@ use Infraestructure\Connection\Connection;
  */
 class VoucherTypeDao {
 
-    private static $TABLE = "voucher-type";
+    private static $TABLE = "voucher_type";
     private $connection;
 
     public function __construct(Connection $connection) {

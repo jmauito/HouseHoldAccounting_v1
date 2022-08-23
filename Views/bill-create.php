@@ -5,41 +5,94 @@ $this->layout('Layouts/layout', [
 ?>
 
 <form action="insert-bill" method="post">
-    <input type="hidden" name="voucherTypeId" id="voucherTypeId" value="1">
-    <label for="establishment">Establishment:</label>
-    <input type="text" name="establishment" id="establishment">
-    <label for="emissionPoint">Emission Point:</label>
-    <input type="text" name="emissionPoint" id="emissionPoint">
-    <label for="sequential">Secuential:</label>
-    <input type="text" name="sequential" id="sequential">
-    <label for="dateOfIssue">Date:</label>
-    <input type="text" name="dateOfIssue" id="dateOfIssue">
-    <label for="tip">Tip:</label>
-    <input type="text" name="tip" id="tip">
-    <label for="totalWithoutTax">Total without tax:</label>
-    <input type="text" name="totalWithoutTax" id="totalWithoutTax">
-    <label for="totalDiscount">Total discount:</label>
-    <input type="text" name="totalDiscount" id="totalDiscount">
-    <label for="total">Total:</label>
-    <input type="text" name="total" id="total">
-    <h3>Store</h3>
-    <label for="ruc">RUC:</label>
-    <input type="text" name="ruc" id="ruc">
-    <label for="businessName">Business name:</label>
-    <input type="text" name="businessName" id="businessName">
-    <label for="tradeName">Trade name:</label>
-    <input type="text" name="tradeName" id="tradeName">
-    <label for="parentAddress">Parent address:</label>
-    <input type="text" name="parentAddress" id="parentAddress">
-    <h3>Buyer</h3>
-    <input type="hidden" name="identificationType" id="identificationType" value="05">
-    <label for="identification">Identification:</label>
-    <input type="text" name="identification" id="identification">
-    <label for="name">Name:</label>
-    <input type="text" name="name" id="name">
+    <div class="m-3">
+        <input type="hidden" name="voucherTypeId" id="voucherTypeId" value="1">
+    </div>
 
-    <div>
-        <h2>Deductibles</h2>
+    <div class="m-3 row">
+        <div class="col-sm-1">
+            <label>Number:</label>
+        </div>
+        <div class="col">
+            <input type="text" name="establishment" id="establishment" placeholder="001" maxlength="3" size="3">
+            <input type="text" name="emissionPoint" id="emissionPoint" placeholder="001" maxlength="3" size="3">
+            <input type="text" name="sequential" id="sequential">
+        </div>
+    </div>
+    <div class="m-3 row">
+        <div class="col-sm-1">
+        <label for="dateOfIssue">Date:</label>
+        </div>
+        <div class="col">
+            <input type="date" name="dateOfIssue" id="dateOfIssue">
+        </div>
+    </div>
+
+    <div class="m-3 row">
+        <div class="col">
+
+        </div>
+    </div>
+    <div class="m-3 row">
+        <h3>Store</h3>
+        <div class="col-sm-6">
+            <div class="col">
+                <label for="ruc">RUC:</label>
+                <input type="text" name="ruc" id="ruc">
+            </div>
+            <div class="col">
+                <label for="businessName">Business name:</label>
+                <input type="text" name="businessName" id="businessName">
+            </div>
+            <div class="col">
+                <label for="tradeName">Trade name:</label>
+                <input type="text" name="tradeName" id="tradeName">
+            </div>
+            <div class="col">
+                <label for="parentAddress">Parent address:</label>
+                <input type="text" name="parentAddress" id="parentAddress">
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <h3>Buyer</h3>
+            <div class="row">
+                <div class="col">
+                    <input type="hidden" name="identificationType" id="identificationType" value="05">
+                    <label for="identification">Identification:</label>
+                    <input type="text" name="identification" id="identification">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="name">Name:</label>
+                    <input type="text" name="name" id="name">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="m-3 row">
+        <div class="col">
+            <label for="tip">Tip:</label>
+            <input type="text" name="tip" id="tip">
+        </div>
+        <div class="col">
+            <label for="totalWithoutTax">Total without tax:</label>
+            <input type="text" name="totalWithoutTax" id="totalWithoutTax">
+        </div>
+        <div class="col">
+            <label for="totalDiscount">Total discount:</label>
+            <input type="text" name="totalDiscount" id="totalDiscount">
+        </div>
+        <div class="col">
+            <label for="total">Total:</label>
+            <input type="text" name="total" id="total">
+        </div>
+
+    </div>
+
+    <div class="m-3 row">
+        <h3>Deductibles</h3>
 
         <?php foreach ($deductibles as $deductible): ?>
             <?php $inputDeductibleName = "deductible-{$deductible->getId()}" ?>
@@ -63,8 +116,8 @@ $this->layout('Layouts/layout', [
         <?php endforeach; ?>
     </div>
 
-    <div>
-        <h2>Expenses</h2>
+    <div class="m-3 row">
+        <h3>Expenses</h3>
         <?php foreach ($expenses as $expense): ?>
             <?php $inputExpenseName = "expense-{$expense->getId()}" ?>
             <?php
@@ -87,13 +140,46 @@ $this->layout('Layouts/layout', [
         <?php endforeach; ?>
     </div>
 
-    <div>
-        <h2>Details</h2>
-        <input type="button" onclick="insertItem()"  value="New item"/>
+    <div class="m-3">
+        <h3>
+            Details
+            <span class="badge">
+                <input class="btn btn-secondary btn-sm" type="button" onclick="insertItem()"  value="+"/>
+            </span>
+        </h3>
+        <div class="row">
+            <div class="col-sm-1">
+                <h6>Nro.</h6>
+            </div>
+            <div class="col">
+                <h6>Description.</h6>
+            </div>
+            <div class="col-sm-1">
+                <h6>Quantity.</h6>
+            </div>
+            <div class="col-sm-1">
+                <h6>Unit price.</h6>
+            </div>
+            <div class="col-sm-1">
+                <h6>Discount</h6>
+            </div>
+            <div class="col-sm-1">
+                <h6>Total</h6>
+            </div>
+            <div class="col-sm">
+                <h6>Deductible</h6>
+            </div>
+            <div class="col-sm-1">
+                ..
+            </div>
+        </div>
         <input type="hidden" id="itemsCount" name="itemsCount" value="0">
         <div id="items" name = "items"></div>
     </div>
-    <input type="submit" value="Save">
+    <div class="d-grid gap-2">
+        <input class="btn btn-primary" type="submit" value="Save">
+    </div>
+
 </form>
 <select name="deductibles" id="deductibles" hidden>
     <option value="0">No deductible</option>
@@ -114,28 +200,65 @@ $this->layout('Layouts/layout', [
         const i = (itemsCount.value * 1) + 1
         itemsCount.value = i
         const divItem = document.createElement('div')
+        divItem.setAttribute("class","row")
         divItem.id = 'item-' + i
         const removeItem = document.createElement('input')
         removeItem.type = "button"
         removeItem.value = '-'
+        removeItem.setAttribute("class", "btn btn-secondary btn-sm")
         removeItem.setAttribute('onclick', `removeItem(${i})`)
         const quantity = createInput('quantity', i, 0)
         quantity.setAttribute("onchange", `calculateTotalPriceWithoutTaxes(${i})`)
+        quantity.setAttribute("size", "6")
         const unitPrice = createInput('unitPrice', i, 0)
         unitPrice.setAttribute("onchange", `calculateTotalPriceWithoutTaxes(${i})`)
+        unitPrice.setAttribute("size", "6")
         const discount = createInput('discount', i, 0)
         discount.setAttribute("onchange", `calculateTotalPriceWithoutTaxes(${i})`)
+        discount.setAttribute("size","6")
         const totalPriceWithoutTaxes = createInput('totalPriceWithoutTaxes', i, 0)
         totalPriceWithoutTaxes.oldValue = 0
         totalPriceWithoutTaxes.setAttribute('onchange',`changeTotalPriceWithoutTaxes(${i},this)`)
-        divItem.appendChild(createInput('mainCode', i, i.toString()))
-        divItem.appendChild(createInput('description', i, null))
-        divItem.appendChild(quantity)
-        divItem.appendChild(unitPrice)
-        divItem.appendChild(discount)
-        divItem.appendChild(totalPriceWithoutTaxes)
+        totalPriceWithoutTaxes.setAttribute("size","6")
+        const mainCode = createInput('mainCode', i, i.toString())
+        mainCode.setAttribute("size","3")
+        const description = createInput('description', i, null)
+        const divMainCode = document.createElement('div')
+        divMainCode.setAttribute("class", "col-sm-1")
+        divMainCode.appendChild(mainCode)
+        divItem.appendChild(divMainCode)
+
+        const divDescription = document.createElement('div')
+        divDescription.setAttribute("class", "col")
+        divDescription.appendChild(description)
+        divItem.appendChild(divDescription)
+
+        const divQuantity = document.createElement('div')
+        divQuantity.setAttribute("class", "col-sm-1")
+        divQuantity.appendChild(quantity)
+        divItem.appendChild(divQuantity)
+
+        const divUnitPrice = document.createElement('div')
+        divUnitPrice.setAttribute("class", "col-sm-1")
+        divUnitPrice.appendChild(unitPrice)
+        divItem.appendChild(divUnitPrice)
+
+        const divDiscount = document.createElement('div')
+        divDiscount.setAttribute("class", "col-sm-1")
+        divDiscount.appendChild(discount)
+        divItem.appendChild(divDiscount)
+
+        const divTotalPriceWithoutTaxes = document.createElement('div')
+        divTotalPriceWithoutTaxes.setAttribute("class", "col-sm-1")
+        divTotalPriceWithoutTaxes.appendChild(totalPriceWithoutTaxes)
+        divItem.appendChild(divTotalPriceWithoutTaxes)
+
         createDeductibleDetailControls(i,divItem)
-        divItem.appendChild(removeItem)
+
+        const divRemoveItem = document.createElement('div')
+        divRemoveItem.setAttribute("class", "col-sm-1")
+        divRemoveItem.appendChild(removeItem)
+        divItem.appendChild(divRemoveItem)
         let items = document.getElementById("items")
         items.appendChild(divItem)
     }
@@ -155,7 +278,11 @@ $this->layout('Layouts/layout', [
         newSelectDeductible.name = `deductibleDetailId[${i}]`
         newSelectDeductible.removeAttribute('hidden')
         newSelectDeductible.setAttribute('onchange',`changeDeductibleDetail(this,${i})`)
-        divItem.appendChild( newSelectDeductible )
+        newSelectDeductible.setAttribute('class', 'sm-1')
+        const divDeductibleDetail = document.createElement('div')
+        divDeductibleDetail.setAttribute("class", "col")
+        divDeductibleDetail.appendChild(newSelectDeductible)
+        divItem.appendChild( divDeductibleDetail )
         const deductibleValue = document.createElement('input')
         deductibleValue.id = "deductibleDetailValue-" + i
         deductibleValue.name = `deductibleDetailValue[${i}]`

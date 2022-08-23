@@ -15,12 +15,12 @@ $encodedBill = base64_encode($bill->toJson());
 
     <div>
         <label for="">Bill number:</label>
-        <label> <?= "{$bill->getEstablishment()}-{$bill->getEmissionPoint()}-{$bill->getSecuential()}" ?> </label>
+        <label> <?= "{$bill->getEstablishment()}-{$bill->getEmissionPoint()}-{$bill->getSequential()}" ?> </label>
     </div>
 
     <div>
         <label for="">Date:</label>
-        <label> <?= $bill->getDateOfIssue() ?> </label>
+        <label> <?= $bill->getDateOfIssue()->format('Y-m-d') ?> </label>
     </div>
 
     <div>
