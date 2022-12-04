@@ -287,7 +287,7 @@ final class Bill extends DomainModel{
         $dto->accessKey = $this->getAccessKey();
         $dto->establishment = $this->getEstablishment();
         $dto->emissionPoint = $this->getEmissionPoint();
-        $dto->secuential = $this->getSequential();
+        $dto->sequential = $this->getSequential();
         $dto->dateOfIssue = $this->getDateOfIssue();
         $dto->establishmentAddress = $this->getEstablishmentAddress();
         $dto->totalWithoutTax = $this->getTotalWithoutTax();

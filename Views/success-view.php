@@ -6,6 +6,11 @@ $this->layout('Layouts/layout', [
 
 <h2><?= $message ?></h2>
 <div>
+    <a href="/update-bill/<?= $billId ?>">
+        <button>Editar la factura</button>
+    </a>
+</div>
+<div>
     <a href="/load-from-xml">
         <button>Registrar una nueva factura</button>
     </a>

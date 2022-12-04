@@ -59,7 +59,6 @@ class ReadXmlBillService {
         if (property_exists($xml, 'infoAdicional')){
             $this->setBillAdditionalInformation($bill,$xml->infoAdicional);
         }
-
         return $bill;
     }
 

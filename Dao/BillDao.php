@@ -91,8 +91,8 @@ class BillDao {
         $bill->setAccessKey($result->accessKey);
         $bill->setEmissionPoint($result->emissionPoint);
         $bill->setEstablishment($result->establishment);
-        $bill->setSequential($result->secuential);
-        $bill->setDateOfIssue($result->dateOfIssue);
+        $bill->setSequential($result->sequential);
+        $bill->setDateOfIssue(new \DateTime($result->dateOfIssue));
         $bill->setEstablishmentAddress($result->establishmentAddress);
         $bill->setTotalWithoutTax($result->totalWithoutTax);
         $bill->setTotalDiscount($result->totalDiscount);

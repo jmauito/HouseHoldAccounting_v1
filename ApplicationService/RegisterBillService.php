@@ -91,6 +91,7 @@ class RegisterBillService {
             $billDetailDao->setBillId($bill->getId());
             $billDetailId = $billDetailDao->insert($billDetail);
             $this->registerBillDetailDeductible($billDetailId, $billDetail->getBillDetailDeductible());
+            $this->registerBillDetailExpense($billDetailId, $billDetail->getBillDetailExpense());
         }
                 
     }
@@ -117,9 +118,14 @@ class RegisterBillService {
                 $billDetailDeductibleDao = new BillDetailDeductibleDao($this->connection, $billDetailId);
                 $billDetailDeductibleDao->insert($billDetailDeductible);
             }
+    }
+    
+    private function registerBillDetailExpense(int $billDetailId, ?\Domain\BillDetailExpense $billDetailExpense){
 
-
-
+            if ($billDetailExpense!==null){
+                $billDetailExpenseDao = new \Dao\BillDetailExpenseDao($this->connection, $billDetailId);
+                $billDetailExpenseDao->insert($billDetailExpense);
+            }
     }
 
     private function registerBillAdditionalInformation(Bill $bill){

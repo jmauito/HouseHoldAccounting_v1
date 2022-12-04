@@ -44,6 +44,10 @@ final class BillDetail extends DomainModel{
     function getBillDetailDeductible():?BillDetailDeductible {
         return $this->billDetailDeductible;
     }
+    
+    function getBillDetailExpense():?BillDetailExpense {
+        return $this->billDetailExpense;
+    }
 
     function setMainCode(string $mainCode): void {
         $this->mainCode = $mainCode;

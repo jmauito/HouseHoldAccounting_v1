@@ -3,9 +3,10 @@ $this->layout('Layouts/layout', [
     'title' => $title,
 ]);
 $encodedBill = base64_encode($bill->toJson());
+$action = $update ? 'update-bill' : 'register-bill';
 ?>
 
-<form action="save-bill" method="post" >
+<form action="<?= $action  ?>" method="post" >
     <input type="hidden" name="update" value="<?= $update ?>">
     <input type="hidden" name="bill" id="bill" value="<?= $encodedBill ?>">
     <div>

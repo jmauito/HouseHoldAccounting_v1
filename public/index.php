@@ -7,9 +7,10 @@ $router = new AltoRouter();
 $router->map('GET', '/', 'FrontController#home', 'home');
 $router->map('GET', '/load-from-xml', 'BillController#loadFromXml', 'load-from-xml');
 $router->map('POST', '/create-bill-from-xml', 'BillController#createBillFromXml', 'create-bill-from-xml');
-$router->map('POST', '/save-bill', 'BillController#saveBill', 'save-bill');
+$router->map('POST', '/register-bill', 'BillController#registerBill', 'register-bill');
 $router->map('GET', '/create-bill', 'BillController#createBill', 'create-bill');
 $router->map('POST', '/insert-bill', 'BillController#insertBill', 'insert-bill');
+$router->map('GET', '/update-bill/[i:id]', 'BillController#updateBill', 'update-bill');
 $match = $router->match();
 
 if (!$match){

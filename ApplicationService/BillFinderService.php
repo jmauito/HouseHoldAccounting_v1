@@ -28,11 +28,21 @@ use Dao\VoucherTypeDao;
 use Dao\DeductibleDao;
 
 
-class SearchBillService {
+class BillFinderService {
     private $connection;
     
     public function __construct(Connection $connection) {
         $this->connection = $connection;
+    }
+    
+    public function searchById(int $id):?Bill
+    {
+        $billDao = new BillDao($this->connection);
+        if (null === $bill = $billDao->findOne('id',$id)){
+            return null;
+        }
+        
+        return $this->searchByAccessKey($bill->getAccessKey());
     }
     
     public function searchByAccessKey($accessKey):?Bill
@@ -101,12 +111,11 @@ class SearchBillService {
     public function getBillExpenses(Bill $bill): void
     {
         $billExpenseDao = new BillExpenseDao($this->connection, $bill->getId());
+        $expenseDao = new ExpenseDao($this->connection);
         if (null === $billExpenses = $billExpenseDao->findByBill() ){
             return;
         }
-
         foreach ($billExpenses as $billExpense) {
-            $expenseDao = new ExpenseDao($this->connection);
             $billExpense->setExpense($expenseDao->findById($billExpense->getExpenseId()));
             $bill->addBillExpense($billExpense);
         }

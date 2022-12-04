@@ -195,6 +195,28 @@ CREATE TABLE `bill_expense` (
                                         ON DELETE RESTRICT
                                         ON UPDATE CASCADE);
 
+CREATE TABLE `bill_detail_deductible` (
+                                       `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                                       `billDetailId` INT UNSIGNED NOT NULL,
+                                       `deductibleId` INT UNSIGNED NOT NULL,
+                                       `value` DECIMAL(14,2) NOT NULL,
+                                       `active` TINYINT NOT NULL DEFAULT 1,
+                                       PRIMARY KEY (`id`),
+                                       UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
+                                       UNIQUE INDEX `uq_bill_detail_deductible_billDetailIdDeductibleId` (`billDetailId` ASC, `deductibleId` ASC) VISIBLE,
+                                       INDEX `fk_bill_detail_deductible_deductible_idx` (`deductibleId` ASC) VISIBLE,
+                                       CONSTRAINT `fk_bill_detail_deductible_bill_detail`
+                                           FOREIGN KEY (`billDetailId`)
+                                               REFERENCES bill_detail(`id`)
+                                               ON DELETE CASCADE
+                                               ON UPDATE CASCADE,
+                                       CONSTRAINT `fk_bill_detail_deductible_deductible`
+                                           FOREIGN KEY (`deductibleId`)
+                                               REFERENCES `expense` (`id`)
+                                               ON DELETE RESTRICT
+                                               ON UPDATE CASCADE);
+
+
 
 CREATE TABLE `bill_detail_expense` (
                                        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
