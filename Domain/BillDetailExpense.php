@@ -41,7 +41,7 @@ class BillDetailExpense extends DomainModel
     function toDto():\StdClass{
         $dto = new \stdClass();
         $dto->id = $this->getId();
-        $dto->deductible = $this->getName();
+        $dto->expenseId = $this->getExpenseId();
         $dto->value = $this->getValue();
         return $dto;
     }

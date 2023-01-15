@@ -20,6 +20,7 @@ use \DomainService\DeductibleFinderService;
 use \Dao\DeductibleDao;
 use \Domain\BillDeductible;
 use \ApplicationService\RegisterBillService;
+use \ApplicationService\UpdateBillService;
 
 class BillController extends Controller {
 
@@ -61,7 +62,7 @@ class BillController extends Controller {
         ]);
     }
 
-    public function createBill(){
+    public function createBill() {
         $connection = new ConnectionMySql();
         $bill = new Bill();
         $title = "New bill";
@@ -78,8 +79,8 @@ class BillController extends Controller {
             'deductibles' => $deductibles,
             'expenses' => $expenses,
         ]);
-
     }
+
     public function registerBill() {
         $connection = new ConnectionMySql();
         $bill = $this->jsonToBill(base64_decode($_POST['bill']));
@@ -90,23 +91,38 @@ class BillController extends Controller {
         $this->addBillDetailDeductibles($bill);
         $this->addBillDetailExpenses($bill);
 
-        $registerBillService = new RegisterBillService($connection);
-        if (null === $billId = $registerBillService($bill, $update)) {
-            echo $this->templates->render('error-view', [
-                'title' => 'Error al registrar la factura.',
-                'errorMessages' => $registerBillService->getErrors()
-            ]);
-        } else {
-            echo $this->templates->render('success-view', [
-                'title' => 'Factura registrada correctamente',
-                'message' => 'La factura fue registrada con éxito.',
-                'billId' => $billId
-            ]);
+        if ($update == false) {
+            $registerBillService = new RegisterBillService($connection);
+            if (null === $billId = $registerBillService($bill, $update)) {
+                echo $this->templates->render('error-view', [
+                    'title' => 'Error al registrar la factura.',
+                    'errorMessages' => $registerBillService->getErrors()
+                ]);
+            } else {
+                echo $this->templates->render('success-view', [
+                    'title' => 'Factura registrada correctamente',
+                    'message' => 'La factura fue registrada con éxito.',
+                    'billId' => $billId
+                ]);
+            }
+        }else{
+            $updateBillService = new UpdateBillService($connection);
+            if (null === $updated = $updateBillService($bill)){
+                echo $this->templates->render('error-view', [
+                    'title' => 'Error al registrar la factura.',
+                    'errorMessages' => $updateBillService->getErrors()
+                ]);
+            }else{
+                echo $this->templates->render('success-view', [
+                    'title' => 'Factura actualizada correctamente',
+                    'message' => 'La factura fue actualizada con éxito.',
+                    'billId' => $billId
+                ]);
+            }
         }
     }
 
-    public function insertBill()
-    {
+    public function insertBill() {
         try {
             $connection = new ConnectionMySql();
             $bill = new Bill();
@@ -144,7 +160,7 @@ class BillController extends Controller {
             }
 
             $bill->setAccessKey($bill->generateAccessKey());
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             echo $this->templates->render('error-view', [
                 'title' => 'Error al registrar la factura.',
                 'errorMessages' => [$e->getMessage()]
@@ -163,38 +179,38 @@ class BillController extends Controller {
                 'message' => 'La factura fue registrada con éxito.'
             ]);
         }
-
     }
 
-    private function addBillDetailDeductibles(Bill $bill){
-        for ($i=0; $i < count($bill->getBillDetails()); $i++){
+    private function addBillDetailDeductibles(Bill $bill) {
+        for ($i = 0; $i < count($bill->getBillDetails()); $i++) {
             $billDetail = $bill->getBillDetails()[$i];
-            if ($_POST['deductibleId'.$billDetail->getMainCode()]){
+            if ($_POST['deductibleId' . $billDetail->getMainCode()]) {
                 $billDetailDeductible = new BillDetailDeductible();
-                $billDetailDeductible->setDeductibleId($_POST['deductibleId'.$billDetail->getMainCode()]);
+                $billDetailDeductible->setDeductibleId($_POST['deductibleId' . $billDetail->getMainCode()]);
                 $billDetailDeductible->setValue($billDetail->getTotalPriceWithoutTaxes());
                 $bill->getBillDetails()[$i]->setBillDetailDeductible($billDetailDeductible);
             }
         }
     }
 
-    private function addBillDetailExpenses(Bill $bill){
-        for ($i=0; $i < count($bill->getBillDetails()); $i++){
+    private function addBillDetailExpenses(Bill $bill) {
+        for ($i = 0; $i < count($bill->getBillDetails()); $i++) {
             $billDetail = $bill->getBillDetails()[$i];
-            if ($_POST['expenseId'.$billDetail->getMainCode()]){
+            if ($_POST['expenseId' . $billDetail->getMainCode()]) {
                 $billDetailExpense = new BillDetailExpense();
-                $billDetailExpense->setExpenseId($_POST['expenseId'.$billDetail->getMainCode()]);
+                $billDetailExpense->setExpenseId($_POST['expenseId' . $billDetail->getMainCode()]);
                 $billDetailExpense->setValue($billDetail->getTotalPriceWithoutTaxes());
                 $bill->getBillDetails()[$i]->setBillDetailExpense($billDetailExpense);
             }
         }
     }
 
-    private function jsonToBill($billJson):? Bill {
+    private function jsonToBill($billJson): ?Bill {
         $bill = new Bill();
         if (null === $json = json_decode($billJson)) {
             return null;
         }
+        $bill->setId($json->id);
         $bill->setAccessKey($json->accessKey);
         $bill->setEstablishment($json->establishment);
         $bill->setEmissionPoint($json->emissionPoint);
@@ -206,7 +222,7 @@ class BillController extends Controller {
         $bill->setTip($json->tip);
         $bill->setTotal($json->total);
         $bill->setFilePath($json->filePath);
-        
+
         $store = new Store();
         $store->setBusinessName($json->store->businessName);
         $store->setTradeName($json->store->tradeName);
@@ -226,7 +242,7 @@ class BillController extends Controller {
         $buyer->setIdentification($json->buyer->ruc);
         $bill->setBuyer($buyer);
 
-        foreach ($json->billDetails as $jsonBillDetail){
+        foreach ($json->billDetails as $jsonBillDetail) {
             $billDetail = new BillDetail();
             $billDetail->setMainCode($jsonBillDetail->mainCode);
             $billDetail->setDescription($jsonBillDetail->description);
@@ -236,7 +252,7 @@ class BillController extends Controller {
             $billDetail->setTotalPriceWithoutTaxes($jsonBillDetail->totalPriceWithoutTaxes);
             $bill->addBillDetail($billDetail);
         }
-        foreach ($json->billAdditionalInformation as $jsonBillAdditionalInformation){
+        foreach ($json->billAdditionalInformation as $jsonBillAdditionalInformation) {
             $billAdditionalInformation = new BillAdditionalInformation();
             $billAdditionalInformation->setName($jsonBillAdditionalInformation->name);
             $billAdditionalInformation->setValue($jsonBillAdditionalInformation->value);
@@ -257,14 +273,13 @@ class BillController extends Controller {
         }
         return $result;
     }
-    
+
     /**
      * @param ConnectionMySql $connection
      * @param Bill|null $bill
      * @return void
      */
-    public function getBillDeductiblesByHtmlPost(ConnectionMySql $connection, ?Bill $bill): void
-    {
+    public function getBillDeductiblesByHtmlPost(ConnectionMySql $connection, ?Bill $bill): void {
         $deductibleDao = new DeductibleDao($connection);
         foreach ($_POST['bill-deductibles'] as $htmlBillDeductibleCode => $htmlBillDeductibleValue) {
             $deductible = $deductibleDao->findById($htmlBillDeductibleCode);
@@ -280,8 +295,7 @@ class BillController extends Controller {
      * @param Bill|null $bill
      * @return void
      */
-    public function getBillExpensesByHtmlPost(ConnectionMySql $connection, ?Bill $bill): void
-    {
+    public function getBillExpensesByHtmlPost(ConnectionMySql $connection, ?Bill $bill): void {
         $expenseDao = new ExpenseDao($connection);
         foreach ($_POST['bill-expenses'] as $htmlBillExpenseCode => $htmlBillExpenseValue) {
             $expense = $expenseDao->findById($htmlBillExpenseCode);
@@ -292,9 +306,8 @@ class BillController extends Controller {
         }
     }
 
-    private function getBillDetailsByHtmlPost(ConnectionMySql $connection, ?Bill $bill): void
-    {
-        foreach ($_POST['mainCode'] as $mainCode){
+    private function getBillDetailsByHtmlPost(ConnectionMySql $connection, ?Bill $bill): void {
+        foreach ($_POST['mainCode'] as $mainCode) {
             $billDetail = new BillDetail();
             $billDetail->setMainCode($mainCode);
             $billDetail->setDescription($_POST['description'][$mainCode]);
@@ -305,12 +318,11 @@ class BillController extends Controller {
             $bill->addBillDetail($billDetail);
         }
     }
-    
-    public function updateBill($billId)
-    {
+
+    public function updateBill($billId) {
         $connection = new ConnectionMySql();
         $billFinderService = new BillFinderService($connection);
-        if (null === $bill = $billFinderService->searchById($billId)){
+        if (null === $bill = $billFinderService->searchById($billId)) {
             echo $this->templates->render('404');
             die();
         }

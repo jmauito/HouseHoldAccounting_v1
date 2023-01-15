@@ -83,19 +83,15 @@ class BillDetailExpenseDao {
         return $billDetailExpense;
     }
     
-    public function findByBillDetail():? array
+    public function findByBillDetail():?BillDetailExpense
     {
-        if (null === $result = $this->connection->find(self::$TABLE, [
+        if (null === $result = $this->connection->findOne(self::$TABLE, [
             'billDetailId' => $this->billDetailId,
             'active' => true
         ])){
             return null;
         }
-        $billDetailExpenses = [];
-        foreach($result as $value){
-            $billDetailExpenses[] = $this->parse($value);
-        }
-        return $billDetailExpenses;
+        return $this->parse($result);
     }
     
     private function parse(\stdClass $result):BillDetailExpense

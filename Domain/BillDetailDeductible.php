@@ -39,7 +39,7 @@ final class BillDetailDeductible extends DomainModel{
     function toDto(){
         $dto = new \stdClass();
         $dto->id = $this->getId();
-        $dto->deductible = $this->getName();
+        $dto->deductibleId = $this->getDeductibleId();
         $dto->value = $this->getValue();
         return $dto;
     }
