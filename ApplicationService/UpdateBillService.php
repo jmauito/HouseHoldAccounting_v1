@@ -16,7 +16,9 @@ namespace ApplicationService;
 use \Infraestructure\Connection\Connection;
 use Domain\Bill;
 use \Dao\BillDeductibleDao;
+use Dao\BillDetailDeductibleDao;
 use Dao\BillExpenseDao;
+use Dao\DeductibleDao;
 
 class UpdateBillService {
 
@@ -38,28 +40,52 @@ class UpdateBillService {
         try {
             $this->connection->beginTransaction();
             $billDeductibleDao = new BillDeductibleDao($this->connection, $bill->getId());
-            $billDeductibles = $billDeductibleDao->findByBill();
-
-            foreach ($billDeductibles as $billDeductible) {
-                $billDeductibleDao->delete($billDeductible->getId());
-            }
-
-            foreach ($bill->getBillDeductibles() as $billDeductible) {
-                if ($billDeductible->getValue() != 0) {
-                    $billDeductibleDao->insert($billDeductible);
+            if (null !== $billDeductibles = $billDeductibleDao->findByBill() ) {
+                foreach ($billDeductibles as $billDeductible) {
+                    $billDeductibleDao->delete($billDeductible->getId());
+                }
+    
+                foreach ($bill->getBillDeductibles() as $billDeductible) {
+                    if ($billDeductible->getValue() != 0) {
+                        $billDeductibleDao->insert($billDeductible);
+                    }
                 }
             }
             
             $billExpenseDao = new BillExpenseDao($this->connection, $bill->getId());
-            $billExpenses = $billExpenseDao->findByBill();
-
-            foreach ($billExpenses as $billExpense) {
-                $billExpenseDao->delete($billExpense->getId());
+            if (null !== $billExpenses = $billExpenseDao->findByBill() ){
+                foreach ($billExpenses as $billExpense) {
+                    $billExpenseDao->delete($billExpense->getId());
+                }
+    
+                foreach ($bill->getBillExpenses() as $billExpense) {
+                    if ($billExpense->getValue() != 0) {
+                        $billExpenseDao->insert($billExpense);
+                    }
+                }
             }
-
-            foreach ($bill->getBillExpenses() as $billExpense) {
-                if ($billExpense->getValue() != 0) {
-                    $billExpenseDao->insert($billExpense);
+            
+            foreach($bill->getBillDetails() as $billDetail){
+                $billDetailDeductibleDao = new BillDetailDeductibleDao($this->connection, $billDetail->getId());
+                $billDetailDeductible = $billDetailDeductibleDao->findByBillDetail();
+                if($billDetail->getBillDetailDeductible() !== null){
+                    if(null === $billDetailDeductible){
+                        $deductibleDao = new DeductibleDao($this->connection);
+                        $billDetail->getBillDetailDeductible()->setDeductible( $deductibleDao->findById($billDetail->getBillDetailDeductible()->getDeductibleId()) );
+                        $billDetailDeductibleDao->insert($billDetail->getBillDetailDeductible());
+                    } else {
+                        $deductibleDao = new DeductibleDao($this->connection);
+                        $deductible = $deductibleDao->findById($billDetail->getBillDetailDeductible()->getDeductibleId());
+                        $billDetailDeductible->setDeductible( $deductible );
+                        $billDetailDeductible->setValue($billDetail->getBillDetailDeductible()->getValue());
+                        $billDetailDeductible->setDeductibleId($billDetail->getBillDetailDeductible()->getDeductibleId());
+                        $billDetailDeductibleDao->update($billDetailDeductible); 
+                        if (strlen($this->connection->getErrorMessage()) > 0 ) {
+                            throw new \Exception($this->connection->getErrorMessage());
+                        }
+                    }
+                } elseif($billDetailDeductible !== null) {
+                    $billDetailDeductibleDao->delete($billDetailDeductible->getId());
                 }
             }
             

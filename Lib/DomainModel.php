@@ -32,7 +32,7 @@ abstract class DomainModel {
     }
 
     function setActive($active): void {
-        $this->active = $active;
+        $this->active = (bool) $active;
     }
 
 }

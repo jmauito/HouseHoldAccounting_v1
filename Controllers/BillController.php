@@ -116,7 +116,7 @@ class BillController extends Controller {
                 echo $this->templates->render('success-view', [
                     'title' => 'Factura actualizada correctamente',
                     'message' => 'La factura fue actualizada con éxito.',
-                    'billId' => $billId
+                    'billId' => $bill->getId()
                 ]);
             }
         }
@@ -243,7 +243,7 @@ class BillController extends Controller {
         $bill->setBuyer($buyer);
 
         foreach ($json->billDetails as $jsonBillDetail) {
-            $billDetail = new BillDetail();
+            $billDetail = new BillDetail($jsonBillDetail->id);
             $billDetail->setMainCode($jsonBillDetail->mainCode);
             $billDetail->setDescription($jsonBillDetail->description);
             $billDetail->setQuantity($jsonBillDetail->quantity);

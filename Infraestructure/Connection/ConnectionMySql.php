@@ -8,6 +8,8 @@
 
 namespace Infraestructure\Connection;
 
+use phpDocumentor\Reflection\Types\String_;
+
 /**
  * Description of ConnectionMySql
  *
@@ -125,7 +127,7 @@ class ConnectionMySql implements Connection {
     }
 
     public function update(string $table, array $params): int {
-        $params['active'] = $params['active'] ? 1 : 0;
+        $params['active'] == true ? 1 : 0;
         $statement = "UPDATE `$table` SET ";
         $separator = '';
         foreach ($params as $column => $param) {
@@ -142,7 +144,7 @@ class ConnectionMySql implements Connection {
             $stmt->bindParam(":$column", $$column);
             $$column = $param;
         }
-
+        $stmt->execute();
         $rowsUpdated = $stmt->rowCount();
 
         return $rowsUpdated;
@@ -158,6 +160,10 @@ class ConnectionMySql implements Connection {
 
     public function rollBack() {
         $this->connection->rollBack();
+    }
+
+    public function getErrorMessage():string{
+        return $this->connection->errorInfo()[2] === null ? '' : $this->connection->errorInfo()[2];
     }
 
 }

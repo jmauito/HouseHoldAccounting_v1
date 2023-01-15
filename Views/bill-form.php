@@ -151,7 +151,10 @@ $action = '/register-bill';
             <?php foreach ($bill->getBillDetails() as $billDetail): ?>
                 <?php $inputDetailName = "bill-detail-{$billDetail->getMainCode()}" ?>
                 <tr>
-                    <td><?= $billDetail->getMainCode() ?></td>
+                    <td>
+                        <input type="hidden" id="billDetailId<?= $billDetail->getMainCode() ?>" name="billDetailId<?= $billDetail->getMainCode() ?>" value="<?= $billDetail->getId() ?>" />
+                        <?= $billDetail->getMainCode() ?>
+                    </td>
                     <td><?= $billDetail->getDescription() ?></td>
                     <td><?= $billDetail->getQuantity() ?></td>
                     <td><?= $billDetail->getUnitPrice() ?></td>
@@ -180,7 +183,8 @@ $action = '/register-bill';
                                 <option <?= $deductibleSelected ?> value="<?= $deductible->getId()  ?>" ><?= $deductible->getName() ?></option>
                             <?php endforeach;?>
                         </select>
-                        <input type="hidden" id="deductibleId<?= $billDetail->getMainCode() ?>" name="deductibleId<?= $billDetail->getMainCode() ?>" value="0" />
+                        <input type="hidden" id="deductibleId<?= $billDetail->getMainCode() ?>" name="deductibleId<?= $billDetail->getMainCode() ?>" 
+                            value="<?= $billDetail->getBillDetailDeductible() === null ? 0 : $billDetail->getBillDetailDeductible()->getDeductibleId() ?>" />
                     </td>
                     <td>
                         <select name="billDetailExpense[<?= $billDetail->getMainCode() ?>]"

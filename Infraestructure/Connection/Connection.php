@@ -20,4 +20,5 @@ interface Connection {
     public function insert(string $table, array $params):int;
     public function update(string $table, array $params):int;
     public function delete(string $table, int $id):int;
+    public function getErrorMessage();
 }

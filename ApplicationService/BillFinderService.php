@@ -19,6 +19,7 @@ use Dao\BillExpenseDao;
 use Dao\ExpenseDao;
 use Infraestructure\Connection\Connection;
 use Dao\BillDao;
+use Dao\BillDetailDeductibleDao;
 use Domain\Bill;
 use Domain\Store;
 use Domain\Buyer;
@@ -61,15 +62,19 @@ class BillFinderService {
         $billDetailDao = new \Dao\BillDetailDao($this->connection);
         $billDetails = $billDetailDao->findByBill($bill->getId());
         foreach ($billDetails as $billDetail){
+            $billDetailDeductibleDao = new BillDetailDeductibleDao($this->connection, $billDetail->getId());
+            if(null !== $billDetailDeductible = $billDetailDeductibleDao->findByBillDetail() ){
+                $billDetail->setBillDetailDeductible($billDetailDeductible);
+            }
             $bill->addBillDetail($billDetail);
         }
-        
         $billDeductibleDao = new \Dao\BillDeductibleDao($this->connection, $bill->getId());
-        $billDeductibles = $billDeductibleDao->findByBill();
-        foreach ($billDeductibles as $billDeductible) {
-            $deductibleDao = new DeductibleDao($this->connection);
-            $billDeductible->setDeductible($deductibleDao->findById($billDeductible->getDeductibleId()));
-            $bill->addBillDeductible($billDeductible);
+        if (null !== $billDeductibles = $billDeductibleDao->findByBill() ){
+            foreach ($billDeductibles as $billDeductible) {
+                $deductibleDao = new DeductibleDao($this->connection);
+                $billDeductible->setDeductible($deductibleDao->findById($billDeductible->getDeductibleId()));
+                $bill->addBillDeductible($billDeductible);
+            }
         }
 
         $billAdditionalInformationDao = new BillAdditionalInformationDao($this->connection);

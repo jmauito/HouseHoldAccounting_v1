@@ -92,11 +92,6 @@ class BillDetailDeductibleDao {
             return null;
         }
         return $this->parse($result);
-        /*$billDetailDeductible = new BillDetailDeductible();
-        foreach($result as $value){
-            $billDetailDeductible-> = $this->parse($value);
-        }
-        return $billDetailDeductibles;*/
     }
     
     private function parse(\stdClass $result):BillDetailDeductible
@@ -104,6 +99,7 @@ class BillDetailDeductibleDao {
         $billDetailDeductible = new BillDetailDeductible($result->id);
         $billDetailDeductible->setValue($result->value);
         $billDetailDeductible->setDeductibleId($result->deductibleId);
+        $billDetailDeductible->setActive($result->active);
         return $billDetailDeductible;
     }
     
