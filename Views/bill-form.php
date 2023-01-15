@@ -3,7 +3,7 @@ $this->layout('Layouts/layout', [
     'title' => $title,
 ]);
 $encodedBill = base64_encode($bill->toJson());
-$action = $update ? 'update-bill' : 'register-bill';
+$action = '/register-bill';
 ?>
 
 <form action="<?= $action  ?>" method="post" >
@@ -162,9 +162,22 @@ $action = $update ? 'update-bill' : 'register-bill';
                             id="billDetailDeductible-<?= $billDetail->getMainCode() ?>"
                             onchange="changeBillDetailDeductible('<?= $billDetail->getMainCode() ?>', '<?= $billDetail->getTotalPriceWithoutTaxes() ?>')"
                         >
-                            <option value="0" selected>Select deductible...</option>
+                            <?php 
+                            $notDeductibleSelected = "";
+                            if($billDetail->getBillDetailDeductible() === null){
+                                $notDeductibleSelected = 'selected';
+                            } 
+                            ?>
+                            <option value="0" <?= $notDeductibleSelected ?>>Select deductible...</option>
+                            
                             <?php foreach ($deductibles as $deductible): ?>
-                            <option value="<?= $deductible->getId()  ?>"><?= $deductible->getName() ?></option>
+                                <?php 
+                                    $deductibleSelected = "";
+                                    if($billDetail->getBillDetailDeductible() !== NULL && $deductible->getId() === $billDetail->getBillDetailDeductible()->getDeductibleId()){
+                                        $deductibleSelected = 'selected';
+                                    }
+                                ?>
+                                <option <?= $deductibleSelected ?> value="<?= $deductible->getId()  ?>" ><?= $deductible->getName() ?></option>
                             <?php endforeach;?>
                         </select>
                         <input type="hidden" id="deductibleId<?= $billDetail->getMainCode() ?>" name="deductibleId<?= $billDetail->getMainCode() ?>" value="0" />
@@ -174,9 +187,21 @@ $action = $update ? 'update-bill' : 'register-bill';
                                 id="billDetailExpense-<?= $billDetail->getMainCode() ?>"
                                 onchange="changeBillDetailExpense('<?= $billDetail->getMainCode() ?>', '<?= $billDetail->getTotalPriceWithoutTaxes() ?>')"
                         >
-                            <option value="0" selected>Select expense...</option>
+                            <?php 
+                            $notExpenseSelected = "";
+                            if($billDetail->getBillDetailExpense() === null){
+                                $notExpenseSelected = 'selected';
+                            }
+                            ?>
+                            <option <?= $notExpenseSelected ?> value="0" >Select expense...</option>
                             <?php foreach ($expenses as $expense): ?>
-                                <option value="<?= $expense->getId()  ?>"><?= $expense->getName() ?></option>
+                                <?php
+                                $expenseSelected = "";
+                                if($billDetail->getBillDetailExpense() !== NULL && $expense->getId() === $billDetail->getBillDetailExpense()->getExpenseId()){
+                                    $expenseSelected = 'selected';
+                                }
+                                ?>
+                            <option <?= $expenseSelected ?> value="<?= $expense->getId()  ?>"><?= $expense->getName() ?></option>
                             <?php endforeach;?>
                         </select>
                         <input type="hidden" id="expenseId<?= $billDetail->getMainCode() ?>" name="expenseId<?= $billDetail->getMainCode() ?>" value="0" />
@@ -193,47 +218,32 @@ $action = $update ? 'update-bill' : 'register-bill';
 
 function changeBillDetailDeductible(mainCode, totalPriceWithoutTaxes){
     const selectedDeductible = document.getElementById('billDetailDeductible-' + mainCode)
-    const oldDeductible = document.getElementById('deductibleId' + mainCode)
-
-    if (selectedDeductible.value == 0 ) {
-        const deductible = document.getElementById('deductible-' + oldDeductible.value)
-        deductible.value = deductible.value * 1 - totalPriceWithoutTaxes * 1
-    } else {
-        const deductible = document.getElementById('deductible-' + selectedDeductible.value)
-        deductible.value = deductible.value * 1 + totalPriceWithoutTaxes * 1
-
-        if(oldDeductible.value != 0 && oldDeductible.value != selectedDeductible.value){
-            const deductible = document.getElementById('deductible-' + oldDeductible.value)
-            deductible.value = deductible.value * 1 - totalPriceWithoutTaxes * 1
-        }
-
-    }
-
-
-
-    oldDeductible.value = selectedDeductible.value
+    const previouslyDeductible = document.getElementById('deductibleId' + mainCode)
+    updateDetail('deductible', selectedDeductible, previouslyDeductible, totalPriceWithoutTaxes)
 }
 
 function changeBillDetailExpense(mainCode, totalPriceWithoutTaxes){
     const selectedExpense = document.getElementById('billDetailExpense-' + mainCode)
     const oldExpense = document.getElementById('expenseId' + mainCode)
+    updateDetail('expense', selectedExpense, oldExpense, totalPriceWithoutTaxes)
+}
 
-    if (selectedExpense.value == 0 ) {
-        const expense = document.getElementById('expense-' + oldExpense.value)
-        expense.value = expense.value * 1 - totalPriceWithoutTaxes * 1
+function updateDetail(objectName, selectedObject, previouslyObject, value){
+    if (selectedObject.value == 0 ) {
+        const deductible = document.getElementById(objectName + '-' + previouslyObject.value)
+        deductible.value = ( Math.round( Number(deductible.value) * 100 ) - Math.round( Number(value) * 100 ) ) /100
     } else {
-        const expense = document.getElementById('expense-' + selectedExpense.value)
-        expense.value = expense.value * 1 + totalPriceWithoutTaxes * 1
+        const deductible = document.getElementById(objectName + '-' + selectedObject.value)
+        deductible.value = (Math.round( Number(deductible.value) * 100 ) + Math.round( Number(value) * 100 ) ) /100
 
-        if(oldExpense.value != 0 && oldExpense.value != selectedExpense.value){
-            const expense = document.getElementById('expense-' + oldExpense.value)
-            expense.value = expense.value * 1 - totalPriceWithoutTaxes * 1
+        if(previouslyObject.value != 0 && previouslyObject.value != selectedObject.value){
+            const deductible = document.getElementById(objectName + '-' + previouslyObject.value)
+            deductible.value = ( Math.round( Number(deductible.value) * 100 ) - Math.round( Number(value) * 100 ) ) /100
         }
 
     }
-
-
-
-    oldExpense.value = selectedExpense.value
+    previouslyObject.value = selectedObject.value
 }
+
+
 </script>
