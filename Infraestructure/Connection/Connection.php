@@ -21,4 +21,7 @@ interface Connection {
     public function update(string $table, array $params):int;
     public function delete(string $table, int $id):int;
     public function getErrorMessage();
+    public function beginTransaction();
+    public function commit();
+    public function rollback();
 }

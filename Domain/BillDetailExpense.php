@@ -3,6 +3,7 @@
 namespace Domain;
 
 use Lib\DomainModel;
+use Domain\Expense;
 
 class BillDetailExpense extends DomainModel
 {
@@ -26,7 +27,7 @@ class BillDetailExpense extends DomainModel
         return $this->expenseId;
     }
 
-    function setExpense(Deductible $expense): void {
+    function setExpense(Expense $expense): void {
         $this->expense = $expense;
     }
 

@@ -50,7 +50,6 @@ class RegisterBillService {
             $this->registerBillDetail($bill);
             $this->registerBillDeductibles($bill);
             $this->registerBillExpenses($bill);
-            //$this->registerBillDetailDeductibles($bill);
             $this->registerBillAdditionalInformation($bill);
 
             $this->connection->commit();
@@ -106,7 +105,7 @@ class RegisterBillService {
 
     private function registerBillExpenses(Bill $bill){
         foreach ($bill->getBillExpenses() as $billExpense){
-            $billExpenseDao = new BillExpenseDao($this->connection, $bill->getId());
+            $billExpenseDao = new BillExpenseDao($this->connection, $bill->getId(), $billExpense->getExpense()->getId());
             $billExpenseDao->insert($billExpense);
         }
 

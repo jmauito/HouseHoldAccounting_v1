@@ -208,7 +208,8 @@ $action = '/register-bill';
                             <option <?= $expenseSelected ?> value="<?= $expense->getId()  ?>"><?= $expense->getName() ?></option>
                             <?php endforeach;?>
                         </select>
-                        <input type="hidden" id="expenseId<?= $billDetail->getMainCode() ?>" name="expenseId<?= $billDetail->getMainCode() ?>" value="0" />
+                        <input type="hidden" id="expenseId<?= $billDetail->getMainCode() ?>" name="expenseId<?= $billDetail->getMainCode() ?>" 
+                            value="<?= $billDetail->getBillDetailExpense() === null ? 0 : $billDetail->getBillDetailExpense()->getExpenseId() ?>" />
                     </td>
                 </tr>
             <?php endforeach; ?>

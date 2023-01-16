@@ -27,6 +27,7 @@ use Dao\StoreDao;
 use Dao\BuyerDao;
 use Dao\VoucherTypeDao;
 use Dao\DeductibleDao;
+use Dao\BillDetailExpenseDao;
 
 
 class BillFinderService {
@@ -65,6 +66,10 @@ class BillFinderService {
             $billDetailDeductibleDao = new BillDetailDeductibleDao($this->connection, $billDetail->getId());
             if(null !== $billDetailDeductible = $billDetailDeductibleDao->findByBillDetail() ){
                 $billDetail->setBillDetailDeductible($billDetailDeductible);
+            }
+            $billDetailExpenseDao = new BillDetailExpenseDao($this->connection, $billDetail->getId());
+            if(null !== $billDetailExpense = $billDetailExpenseDao->findByBillDetail() ){
+                $billDetail->setBillDetailExpense($billDetailExpense);
             }
             $bill->addBillDetail($billDetail);
         }

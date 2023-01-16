@@ -99,6 +99,7 @@ class BillDetailExpenseDao {
         $billDetailExpense = new BillDetailExpense($result->id);
         $billDetailExpense->setValue($result->value);
         $billDetailExpense->setExpenseId($result->expenseId);
+        $billDetailExpense->setActive($result->active);
         return $billDetailExpense;
     }
     

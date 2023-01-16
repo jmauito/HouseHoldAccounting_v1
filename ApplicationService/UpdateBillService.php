@@ -19,6 +19,8 @@ use \Dao\BillDeductibleDao;
 use Dao\BillDetailDeductibleDao;
 use Dao\BillExpenseDao;
 use Dao\DeductibleDao;
+use Dao\BillDetailExpenseDao;
+use Dao\ExpenseDao;
 
 class UpdateBillService {
 
@@ -35,8 +37,7 @@ class UpdateBillService {
         // los gastos.
         // Si la factura fue creada manualmente, se deberá eliminar en caso de
         // querer cambiar otro dato.
-        #Deductibles, aplicar la lógica de eliminar los valores anteriores y
-        #crear nuevos
+        
         try {
             $this->connection->beginTransaction();
             $billDeductibleDao = new BillDeductibleDao($this->connection, $bill->getId());
@@ -44,11 +45,11 @@ class UpdateBillService {
                 foreach ($billDeductibles as $billDeductible) {
                     $billDeductibleDao->delete($billDeductible->getId());
                 }
+            }
     
-                foreach ($bill->getBillDeductibles() as $billDeductible) {
-                    if ($billDeductible->getValue() != 0) {
-                        $billDeductibleDao->insert($billDeductible);
-                    }
+            foreach ($bill->getBillDeductibles() as $billDeductible) {
+                if ($billDeductible->getValue() != 0) {
+                    $billDeductibleDao->insert($billDeductible);
                 }
             }
             
@@ -57,13 +58,13 @@ class UpdateBillService {
                 foreach ($billExpenses as $billExpense) {
                     $billExpenseDao->delete($billExpense->getId());
                 }
-    
-                foreach ($bill->getBillExpenses() as $billExpense) {
-                    if ($billExpense->getValue() != 0) {
-                        $billExpenseDao->insert($billExpense);
-                    }
+            }
+            foreach ($bill->getBillExpenses() as $billExpense) {
+                if ($billExpense->getValue() != 0) {
+                    $billExpenseDao->insert($billExpense);
                 }
             }
+            
             
             foreach($bill->getBillDetails() as $billDetail){
                 $billDetailDeductibleDao = new BillDetailDeductibleDao($this->connection, $billDetail->getId());
@@ -87,6 +88,29 @@ class UpdateBillService {
                 } elseif($billDetailDeductible !== null) {
                     $billDetailDeductibleDao->delete($billDetailDeductible->getId());
                 }
+
+                $billDetailExpenseDao = new BillDetailExpenseDao($this->connection, $billDetail->getId());
+                $billDetailExpense = $billDetailExpenseDao->findByBillDetail();
+                if($billDetail->getBillDetailExpense() !== null){
+                    if(null === $billDetailExpense){
+                        $expenseDao = new ExpenseDao($this->connection);
+                        $billDetail->getBillDetailExpense()->setExpense( $expenseDao->findById($billDetail->getBillDetailExpense()->getExpenseId()) );
+                        $billDetailExpenseDao->insert($billDetail->getBillDetailExpense());
+                    } else {
+                        $expenseDao = new ExpenseDao($this->connection);
+                        $expense = $expenseDao->findById($billDetail->getBillDetailExpense()->getExpenseId());
+                        $billDetailExpense->setExpense( $expense );
+                        $billDetailExpense->setValue($billDetail->getBillDetailExpense()->getValue());
+                        $billDetailExpense->setExpenseId($billDetail->getBillDetailExpense()->getExpenseId());
+                        $billDetailExpenseDao->update($billDetailExpense); 
+                        if (strlen($this->connection->getErrorMessage()) > 0 ) {
+                            throw new \Exception($this->connection->getErrorMessage() );
+                        }
+                    }
+                } elseif($billDetailExpense !== null) {
+                    $billDetailExpenseDao->delete($billDetailExpense->getId());
+                }
+
             }
             
             $this->connection->commit();
