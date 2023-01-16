@@ -83,10 +83,12 @@ class BillFinderService {
         }
 
         $billAdditionalInformationDao = new BillAdditionalInformationDao($this->connection);
-        $additionalInformation = $billAdditionalInformationDao->findByBillId($bill->getId());
-        foreach ($additionalInformation as $add){
-            $bill->addBillAdditionalInformation($add);
+        if(null!==$additionalInformation = $billAdditionalInformationDao->findByBillId($bill->getId())){
+            foreach ($additionalInformation as $add){
+                $bill->addBillAdditionalInformation($add);
+            }
         }
+        
 
         $this->getBillExpenses($bill);
 
