@@ -166,4 +166,24 @@ class ConnectionMySql implements Connection {
         return $this->connection->errorInfo()[2] === null ? '' : $this->connection->errorInfo()[2];
     }
 
+    public function executeStatement(string $statement, array $params)
+    {
+        
+        $separator = "";
+        foreach ($params as $param => $value) {
+            $statement .= "$separator $param = :$param";
+            $separator = " AND ";
+        }
+        $stmt = $this->connection->prepare($statement);
+        foreach ($params as $param => $value) {
+            $stmt->bindParam(":$param", $$param);
+            $$param = $value;
+        }
+
+        $stmt->execute();
+
+        $result = $stmt->fetchAll(\PDO::FETCH_OBJ);
+
+        return $result;
+    }
 }

@@ -24,4 +24,5 @@ interface Connection {
     public function beginTransaction();
     public function commit();
     public function rollback();
+    public function executeStatement(string $statement, array $params);
 }
