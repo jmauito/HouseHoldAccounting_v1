@@ -14,8 +14,8 @@ $this->layout('Layouts/layout', [
             <label>Number:</label>
         </div>
         <div class="col">
-            <input type="text" name="establishment" id="establishment" placeholder="001" maxlength="3" size="3">
-            <input type="text" name="emissionPoint" id="emissionPoint" placeholder="001" maxlength="3" size="3">
+            <input type="text" name="establishment" id="establishment" value="001" maxlength="3" size="3">
+            <input type="text" name="emissionPoint" id="emissionPoint" value="001" maxlength="3" size="3">
             <input type="text" name="sequential" id="sequential">
         </div>
     </div>
@@ -74,19 +74,19 @@ $this->layout('Layouts/layout', [
     <div class="m-3 row">
         <div class="col">
             <label for="tip">Tip:</label>
-            <input type="text" name="tip" id="tip">
+            <input type="text" name="tip" id="tip" value="0">
         </div>
         <div class="col">
             <label for="totalWithoutTax">Total without tax:</label>
-            <input type="text" name="totalWithoutTax" id="totalWithoutTax">
+            <input type="text" name="totalWithoutTax" id="totalWithoutTax" value="0">
         </div>
         <div class="col">
             <label for="totalDiscount">Total discount:</label>
-            <input type="text" name="totalDiscount" id="totalDiscount">
+            <input type="text" name="totalDiscount" id="totalDiscount" value="0">
         </div>
         <div class="col">
             <label for="total">Total:</label>
-            <input type="text" name="total" id="total">
+            <input type="text" name="total" id="total" value="0">
         </div>
 
     </div>
@@ -269,63 +269,54 @@ $this->layout('Layouts/layout', [
         const totalWithoutTaxes = document.getElementById(`totalPriceWithoutTaxes-${i}`)
         totalWithoutTaxes.oldValue = totalWithoutTaxes.value
         totalWithoutTaxes.value = quantity.value * unitPrice.value - discount.value
-        updateDeductibleValue(i, totalWithoutTaxes.value, totalWithoutTaxes.oldValue)
     }
     function createDeductibleDetailControls(i, divItem){
         const selectDeductible = document.getElementById('deductibles')
         const newSelectDeductible = selectDeductible.cloneNode(true)
-        newSelectDeductible.id = "deductibleDetailId-" + i
-        newSelectDeductible.name = `deductibleDetailId[${i}]`
+        newSelectDeductible.id = "billDetailDeductible-" + i
+        newSelectDeductible.name = `billDetailDeductible[${i}]`
         newSelectDeductible.removeAttribute('hidden')
-        newSelectDeductible.setAttribute('onchange',`changeDeductibleDetail(this,${i})`)
+        newSelectDeductible.setAttribute('onchange',`changeBillDetailDeductible(${i}, document.getElementById('totalPriceWithoutTaxes-${i}').value)`)
         newSelectDeductible.setAttribute('class', 'sm-1')
         const divDeductibleDetail = document.createElement('div')
         divDeductibleDetail.setAttribute("class", "col")
         divDeductibleDetail.appendChild(newSelectDeductible)
         divItem.appendChild( divDeductibleDetail )
         const deductibleValue = document.createElement('input')
-        deductibleValue.id = "deductibleDetailValue-" + i
-        deductibleValue.name = `deductibleDetailValue[${i}]`
+        deductibleValue.id = "deductibleId" + i
+        deductibleValue.name = `deductibleId${i}`
         deductibleValue.type = "hidden"
         divItem.appendChild(deductibleValue)
     }
     function removeItem(i){
         const items = document.getElementById('items')
         const item = document.getElementById('item-' + i)
-        const deductibleDetailId = document.getElementById(`deductibleDetailId-${i}`)
-        const deductibleDetailValue = document.getElementById(`deductibleDetailValue-${i}`)
-        subtractDeductibleValue(deductibleDetailId.value, deductibleDetailValue.value)
+        const billDetailDeductible = document.getElementById(`billDetailDeductible-${i}`)
+        billDetailDeductible.value = 0
+        changeBillDetailDeductible(i, document.getElementById(`totalPriceWithoutTaxes-${i}`).value)
         items.removeChild(item)
     }
-    function changeDeductibleDetail(select, i){
-        const totalWithoutTax = document.getElementById(`totalPriceWithoutTaxes-${i}`)
-        const deductibleDetailValue = document.getElementById(`deductibleDetailValue-${i}`)
-        const deductibleId = select.value
-        const deductible = document.getElementById(`deductible-${deductibleId}`)
-        deductibleDetailValue.value = totalWithoutTax.value
-        if (null != select.oldValue && 0 != select.oldValue){
-            subtractDeductibleValue(select.oldValue, totalWithoutTax.value)
-        }
-        select.oldValue = select.value
-        if(0 != deductibleId){
-            deductible.value = deductible.value * 1 + (deductibleDetailValue.value*1)
-        }
+    
+    function changeBillDetailDeductible(mainCode, totalPriceWithoutTaxes){
+        const selectedDeductible = document.getElementById('billDetailDeductible-' + mainCode)
+        const previouslyDeductible = document.getElementById('deductibleId' + mainCode)
+        updateDetail('deductible', selectedDeductible, previouslyDeductible, totalPriceWithoutTaxes)
+    }
+    function updateDetail(objectName, selectedObject, previouslyObject, value){
+        if (selectedObject.value == 0 ) {
+            const deductible = document.getElementById(objectName + '-' + previouslyObject.value)
+            deductible.value = ( Math.round( Number(deductible.value) * 100 ) - Math.round( Number(value) * 100 ) ) /100
+        } else {
+            const deductible = document.getElementById(objectName + '-' + selectedObject.value)
+            deductible.value = (Math.round( Number(deductible.value) * 100 ) + Math.round( Number(value) * 100 ) ) /100
 
-    }
-    function updateDeductibleValue(i, newValue, oldValue){
-        const deductibleDetail = document.getElementById(`deductibleDetailId-${i}`)
-        if(deductibleDetail.value == 0 || deductibleDetail.value == null){
-            return
+            if(previouslyObject.value != 0 && previouslyObject.value != selectedObject.value){
+                const deductible = document.getElementById(objectName + '-' + previouslyObject.value)
+                deductible.value = ( Math.round( Number(deductible.value) * 100 ) - Math.round( Number(value) * 100 ) ) /100
+            }
+
         }
-        const deductible = document.getElementById(`deductible-${deductibleDetail.value}`)
-        deductible.value = deductible.value*1 - oldValue*1
-        deductible.value = deductible.value*1 + newValue*1
-    }
-    function subtractDeductibleValue(deductibleId, value){
-        const deductible = document.getElementById(`deductible-${deductibleId}`)
-        if (deductible != null){
-            deductible.value = deductible.value - value
-        }
+        previouslyObject.value = selectedObject.value
     }
 
 </script>

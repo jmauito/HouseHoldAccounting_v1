@@ -160,6 +160,9 @@ class BillController extends Controller {
             }
 
             $bill->setAccessKey($bill->generateAccessKey());
+
+            $this->addBillDetailDeductibles($bill);
+
         } catch (\Exception $e) {
             echo $this->templates->render('error-view', [
                 'title' => 'Error al registrar la factura.',
