@@ -36,11 +36,21 @@ class BillFinderService {
     public function __construct(Connection $connection) {
         $this->connection = $connection;
     }
+
+    /**
+     * Returns the las registered function
+     * @param $limit the number of rows retrieved
+     * @return array list of bills
+     */
+    public function findLastRegistered($limit=10){
+        $billDao = new BillDao($this->connection);
+        return $billDao->findLastRegistered($limit);
+    }
     
-    public function searchById(int $id):?Bill
+    public function findById(int $id):?Bill
     {
         $billDao = new BillDao($this->connection);
-        if (null === $bill = $billDao->findOne('id',$id)){
+        if (null === $bill = $billDao->findById($id)){
             return null;
         }
         

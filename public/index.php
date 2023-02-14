@@ -10,8 +10,8 @@ $router->map('POST', '/create-bill-from-xml', 'BillController#createBillFromXml'
 $router->map('POST', '/register-bill', 'BillController#registerBill', 'register-bill');
 $router->map('GET', '/create-bill', 'BillController#createBill', 'create-bill');
 $router->map('POST', '/insert-bill', 'BillController#insertBill', 'insert-bill');
-$router->map('GET', '/update-bill/[i:id]', 'BillController#updateBill', 'update-bill');
 $router->map('GET', '/deductibles-by-year/[i:id]', 'TotalDeductiblesByYearController#viewTotalDeductiblesByYear', 'deductibles-by-year');
+$router->map('GET', '/bills/[i:id]', 'BillController#findById', 'bill-find-by-id');
 $match = $router->match();
 
 if (!$match){

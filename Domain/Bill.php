@@ -119,7 +119,7 @@ final class Bill extends DomainModel{
         $this->dateOfIssue = $dateOfIssue;
     }
 
-    function setEstablishmentAddress(string $establishmentAddress): void {
+    function setEstablishmentAddress(?string $establishmentAddress): void {
         $this->establishmentAddress = $establishmentAddress;
     }
 
@@ -241,6 +241,13 @@ final class Bill extends DomainModel{
         }
         $this->billExpenses = $billExpenses;
         return true;
+    }
+    public function getNumber(){
+        return $this->getEstablishment() .
+            '-' .
+            $this->getEmissionPoint() . 
+            '-' . 
+            $this->getSequential();
     }
     public function generateAccessKey(){
         $accessKey = $this->dateOfIssue->format('dmY');

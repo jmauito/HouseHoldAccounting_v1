@@ -62,6 +62,29 @@ class BillController extends Controller {
         ]);
     }
 
+    public function findById(int $id){
+        $connection = new ConnectionMySql();
+        $billFinderService = new BillFinderService($connection);
+        if (null === $billExists = $billFinderService->findById($id) ){
+            echo $this->templates->render('404', []);
+            return;
+        }
+        
+        $deductibleFinderService = new DeductibleFinderService($connection);
+        $deductibles = $deductibleFinderService->findAll();
+
+        $expenseDao = new ExpenseDao($connection);
+        $expenses = $expenseDao->find();
+
+        echo $this->templates->render('bill-form', [
+            'title' => 'Bill update',
+            'bill' => $billExists,
+            'deductibles' => $deductibles,
+            'expenses' => $expenses,
+            'update' => true
+        ]);
+    }
+
     public function createBill() {
         $connection = new ConnectionMySql();
         $bill = new Bill();
@@ -320,26 +343,6 @@ class BillController extends Controller {
             $billDetail->setTotalPriceWithoutTaxes($_POST['totalPriceWithoutTaxes'][$mainCode]);
             $bill->addBillDetail($billDetail);
         }
-    }
-
-    public function updateBill($billId) {
-        $connection = new ConnectionMySql();
-        $billFinderService = new BillFinderService($connection);
-        if (null === $bill = $billFinderService->searchById($billId)) {
-            echo $this->templates->render('404');
-            die();
-        }
-        $deductibleFinderService = new DeductibleFinderService($connection);
-        $deductibles = $deductibleFinderService->findAll();
-        $expenseDao = new ExpenseDao($connection);
-        $expenses = $expenseDao->find();
-        echo $this->templates->render('bill-form', [
-            'title' => 'Update bill',
-            'bill' => $bill,
-            'deductibles' => $deductibles,
-            'expenses' => $expenses,
-            'update' => true
-        ]);
     }
 
 }

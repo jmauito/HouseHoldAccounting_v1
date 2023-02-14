@@ -72,6 +72,31 @@ class BillDao {
     public function delete(int $id):int{
         return $this->connection->delete(self::$TABLE, $id);
     }
+
+    public function findById(int $id):?Bill{
+        if (null === $result = $this->connection->findById(self::$TABLE, $id) ){
+            return null;
+        }
+        
+        $this->buyerId = $result->buyerId;
+        $this->storeId = $result->storeId;
+        $this->voucherTypeId = $result->voucherTypeId;
+        
+        $bill = new Bill();
+        $bill->setId($result->id);
+        $bill->setAccessKey($result->accessKey);
+        $bill->setEmissionPoint($result->emissionPoint);
+        $bill->setEstablishment($result->establishment);
+        $bill->setSequential($result->sequential);
+        $bill->setDateOfIssue(new \DateTime($result->dateOfIssue));
+        $bill->setEstablishmentAddress($result->establishmentAddress);
+        $bill->setTotalWithoutTax($result->totalWithoutTax);
+        $bill->setTotalDiscount($result->totalDiscount);
+        $bill->setTip($result->tip);
+        $bill->setTotal($result->total);
+        $bill->setFilePath($result->filePath);
+        return $bill;
+    }
     
     public function findOne($property, $value):?Bill
     {
@@ -100,5 +125,29 @@ class BillDao {
         $bill->setTotal($result->total);
         $bill->setFilePath($result->filePath);
         return $bill;
+    }
+
+    public function findLastRegistered($limit){
+        $statement = "SELECT * FROM " . self::$TABLE . " ORDER BY dateOfIssue DESC LIMIT $limit ";
+        $resultList = $this->connection->executeStatement($statement, []);
+        $bills = [];
+        foreach($resultList as $result){
+            $bill = new Bill();
+            $bill->setId($result->id);
+            $bill->setAccessKey($result->accessKey);
+            $bill->setEmissionPoint($result->emissionPoint);
+            $bill->setEstablishment($result->establishment);
+            $bill->setSequential($result->sequential);
+            $bill->setDateOfIssue(new \DateTime($result->dateOfIssue));
+            //$bill->setEstablishmentAddress($result->establishmentAddress);
+            $bill->setTotalWithoutTax($result->totalWithoutTax);
+            $bill->setTotalDiscount($result->totalDiscount);
+            $bill->setTip($result->tip);
+            $bill->setTotal($result->total);
+            $bill->setFilePath($result->filePath);
+            $bills[] = $bill;
+        }
+        
+        return $bills;
     }
 }
