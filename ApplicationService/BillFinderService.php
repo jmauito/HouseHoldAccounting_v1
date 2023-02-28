@@ -104,6 +104,11 @@ class BillFinderService {
 
         return $bill;
     }
+
+    public function delete(int $id){
+        $billDao = new BillDao($this->connection);
+        $billDao->delete($id);
+    }
     
     private function getStore(int $storeId):Store
     {

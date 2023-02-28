@@ -24,7 +24,10 @@
                 <td><?= $bill->getNumber() ?></td>
                 <td><?= $bill->getTotalWithoutTax() ?></td>
                 <td><?= $bill->getTotal() ?></td>
-                <td> <a href="bills/<?= $bill->getId()?>"  >Edit</a>  </td>
+                <td> 
+                    <a href="bills/<?= $bill->getId()?>"  >Edit</a>  
+                    <a href="bill-delete/<?= $bill->getId()?>"  >Delete</a>  
+                </td>
             </tr>
         <?php endforeach ?>
     </tbody>

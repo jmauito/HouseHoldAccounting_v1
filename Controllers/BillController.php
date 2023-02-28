@@ -22,6 +22,8 @@ use \Domain\BillDeductible;
 use \ApplicationService\RegisterBillService;
 use \ApplicationService\UpdateBillService;
 
+use function PHPUnit\Framework\isNull;
+
 class BillController extends Controller {
 
     public function loadFromXml() {
@@ -206,6 +208,44 @@ class BillController extends Controller {
             ]);
         }
     }
+
+    public function confirmDeleteById(int $id){
+        $connection = new ConnectionMySql();
+        $billFinderService = new BillFinderService($connection);
+        if (null === $billExists = $billFinderService->findById($id) ){
+            echo $this->templates->render('404', []);
+            return;
+        }
+        
+        $deductibleFinderService = new DeductibleFinderService($connection);
+        $deductibles = $deductibleFinderService->findAll();
+
+        $expenseDao = new ExpenseDao($connection);
+        $expenses = $expenseDao->find();
+
+        echo $this->templates->render('bill-delete', [
+            'title' => 'Confirm delete',
+            'bill' => $billExists,
+            'deductibles' => $deductibles,
+            'expenses' => $expenses
+        ]);
+    }
+
+    public function deleteById(){
+        $connection = new ConnectionMySql();
+        $billFinderService = new BillFinderService($connection);
+        $id = $_POST['billId'];
+        $billFinderService->delete($id);
+
+        echo $this->templates->render('success-view', [
+            'title' => 'Factura eliminada correctamente',
+            'message' => 'La factura fue eliminada con éxito.'
+        ]);
+        
+
+    }
+
+    
 
     private function addBillDetailDeductibles(Bill $bill) {
         for ($i = 0; $i < count($bill->getBillDetails()); $i++) {
