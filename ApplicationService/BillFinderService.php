@@ -83,8 +83,8 @@ class BillFinderService {
             }
             $bill->addBillDetail($billDetail);
         }
-        $billDeductibleDao = new \Dao\BillDeductibleDao($this->connection, $bill->getId());
-        if (null !== $billDeductibles = $billDeductibleDao->findByBill() ){
+        $billDeductibleDao = new \Dao\BillDeductibleDao($this->connection);
+        if (null !== $billDeductibles = $billDeductibleDao->findByBill($bill->getId()) ){
             foreach ($billDeductibles as $billDeductible) {
                 $deductibleDao = new DeductibleDao($this->connection);
                 $billDeductible->setDeductible($deductibleDao->findById($billDeductible->getDeductibleId()));

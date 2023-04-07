@@ -134,7 +134,7 @@ $action = '/register-bill';
     </div>
 
     <h2>Details:</h2>
-    <table>
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Code</th>

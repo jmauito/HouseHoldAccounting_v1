@@ -4,6 +4,7 @@ namespace Domain;
 use Lib\DomainModel;
 
 final class BillDeductible extends DomainModel{
+    private $billId;
     private $deductible;
     private $value;
     private $deductibleId;
@@ -12,6 +13,10 @@ final class BillDeductible extends DomainModel{
         parent::__construct($id);
     }
     
+    function getBillId(): int {
+        return $this->billId;
+    }
+
     function getDeductible(): Deductible {
         return $this->deductible;
     }
@@ -24,6 +29,10 @@ final class BillDeductible extends DomainModel{
         return $this->deductibleId;
     }
 
+    function setBillId(int $billId): void {
+        $this->billId = $billId;
+    }
+    
     function setDeductible(Deductible $deductible): void {
         $this->deductible = $deductible;
     }
@@ -39,7 +48,8 @@ final class BillDeductible extends DomainModel{
     function toDto(){
         $dto = new \stdClass();
         $dto->id = $this->getId();
-        $dto->deductible = $this->getName();
+        $dto->billId = $this->getBillId();
+        $dto->deductible = $this->getDeductible();
         $dto->value = $this->getValue();
         return $dto;
     }

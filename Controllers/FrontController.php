@@ -3,6 +3,7 @@ namespace Controllers;
 
 use ApplicationService\BillFinderService;
 use ApplicationService\TotalDeductiblesByYearService;
+use Dao\DeductibleDao;
 use Infraestructure\Connection\ConnectionMySql;
 
 class FrontController extends Controller{
@@ -36,13 +37,17 @@ class FrontController extends Controller{
     
     }
 
-    // public function getBillsByDeductibleIdAndYear($deductibleId, $year){
+    public function getBillsByDeductibleIdAndYear($deductibleId, $year){
 
-        // $totalDeductibleByYear = new TotalDeductiblesByYearService($this->connection);
-        // $bills = $totalDeductibleByYear->getBillsByDeductibleIdAndYear($deductibleId, $year);
-        // echo $this->templates->render('billsByDeductibleAndYear', [
-        //     'bills' => $bills,
-        //     'year' => 2022
-        // ]);
-    // }
+        $totalDeductibleByYear = new TotalDeductiblesByYearService($this->connection);
+        $bills = $totalDeductibleByYear->getBillsByDeductibleIdAndYear($deductibleId, $year);
+        $deductibleDao = new DeductibleDao($this->connection);
+        $deductible = $deductibleDao->findById($deductibleId);
+        echo $this->templates->render('bills-by-deductible-and-year', [
+            'title' => "Bills by deductible by year",
+            'deductibleName' => $deductible->getName(),
+            'bills' => $bills,
+            'year' => 2022
+        ]);
+    }
 }

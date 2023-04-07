@@ -97,7 +97,8 @@ class RegisterBillService {
     
     private function registerBillDeductibles(Bill $bill){
         foreach ($bill->getBillDeductibles() as $billDeductible){
-            $billDeductibleDao = new \Dao\BillDeductibleDao($this->connection, $bill->getId(), $billDeductible->getDeductible()->getId());
+            $billDeductible->setBillId($bill->getId());
+            $billDeductibleDao = new \Dao\BillDeductibleDao($this->connection);
             $billDeductibleDao->insert($billDeductible);
         }
                 

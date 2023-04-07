@@ -19,27 +19,21 @@ use Infraestructure\Connection\Connection;
 class BillDeductibleDao {
     private static $TABLE = "bill_deductible";
     private $connection;
-    private $billId;
     private $deductibleId;
-    
-    function getBillId(): int {
-        return $this->billId;
-    }
 
     function getDeductibleId(): int {
         return $this->deductibleId;
     }
 
-    public function __construct(Connection $connection, int $billId) {
+    public function __construct(Connection $connection) {
         $this->connection = $connection;
-        $this->billId = $billId;
     }
     
     public function toArray(BillDeductible $billDeductible){
         $arr = [];
         $arr['id'] = $billDeductible->getId();
         $arr['value'] = $billDeductible->getValue();
-        $arr['billId'] = $this->getBillId();
+        $arr['billId'] = $billDeductible->getBillId();
         $arr['deductibleId'] = $this->getDeductibleId();
         $arr['active'] = $billDeductible->isActive();
         return $arr;
@@ -67,6 +61,7 @@ class BillDeductibleDao {
         }
         
         $billDeductible = new BillDeductible($result->id);
+        $billDeductible->setBillId($result->billId);
         $billDeductible->setValue($result->value);
         $billDeductible->setActive($result->active);
         
@@ -78,15 +73,31 @@ class BillDeductibleDao {
             return null;
         }
         $billDeductible = new BillDeductible($result->id);
+        $billDeductible->setBillId($result->billId);
         $billDeductible->setValue($result->value);
         $billDeductible->setActive($result->active);
         return $billDeductible;
     }
     
-    public function findByBill():? array
+    public function findByBill(int $billId):? array
     {
         if (null === $result = $this->connection->find(self::$TABLE, [
-            'billId' => $this->billId,
+            'billId' => $billId,
+            'active' => true
+        ])){
+            return null;
+        }
+        $billDeductibles = [];
+        foreach($result as $value){
+            $billDeductibles[] = $this->parse($value);
+        }
+        return $billDeductibles;
+    }
+
+    public function findByDeductibleId(int $deductibleId): array
+    {
+        if (null === $result = $this->connection->find(self::$TABLE, [
+            'deductibleId' => $deductibleId,
             'active' => true
         ])){
             return null;
@@ -101,6 +112,7 @@ class BillDeductibleDao {
     private function parse(\stdClass $result):BillDeductible
     {
         $billDeductible = new BillDeductible($result->id);
+        $billDeductible->setBillId($result->billId);
         $billDeductible->setValue($result->value);
         $billDeductible->setDeductibleId($result->deductibleId);
         return $billDeductible;

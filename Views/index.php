@@ -29,7 +29,7 @@
                 <td><?= $deductible['deductibleName'] ?></td>
                 <td><?= $deductible['deductibleTotal'] ?></td>
                 <td>
-                    <a href="deductibles/?deductibleId=<?= $deductible['deductibleId'] ?>&year=<?= $year ?>">View bills</a>
+                    <a href="bills-by-deductible-and-year/<?= $deductible['deductibleId'] ?>/<?= $year ?>">View bills</a>
                 </td>
             </tr>
         <?php endforeach; ?>

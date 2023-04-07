@@ -40,8 +40,8 @@ class UpdateBillService {
         
         try {
             $this->connection->beginTransaction();
-            $billDeductibleDao = new BillDeductibleDao($this->connection, $bill->getId());
-            if (null !== $billDeductibles = $billDeductibleDao->findByBill() ) {
+            $billDeductibleDao = new BillDeductibleDao($this->connection);
+            if (null !== $billDeductibles = $billDeductibleDao->findByBill($bill->getId()) ) {
                 foreach ($billDeductibles as $billDeductible) {
                     $billDeductibleDao->delete($billDeductible->getId());
                 }

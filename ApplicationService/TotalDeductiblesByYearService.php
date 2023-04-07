@@ -52,13 +52,25 @@ use Infraestructure\Connection\Connection;
         
     }
 
-    // public function getBillsByDedctibleIdAndYear($deductibleId, $year){
-    //     $billDeductibleDao = new BillDeductibleDao($this->connection,0);
-    //     $billsDeductibles = $billDeductibleDao->find(['deductibleId' => $deductibleId]);
-    //     $bills = [];
-        
-    //     foreach($billsDeductibles as $billDeductible){
+    public function getBillsByDeductibleIdAndYear($deductibleId, $year){
+        $billDeductibleDao = new BillDeductibleDao($this->connection,0);
+        $billsDeductibles = $billDeductibleDao->findByDeductibleId($deductibleId);
+        $billDao = new BillDao($this->connection);
+        $billsByYear = $billDao->findByYear($year);
 
-    //     }
-    // }
+        $billsIdByYear = array_map(function($bill){
+            return $bill->getId();
+        },$billsByYear);
+
+        $bills = [];
+        
+        foreach($billsDeductibles as $billDeductible){
+            $index = array_search($billDeductible->getBillId(), $billsIdByYear);
+            if($index !== false){
+                $billsByYear[$index]->addBillDeductible($billDeductible);
+                $bills[] = $billsByYear[$index];
+            }
+        }
+        return $bills;
+    }
  }

@@ -10,6 +10,7 @@ namespace Dao;
 
 use Domain\Bill;
 use Infraestructure\Connection\Connection;
+use phpDocumentor\Reflection\Types\Object_;
 
 /**
  * Description of BillDao
@@ -149,5 +150,45 @@ class BillDao {
         }
         
         return $bills;
+    }
+
+    public function find(array $params){
+        $params['active'] = true;
+        if (null === $listResult = $this->connection->find(self::$TABLE, $params)) {
+            return null;
+        }
+        $bills = [];
+        foreach($listResult as $result){
+            $bills[] = $this->parse($result);
+        }
+        return $bills;
+    }
+
+    public function findByYear(int $year){
+        $statement = "SELECT * FROM " . self::$TABLE . " WHERE YEAR(dateOfIssue) = :year ORDER BY dateOfIssue DESC ";
+        $resultList = $this->connection->executeStatement($statement, ['year' => $year]);
+        $bills = [];
+        foreach($resultList as $result){
+            $bills[] = $this->parse($result);
+        }
+        return $bills;
+    }
+
+    private function parse(\stdClass $obj){
+        $bill = new Bill($obj->id);
+        $bill->setId($obj->id);
+        $bill->setAccessKey($obj->accessKey);
+        $bill->setEmissionPoint($obj->emissionPoint);
+        $bill->setEstablishment($obj->establishment);
+        $bill->setSequential($obj->sequential);
+        $bill->setDateOfIssue(new \DateTime($obj->dateOfIssue));
+        //$bill->setEstablishmentAddress($obj->establishmentAddress);
+        $bill->setTotalWithoutTax($obj->totalWithoutTax);
+        $bill->setTotalDiscount($obj->totalDiscount);
+        $bill->setTip($obj->tip);
+        $bill->setTotal($obj->total);
+        $bill->setFilePath($obj->filePath);
+        
+        return $bill;
     }
 }

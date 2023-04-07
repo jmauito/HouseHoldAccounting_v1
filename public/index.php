@@ -14,6 +14,7 @@ $router->map('GET', '/deductibles-by-year/[i:id]', 'TotalDeductiblesByYearContro
 $router->map('GET', '/bills/[i:id]', 'BillController#findById', 'bill-find-by-id');
 $router->map('GET', '/bill-delete/[i:id]', 'BillController#confirmDeleteById', 'bill-confirm-delete-by-id');
 $router->map('POST', '/delete-bill', 'BillController#deleteById', 'bill-delete-by-id');
+$router->map('GET', '/bills-by-deductible-and-year/[i:deductibleId]/[i:year]', 'FrontController#getBillsByDeductibleIdAndYear', 'get-bills-by-deductibleId-and-year');
 $match = $router->match();
 
 if (!$match){
