@@ -8,6 +8,8 @@
 
 namespace ApplicationService;
 
+use Dao\BillDao;
+use Dao\BillDeductibleDao;
 use Dao\TotalDeductiblesDao;
 use DomainService\DeductibleFinderService;
 use Infraestructure\Connection\Connection;
@@ -25,7 +27,7 @@ use Infraestructure\Connection\Connection;
         $this->connection = $connection;
     }
 
-    public function totalByYear(int $year){
+    public function getTotalByYear(int $year){
         $totalDeductiblesDao = new TotalDeductiblesDao($this->connection);
         $deductibleFinderService = new DeductibleFinderService($this->connection);
         $totalByDeductible = $totalDeductiblesDao->getTotalByYear($year);
@@ -49,4 +51,14 @@ use Infraestructure\Connection\Connection;
         return $deductibleValues;
         
     }
+
+    // public function getBillsByDedctibleIdAndYear($deductibleId, $year){
+    //     $billDeductibleDao = new BillDeductibleDao($this->connection,0);
+    //     $billsDeductibles = $billDeductibleDao->find(['deductibleId' => $deductibleId]);
+    //     $bills = [];
+        
+    //     foreach($billsDeductibles as $billDeductible){
+
+    //     }
+    // }
  }
