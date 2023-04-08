@@ -26,6 +26,8 @@ use Domain\Buyer;
 use Dao\BuyerDao;
 use Dao\BillDetailDeductibleDao;
 use Dao\BillExpenseDao;
+use Dao\BillTaxRateDao;
+
 
 class RegisterBillService {
 
@@ -51,6 +53,7 @@ class RegisterBillService {
             $this->registerBillDeductibles($bill);
             $this->registerBillExpenses($bill);
             $this->registerBillAdditionalInformation($bill);
+            $this->registerBillTaxeRates($bill);
 
             $this->connection->commit();
         } catch (\Exception $exc) {
@@ -135,6 +138,14 @@ class RegisterBillService {
             $billAdditionalInformationDao->insert($billAdditionalInformation);
         }
 
+    }
+
+    private function registerBillTaxeRates(Bill $bill){
+        foreach ($bill->getBillTaxRates() as $billTaxRate){
+            $billTaxRateDao = new BillTaxRateDao($this->connection);
+            $billTaxRate->setBillId($bill->getId());
+            $billTaxRateDao->insert($billTaxRate);
+        }
     }
 
     public function getErrors():?array{

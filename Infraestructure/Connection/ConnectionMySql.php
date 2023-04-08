@@ -169,11 +169,6 @@ class ConnectionMySql implements Connection {
     public function executeStatement(string $statement, array $params)
     {
         
-        // $separator = "";
-        // foreach ($params as $param => $value) {
-        //     $statement .= "$separator $param = :$param";
-        //     $separator = " AND ";
-        // }
         $stmt = $this->connection->prepare($statement);
         foreach ($params as $param => $value) {
             $stmt->bindParam(":$param", $$param);

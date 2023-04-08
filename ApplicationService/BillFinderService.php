@@ -28,7 +28,7 @@ use Dao\BuyerDao;
 use Dao\VoucherTypeDao;
 use Dao\DeductibleDao;
 use Dao\BillDetailExpenseDao;
-
+use Dao\BillTaxRateDao;
 
 class BillFinderService {
     private $connection;
@@ -102,6 +102,8 @@ class BillFinderService {
 
         $this->getBillExpenses($bill);
 
+        $this->getTaxRates($bill);
+
         return $bill;
     }
 
@@ -145,6 +147,18 @@ class BillFinderService {
         foreach ($billExpenses as $billExpense) {
             $billExpense->setExpense($expenseDao->findById($billExpense->getExpenseId()));
             $bill->addBillExpense($billExpense);
+        }
+    }
+
+    public function getTaxRates(Bill $bill): void
+    {
+        $billTaxRateDao = new BillTaxRateDao($this->connection);
+        if (null === $billTaxRates = $billTaxRateDao->findByBillId($bill->getId()) ){
+            return;
+        }
+        
+        foreach ($billTaxRates as $billTaxRate) {
+            $bill->addBillTaxRate($billTaxRate);
         }
     }
 

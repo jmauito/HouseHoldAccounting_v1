@@ -22,6 +22,7 @@ final class Bill extends DomainModel{
     private $billDeductibles = [];
     private $billAdditionalInformation = [];
     private $billExpenses = [];
+    private $billTaxRates = [];
     
     public function __construct(int $id = 0) {
         parent::__construct($id);
@@ -97,6 +98,10 @@ final class Bill extends DomainModel{
 
     function getBillExpenses(): array{
         return $this->billExpenses;
+    }
+
+    function getBillTaxRates(): array{
+        return $this->billTaxRates;
     }
     
     function setAccessKey(string $accessKey): void {
@@ -242,6 +247,29 @@ final class Bill extends DomainModel{
         $this->billExpenses = $billExpenses;
         return true;
     }
+
+    function addBillTaxRate(BillTaxRate $billTaxRate): ?bool{
+        if (TRUE === $index = array_search($billTaxRate, $this->getBillTaxRates()) ){
+            return null;
+        }
+        $this->billTaxRates[] = $billTaxRate;
+        return true;
+    }
+
+    public function deleteBillTaxRate(BillTaxRate $billTaxRate): ?bool{
+        if (FALSE === $index = array_search( $billTaxRate, $this->getBillTaxRates() ) ){
+            return null;
+        }
+        $billTaxRates = [];
+        foreach ($this->getBillTaxRates() as $key=>$value){
+            if ($key !== $index){
+                $billTaxRates[] = $value;
+            }
+        }
+        $this->billTaxRates = $billTaxRates;
+        return true;
+    }
+
     public function getNumber(){
         return $this->getEstablishment() .
             '-' .
@@ -316,6 +344,10 @@ final class Bill extends DomainModel{
         $dto->billExpenses = [];
         foreach ($this->billExpenses as $billExpense){
             $dto->billExpenses[] = $billExpense->toDto();
+        }
+        $dto->billTaxRates = [];
+        foreach ($this->billTaxRates as $billTaxRate){
+            $dto->billTaxRates[] = $billTaxRate->toDto();
         }
         return $dto;
     }

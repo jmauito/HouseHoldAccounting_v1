@@ -37,6 +37,27 @@ $action = '/register-bill';
         <label> <?= $bill->getTip() ?> </label>
     </div>
     <div>
+        <h2> Taxes </h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>Code</td>
+                    <td>Base</td>
+                    <td>Value</td>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach($bill->getBillTaxRates() as $billTaxRate): ?>
+            <tr>
+                <td><?=  $billTaxRate->getTaxRateId() ?> </td>
+                <td><?=  $billTaxRate->getTaxBase() ?> </td>
+                <td><?=  $billTaxRate->getValue() ?> </td>
+            </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <div>
         <label >Total:</label>
         <label> <?= $bill->getTotal() ?> </label>
     </div>

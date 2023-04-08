@@ -21,21 +21,31 @@ use \Dao\DeductibleDao;
 use \Domain\BillDeductible;
 use \ApplicationService\RegisterBillService;
 use \ApplicationService\UpdateBillService;
+use Domain\BillTaxRate;
 
 use function PHPUnit\Framework\isNull;
 
-class BillController extends Controller {
+class BillController extends Controller
+{
 
-    public function loadFromXml() {
+    public function loadFromXml()
+    {
         echo $this->templates->render('load-xml-file', [
-            'title' => 'Load bill from xml file']);
+            'title' => 'Load bill from xml file'
+        ]);
     }
 
-    public function createBillFromXml() {
+    public function createBillFromXml()
+    {
         $xmlBill = file_get_contents($_FILES['xml-file']['tmp_name']);
         $readXmlService = new ReadXmlBillService($xmlBill);
         $connection = new ConnectionMySql();
         $bill = $readXmlService($connection);
+
+        if(null === $bill){
+            print_r($readXmlService->getErrors());
+            die();
+        }
 
         $title = "New bill";
         $update = false;
@@ -64,14 +74,15 @@ class BillController extends Controller {
         ]);
     }
 
-    public function findById(int $id){
+    public function findById(int $id)
+    {
         $connection = new ConnectionMySql();
         $billFinderService = new BillFinderService($connection);
-        if (null === $billExists = $billFinderService->findById($id) ){
+        if (null === $billExists = $billFinderService->findById($id)) {
             echo $this->templates->render('404', []);
             return;
         }
-        
+
         $deductibleFinderService = new DeductibleFinderService($connection);
         $deductibles = $deductibleFinderService->findAll();
 
@@ -87,7 +98,8 @@ class BillController extends Controller {
         ]);
     }
 
-    public function createBill() {
+    public function createBill()
+    {
         $connection = new ConnectionMySql();
         $bill = new Bill();
         $title = "New bill";
@@ -106,7 +118,8 @@ class BillController extends Controller {
         ]);
     }
 
-    public function registerBill() {
+    public function registerBill()
+    {
         $connection = new ConnectionMySql();
         $bill = $this->jsonToBill(base64_decode($_POST['bill']));
         $update = $_POST['update'];
@@ -130,14 +143,14 @@ class BillController extends Controller {
                     'billId' => $billId
                 ]);
             }
-        }else{
+        } else {
             $updateBillService = new UpdateBillService($connection);
-            if (null === $updated = $updateBillService($bill)){
+            if (null === $updated = $updateBillService($bill)) {
                 echo $this->templates->render('error-view', [
                     'title' => 'Error al registrar la factura.',
                     'errorMessages' => $updateBillService->getErrors()
                 ]);
-            }else{
+            } else {
                 echo $this->templates->render('success-view', [
                     'title' => 'Factura actualizada correctamente',
                     'message' => 'La factura fue actualizada con éxito.',
@@ -147,7 +160,8 @@ class BillController extends Controller {
         }
     }
 
-    public function insertBill() {
+    public function insertBill()
+    {
         try {
             $connection = new ConnectionMySql();
             $bill = new Bill();
@@ -187,7 +201,6 @@ class BillController extends Controller {
             $bill->setAccessKey($bill->generateAccessKey());
 
             $this->addBillDetailDeductibles($bill);
-
         } catch (\Exception $e) {
             echo $this->templates->render('error-view', [
                 'title' => 'Error al registrar la factura.',
@@ -209,14 +222,15 @@ class BillController extends Controller {
         }
     }
 
-    public function confirmDeleteById(int $id){
+    public function confirmDeleteById(int $id)
+    {
         $connection = new ConnectionMySql();
         $billFinderService = new BillFinderService($connection);
-        if (null === $billExists = $billFinderService->findById($id) ){
+        if (null === $billExists = $billFinderService->findById($id)) {
             echo $this->templates->render('404', []);
             return;
         }
-        
+
         $deductibleFinderService = new DeductibleFinderService($connection);
         $deductibles = $deductibleFinderService->findAll();
 
@@ -231,7 +245,8 @@ class BillController extends Controller {
         ]);
     }
 
-    public function deleteById(){
+    public function deleteById()
+    {
         $connection = new ConnectionMySql();
         $billFinderService = new BillFinderService($connection);
         $id = $_POST['billId'];
@@ -241,13 +256,12 @@ class BillController extends Controller {
             'title' => 'Factura eliminada correctamente',
             'message' => 'La factura fue eliminada con éxito.'
         ]);
-        
-
     }
 
-    
 
-    private function addBillDetailDeductibles(Bill $bill) {
+
+    private function addBillDetailDeductibles(Bill $bill)
+    {
         for ($i = 0; $i < count($bill->getBillDetails()); $i++) {
             $billDetail = $bill->getBillDetails()[$i];
             if ($_POST['deductibleId' . $billDetail->getMainCode()]) {
@@ -259,7 +273,8 @@ class BillController extends Controller {
         }
     }
 
-    private function addBillDetailExpenses(Bill $bill) {
+    private function addBillDetailExpenses(Bill $bill)
+    {
         for ($i = 0; $i < count($bill->getBillDetails()); $i++) {
             $billDetail = $bill->getBillDetails()[$i];
             if ($_POST['expenseId' . $billDetail->getMainCode()]) {
@@ -271,7 +286,8 @@ class BillController extends Controller {
         }
     }
 
-    private function jsonToBill($billJson): ?Bill {
+    private function jsonToBill($billJson): ?Bill
+    {
         $bill = new Bill();
         if (null === $json = json_decode($billJson)) {
             return null;
@@ -324,10 +340,21 @@ class BillController extends Controller {
             $billAdditionalInformation->setValue($jsonBillAdditionalInformation->value);
             $bill->addBillAdditionalInformation($billAdditionalInformation);
         }
+        foreach ($json->billTaxRates as $jsonBillTaxRate) {
+            $billTaxRate = new BillTaxRate();
+            $billTaxRate->setId($jsonBillTaxRate->id);
+            $billTaxRate->setBillId($jsonBillTaxRate->billId);
+            $billTaxRate->setTaxRateId($jsonBillTaxRate->taxRateId);
+            $billTaxRate->setTaxBase($jsonBillTaxRate->taxBase);
+            $billTaxRate->setValue($jsonBillTaxRate->value);
+            
+            $bill->addBillTaxRate($billTaxRate);
+        }
         return $bill;
     }
 
-    private function parseEstablishmentAddress($establisment) {
+    private function parseEstablishmentAddress($establisment)
+    {
         $result = '';
         if (is_string($establisment)) {
             return $establisment;
@@ -345,14 +372,18 @@ class BillController extends Controller {
      * @param Bill|null $bill
      * @return void
      */
-    public function getBillDeductiblesByHtmlPost(ConnectionMySql $connection, ?Bill $bill): void {
+    public function getBillDeductiblesByHtmlPost(ConnectionMySql $connection, ?Bill $bill): void
+    {
         $deductibleDao = new DeductibleDao($connection);
         foreach ($_POST['bill-deductibles'] as $htmlBillDeductibleCode => $htmlBillDeductibleValue) {
-            $deductible = $deductibleDao->findById($htmlBillDeductibleCode);
-            $billDeductible = new BillDeductible();
-            $billDeductible->setDeductible($deductible);
-            $billDeductible->setValue(floatval($htmlBillDeductibleValue));
-            $bill->addBillDeductible($billDeductible);
+            if ($htmlBillDeductibleValue > 0) {
+                $deductible = $deductibleDao->findById($htmlBillDeductibleCode);
+                $billDeductible = new BillDeductible();
+                $billDeductible->setBillId($bill->getId());
+                $billDeductible->setDeductible($deductible);
+                $billDeductible->setValue(floatval($htmlBillDeductibleValue));
+                $bill->addBillDeductible($billDeductible);
+            }
         }
     }
 
@@ -361,7 +392,8 @@ class BillController extends Controller {
      * @param Bill|null $bill
      * @return void
      */
-    public function getBillExpensesByHtmlPost(ConnectionMySql $connection, ?Bill $bill): void {
+    public function getBillExpensesByHtmlPost(ConnectionMySql $connection, ?Bill $bill): void
+    {
         $expenseDao = new ExpenseDao($connection);
         foreach ($_POST['bill-expenses'] as $htmlBillExpenseCode => $htmlBillExpenseValue) {
             $expense = $expenseDao->findById($htmlBillExpenseCode);
@@ -372,7 +404,8 @@ class BillController extends Controller {
         }
     }
 
-    private function getBillDetailsByHtmlPost(ConnectionMySql $connection, ?Bill $bill): void {
+    private function getBillDetailsByHtmlPost(ConnectionMySql $connection, ?Bill $bill): void
+    {
         foreach ($_POST['mainCode'] as $mainCode) {
             $billDetail = new BillDetail();
             $billDetail->setMainCode($mainCode);
@@ -384,5 +417,4 @@ class BillController extends Controller {
             $bill->addBillDetail($billDetail);
         }
     }
-
 }

@@ -13,11 +13,15 @@ namespace ApplicationService;
  *
  * @author mauit
  */
+
+use Dao\TaxDao;
+use Dao\TaxRateDao;
 use Domain\Bill;
 use Domain\BillAdditionalInformation;
 use Domain\Buyer;
 use Domain\Store;
 use Domain\BillDetail;
+use Domain\BillTaxRate;
 use \Infraestructure\Connection\Connection;
 
 class ReadXmlBillService {
@@ -54,11 +58,14 @@ class ReadXmlBillService {
         }
         $bill->setVoucherType($voucherType);
         
+        $this->setTaxes($bill, $xml->infoFactura->totalConImpuestos, $connection);
+
         $this->setBillDetails($bill,$xml->detalles);
 
         if (property_exists($xml, 'infoAdicional')){
             $this->setBillAdditionalInformation($bill,$xml->infoAdicional);
         }
+
         return $bill;
     }
 
@@ -125,5 +132,25 @@ class ReadXmlBillService {
 
             $bill->addBillAdditionalInformation($billAdditionalInformation);
         }
+    }
+
+    private function setTaxes(Bill $bill, \SimpleXMLElement $xml, Connection $connection){
+        
+        $taxDao = new TaxDao($connection);
+        $taxRateDao = new TaxRateDao($connection);
+
+        foreach($xml->totalImpuesto as $impuesto){
+            $tax = $taxDao->findOne(['code'=> $impuesto->codigo]);
+            $taxRate = $taxRateDao->findOne(['taxId' => $tax->getId(), 'code' => $impuesto->codigoPorcentaje]);
+            $billTaxRate = new BillTaxRate();
+            $billTaxRate->setBillId($bill->getId());
+            $billTaxRate->setTaxRateId($taxRate->getId());
+            $billTaxRate->setTaxBase((float) $impuesto->baseImponible);
+            $billTaxRate->setValue((float) $impuesto->valor);
+            
+            $bill->addBillTaxRate($billTaxRate);
+
+        }
+        
     }
 }

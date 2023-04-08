@@ -129,7 +129,7 @@ class BillDao {
     }
 
     public function findLastRegistered($limit){
-        $statement = "SELECT * FROM " . self::$TABLE . " ORDER BY dateOfIssue DESC LIMIT $limit ";
+        $statement = "SELECT * FROM " . self::$TABLE . " ORDER BY id DESC LIMIT $limit ";
         $resultList = $this->connection->executeStatement($statement, []);
         $bills = [];
         foreach($resultList as $result){
