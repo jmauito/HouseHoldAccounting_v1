@@ -50,6 +50,7 @@ final class BillDetail extends DomainModel{
     }
 
     function setMainCode(string $mainCode): void {
+        $mainCode = str_replace([' ','.'], '_', $mainCode);
         $this->mainCode = str_replace(' ', '_', $mainCode);
     }
 
