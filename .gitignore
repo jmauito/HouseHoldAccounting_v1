@@ -1,0 +1,5 @@
+vendor/
+nbproject/
+.idea/
+.env
+.vscode/
