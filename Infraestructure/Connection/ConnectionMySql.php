@@ -21,7 +21,6 @@ class ConnectionMySql implements Connection {
             ));
         } catch (\PDOException $ex) {
             echo "Falló la conexión: " . $ex->getMessage() . PHP_EOL;
-            print_r($ex);
             die();
         }
     }

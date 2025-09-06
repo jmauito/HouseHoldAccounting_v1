@@ -1,4 +1,3 @@
-use householdaccounting_v1;
 /*
 FT = FICHA TECNICA COMPROBANTES ELECTRÓNICOS ESQUEMA OFFLINE
 */
