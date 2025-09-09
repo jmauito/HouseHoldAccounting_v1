@@ -23,6 +23,3 @@ services:
       - "${DB_EXTERNAL_PORT}:${DB_PORT}"
     volumes:
       - ./init-db:/docker-entrypoint-initdb.d
-
-volumes:
-  db_data:
