@@ -24,3 +24,14 @@ services:
     volumes:
       - ./init-db:/docker-entrypoint-initdb.d
       - ./db_data:/var/lib/mysql
+  php:
+    image: php:7.2-cli
+    working_dir: /app
+    volumes:
+      - .:/app
+
+  composer:
+    image: composer:2
+    working_dir: /app
+    volumes:
+      - .:/app
