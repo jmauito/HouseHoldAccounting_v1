@@ -67,6 +67,7 @@ CREATE TABLE `bill` (
                         `voucherTypeId` int unsigned NOT NULL,
                         `buyerId` int unsigned NOT NULL,
                         `storeId` int unsigned NOT NULL,
+                        `licensePlate` char(8),
                         PRIMARY KEY (`id`),
                         UNIQUE KEY `id_UNIQUE` (`id`),
                         UNIQUE KEY `billNumber_UNIQUE` (`establishment`,`emissionPoint`,`sequential`) USING BTREE,
