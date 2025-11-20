@@ -14,7 +14,7 @@ class ConnectionMySql implements Connection {
         $dbPort = $_ENV['DB_PORT'];
         $dbUsername = $_ENV['DB_USER'];
         $dbPassword = $_ENV['DB_PASSWORD'];
-        $dsn = "mysql:dbname=$dbName;host=$dbHost;port=$dbPort;";
+        $dsn = "mysql:dbname=$dbName;host=$dbHost;port=$dbPort;charset=utf8mb4;";
         try {
             $this->connection = new \PDO($dsn, $dbUsername, $dbPassword, array(
                 \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
