@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<factura id="comprobante" version="1.0.0">
+    <infoTributaria>
+        <ambiente>1</ambiente>
+        <tipoEmision>1</tipoEmision>
+        <razonSocial>EMPRESA DE PRUEBA S.A.</razonSocial>
+        <nombreComercial>EMPRESA DE PRUEBA</nombreComercial>
+        <ruc>1790012026001</ruc>
+        <claveAcceso>0101202401179001202600110010010000000011234567816</claveAcceso>
+        <codDoc>01</codDoc>
+        <estab>001</estab>
+        <ptoEmi>001</ptoEmi>
+        <secuencial>000000001</secuencial>
+        <dirMatriz>Avenida Siempre Viva 123</dirMatriz>
+    </infoTributaria>
+
+    <infoFactura>
+        <fechaEmision>01/01/2024</fechaEmision>
+        <dirEstablecimiento>Avenida Siempre Viva 123</dirEstablecimiento>
+        <obligadoContabilidad>NO</obligadoContabilidad>
+        <tipoIdentificacionComprador>05</tipoIdentificacionComprador>
+        <razonSocialComprador>Juan Pérez</razonSocialComprador>
+        <identificacionComprador>1100000000</identificacionComprador>
+        <totalSinImpuestos>45.00</totalSinImpuestos>
+        <totalDescuento>0.00</totalDescuento>
+        <totalConImpuestos>
+            <totalImpuesto>
+                <codigo>2</codigo>
+                <codigoPorcentaje>2</codigoPorcentaje>
+                <baseImponible>45.00</baseImponible>
+                <valor>5.40</valor>
+            </totalImpuesto>
+        </totalConImpuestos>
+        <propina>0.00</propina>
+        <importeTotal>50.40</importeTotal>
+        <moneda>DOLAR</moneda>
+    </infoFactura>
+
+    <detalles>
+        <detalle>
+            <codigoPrincipal>P001</codigoPrincipal>
+            <descripcion>Producto A</descripcion>
+            <cantidad>1</cantidad>
+            <precioUnitario>10.00</precioUnitario>
+            <descuento>0.00</descuento>
+            <precioTotalSinImpuesto>10.00</precioTotalSinImpuesto>
+            <impuestos>
+                <impuesto>
+                    <codigo>2</codigo>
+                    <codigoPorcentaje>2</codigoPorcentaje>
+                    <tarifa>12</tarifa>
+                    <baseImponible>10.00</baseImponible>
+                    <valor>1.20</valor>
+                </impuesto>
+            </impuestos>
+        </detalle>
+
+        <detalle>
+            <codigoPrincipal>P002</codigoPrincipal>
+            <descripcion>Producto B</descripcion>
+            <cantidad>2</cantidad>
+            <precioUnitario>8.00</precioUnitario>
+            <descuento>0.00</descuento>
+            <precioTotalSinImpuesto>16.00</precioTotalSinImpuesto>
+            <impuestos>
+                <impuesto>
+                    <codigo>2</codigo>
+                    <codigoPorcentaje>2</codigoPorcentaje>
+                    <tarifa>12</tarifa>
+                    <baseImponible>16.00</baseImponible>
+                    <valor>1.92</valor>
+                </impuesto>
+            </impuestos>
+        </detalle>
+
+        <detalle>
+            <codigoPrincipal>P003</codigoPrincipal>
+            <descripcion>Producto C</descripcion>
+            <cantidad>1</cantidad>
+            <precioUnitario>19.00</precioUnitario>
+            <descuento>0.00</descuento>
+            <precioTotalSinImpuesto>19.00</precioTotalSinImpuesto>
+            <impuestos>
+                <impuesto>
+                    <codigo>2</codigo>
+                    <codigoPorcentaje>2</codigoPorcentaje>
+                    <tarifa>12</tarifa>
+                    <baseImponible>19.00</baseImponible>
+                    <valor>2.28</valor>
+                </impuesto>
+            </impuestos>
+        </detalle>
+    </detalles>
+
+    <infoAdicional>
+        <campoAdicional nombre="Email">cliente@correo.com</campoAdicional>
+    </infoAdicional>
+</factura>
