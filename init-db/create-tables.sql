@@ -98,7 +98,8 @@ CREATE TABLE `bill_detail` (
                                    FOREIGN KEY (`billId`)
                                        REFERENCES `bill` (`id`)
                                        ON DELETE CASCADE
-                                       ON UPDATE CASCADE);
+                                       ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE `deductible` (
@@ -107,7 +108,8 @@ CREATE TABLE `deductible` (
                               `active` TINYINT NOT NULL DEFAULT 1,
                               PRIMARY KEY (`id`),
                               UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
-                              UNIQUE INDEX `name_UNIQUE` (`name` ASC) );
+                              UNIQUE INDEX `name_UNIQUE` (`name` ASC) 
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 
@@ -130,7 +132,8 @@ CREATE TABLE `bill_deductible` (
                                        FOREIGN KEY (`deductibleId`)
                                            REFERENCES `deductible` (`id`)
                                            ON DELETE RESTRICT
-                                           ON UPDATE CASCADE);
+                                           ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE `bill_additional_information` (
@@ -145,7 +148,8 @@ CREATE TABLE `bill_additional_information` (
                                                    FOREIGN KEY (`billId`)
                                                        REFERENCES `bill` (`id`)
                                                        ON DELETE CASCADE
-                                                       ON UPDATE CASCADE);
+                                                       ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE `expense` (
@@ -154,7 +158,8 @@ CREATE TABLE `expense` (
                            `active` TINYINT NOT NULL DEFAULT 1,
                            PRIMARY KEY (`id`),
                            UNIQUE INDEX `id_UNIQUE` (`id` ASC) ,
-                           UNIQUE INDEX `name_UNIQUE` (`name` ASC) );
+                           UNIQUE INDEX `name_UNIQUE` (`name` ASC) 
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 
@@ -177,7 +182,8 @@ CREATE TABLE `bill_expense` (
                                     FOREIGN KEY (`expenseId`)
                                         REFERENCES `expense` (`id`)
                                         ON DELETE RESTRICT
-                                        ON UPDATE CASCADE);
+                                        ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `bill_detail_deductible` (
                                        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -198,7 +204,8 @@ CREATE TABLE `bill_detail_deductible` (
                                            FOREIGN KEY (`deductibleId`)
                                                REFERENCES `expense` (`id`)
                                                ON DELETE RESTRICT
-                                               ON UPDATE CASCADE);
+                                               ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 
@@ -221,7 +228,8 @@ CREATE TABLE `bill_detail_expense` (
                                            FOREIGN KEY (`expenseId`)
                                                REFERENCES `expense` (`id`)
                                                ON DELETE RESTRICT
-                                               ON UPDATE CASCADE);
+                                               ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE tax(
     id int unsigned NOT NULL AUTO_INCREMENT,
@@ -231,8 +239,8 @@ CREATE TABLE tax(
     PRIMARY KEY (`id`),
     UNIQUE KEY `id_UNIQUE` (`id`),
     UNIQUE KEY `name_UNIQUE` (`name`)
-);
-DROP TABLE IF EXISTS  percentage_tax;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 CREATE TABLE tax_rate(
    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
    name VARCHAR(45),
@@ -246,7 +254,7 @@ CREATE TABLE tax_rate(
    UNIQUE KEY `taxId_code_UNIQUE` (taxId,code),
    KEY `tax_fk` (`taxId`),
    CONSTRAINT `tax_fk` FOREIGN KEY (`taxId`) REFERENCES `tax` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-);
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE bill_tax_rate(
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -261,4 +269,4 @@ CREATE TABLE bill_tax_rate(
   KEY `tax_fk` (`billId`),
   CONSTRAINT `bill_tax_rate_bill_fk` FOREIGN KEY (`billId`) REFERENCES `bill` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `bill_tax_rate_tax_rate_fk` FOREIGN KEY (`taxRateId`) REFERENCES `tax_rate` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-);
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
